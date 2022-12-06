@@ -46,18 +46,16 @@ public class EnvironmentController : MonoBehaviour
     public GameObject camera_pos_ref;
     //public TMP_Dropdown prey_list, predator_list;
     private int gen_count;
-
+    public Slider NMC, TMS, TMR;
 
     [Header("Mutation settings")]
-    public float reproduction_mutation_prob_prey;
-    public float mutation_prob_prey;
+    public float reptoduction_mutation_prob;
+    public float spwn_mutation_prob;
     public float maturity_offset_prey;
     public float hunger_offset_prey;
     public float speed_offset_prey;
     public float size_offset_prey;
     public float sight_offset_prey;
-    public float reproduction_mutation_prob_predator;
-    public float mutation_prob_predator;
     public float maturity_offset_predator;
     public float hunger_offset_predator;
     public float speed_offset_predator;
@@ -114,6 +112,9 @@ public class EnvironmentController : MonoBehaviour
         camera_pos_ref = this.gameObject;
         def_zoom = main_camera.orthographicSize;
         info_panel.SetActive(false);
+        NMC.value = mutation_rate;
+        TMR.value = reptoduction_mutation_prob;
+        TMS.value = spwn_mutation_prob;
     }
 
     void MutatePrey(PreyController prey)
@@ -121,7 +122,7 @@ public class EnvironmentController : MonoBehaviour
         float rand = Random.Range(0f, 1f);
 
         prey.speed = speed_def_prey;
-        if (rand <= mutation_prob_prey)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-speed_offset_prey, speed_offset_prey);
             if (prey.speed + t >= speed_min_prey)
@@ -132,7 +133,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         prey.max_hunger = hunger_def_prey;
-        if (rand <= mutation_prob_prey)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-hunger_offset_prey, hunger_offset_prey);
             if (prey.max_hunger + t >= hunger_min_prey)
@@ -143,7 +144,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         prey.sight_radius = sight_def_prey;
-        if (rand <= mutation_prob_prey)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-sight_offset_prey, sight_offset_prey);
             if (prey.sight_radius + t >= sight_min_prey)
@@ -154,7 +155,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         prey.maturity = maturity_def_prey;
-        if (rand <= mutation_prob_prey)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-maturity_offset_prey, maturity_offset_prey);
             if (prey.maturity + t >= maturity_min_prey)
@@ -165,7 +166,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         prey.size = new Vector2(def_size_prey.x, def_size_prey.y);
-        if (rand <= mutation_prob_prey)
+        if (rand <= spwn_mutation_prob)
         {
             float offst = Random.Range(-size_offset_prey, +size_offset_prey);
             if (prey.size.x - offst >= 0.01 && prey.size.y - offst >= 0.01)
@@ -183,7 +184,7 @@ public class EnvironmentController : MonoBehaviour
         float rand = Random.Range(0f, 1f);
 
         predator.speed = speed_def_predator;
-        if (rand <= mutation_prob_predator)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-speed_offset_predator, speed_offset_predator);
             if (predator.speed + t >= speed_min_predator)
@@ -194,7 +195,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         predator.max_hunger = hunger_def_predator;
-        if (rand <= mutation_prob_predator)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-hunger_offset_predator, hunger_offset_predator);
             if (predator.max_hunger + t >= hunger_min_predator)
@@ -205,7 +206,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         predator.sight_radius = sight_def_predator;
-        if (rand <= mutation_prob_predator)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-sight_offset_predator, sight_offset_predator);
             if (predator.sight_radius + t >= sight_min_predator)
@@ -216,7 +217,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         predator.maturity = maturity_def_predator;
-        if (rand <= mutation_prob_predator)
+        if (rand <= spwn_mutation_prob)
         {
             float t = Random.Range(-maturity_offset_predator, maturity_offset_predator);
             if (predator.maturity + t >= maturity_min_predator)
@@ -227,7 +228,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         predator.size = new Vector2(def_size_predator.x, def_size_predator.y);
-        if (rand <= mutation_prob_predator)
+        if (rand <= spwn_mutation_prob)
         {
             float offst = Random.Range(-size_offset_predator, +size_offset_predator);
             if (predator.size.x - offst >= 0.01 && predator.size.y - offst >= 0.01)
@@ -245,7 +246,7 @@ public class EnvironmentController : MonoBehaviour
         float rand = Random.Range(0f, 1f);
 
         prey.speed = parent.speed;
-        if (rand <= reproduction_mutation_prob_prey)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-speed_offset_prey, speed_offset_prey);
             if (prey.speed + t >= speed_min_prey)
@@ -256,7 +257,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         prey.max_hunger = parent.max_hunger;
-        if (rand <= reproduction_mutation_prob_prey)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-hunger_offset_prey, hunger_offset_prey);
             if (prey.max_hunger + t >= hunger_min_prey)
@@ -267,7 +268,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         prey.sight_radius = parent.sight_radius;
-        if (rand <= reproduction_mutation_prob_prey)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-sight_offset_prey, sight_offset_prey);
             if (prey.sight_radius + t >= sight_min_prey)
@@ -278,7 +279,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         prey.maturity = parent.maturity;
-        if (rand <= reproduction_mutation_prob_prey)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-maturity_offset_prey, maturity_offset_prey);
             if (prey.maturity + t >= maturity_min_prey)
@@ -297,7 +298,7 @@ public class EnvironmentController : MonoBehaviour
         float rand = Random.Range(0f, 1f);
 
         predator.speed = parent.speed;
-        if (rand <= reproduction_mutation_prob_predator)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-speed_offset_predator, speed_offset_predator);
             if (predator.speed + t >= speed_min_predator)
@@ -308,7 +309,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         predator.max_hunger = parent.max_hunger;
-        if (rand <= reproduction_mutation_prob_predator)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-hunger_offset_predator, hunger_offset_predator);
             if (predator.max_hunger + t >= hunger_min_predator)
@@ -319,7 +320,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         predator.sight_radius = parent.sight_radius;
-        if (rand <= reproduction_mutation_prob_predator)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-sight_offset_predator, sight_offset_predator);
             if (predator.sight_radius + t >= sight_min_predator)
@@ -330,7 +331,7 @@ public class EnvironmentController : MonoBehaviour
 
         rand = Random.Range(0f, 1f);
         predator.maturity = parent.maturity;
-        if (rand <= reproduction_mutation_prob_predator)
+        if (rand <= reptoduction_mutation_prob)
         {
             float t = Random.Range(-maturity_offset_predator, maturity_offset_predator);
             if (predator.maturity + t >= maturity_min_predator)
@@ -351,6 +352,9 @@ public class EnvironmentController : MonoBehaviour
         cur_gen_text.text = gen_count.ToString();
         population_text.text = prey_count.ToString() + " / " + predator_count.ToString();
         main_camera.transform.position = new Vector3(camera_pos_ref.transform.position.x, camera_pos_ref.transform.position.y, -10);
+        mutation_rate = NMC.value;
+        reptoduction_mutation_prob = TMR.value;
+        spwn_mutation_prob = TMS.value;
        /* for (int i = 0; i < preys.Length; i++)
         {
             prey_list.options.Add(new TMP_Dropdown.OptionData() { text = " prey " + i.ToString() + " fit " + preys[i].network.GetFitness().ToString() });
