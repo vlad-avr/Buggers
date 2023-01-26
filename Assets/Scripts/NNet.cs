@@ -30,7 +30,7 @@ public class NNet : MonoBehaviour
         {
             this.layers[i] = copy_network.layers[i];
         }
-        this.fitness = copy_network.fitness;
+        //this.fitness = copy_network.fitness;
         InitNeurons();
         InitWeights();
         CopyWeights(copy_network.weights);
