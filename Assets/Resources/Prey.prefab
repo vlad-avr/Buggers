@@ -454,7 +454,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.45, y: 0.9}
   m_EdgeRadius: 0
 --- !u!50 &8648281372460763464
 Rigidbody2D:
@@ -504,3 +504,4 @@ MonoBehaviour:
   layers: 040000000400000001000000
   mutation_rate: 0.2
   spawn_point: {fileID: 0}
+  is_test: 0

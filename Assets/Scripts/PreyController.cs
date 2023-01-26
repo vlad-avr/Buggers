@@ -21,59 +21,29 @@ public class PreyController : MonoBehaviour
     public SpriteRenderer spr;
     public GameObject succesor;
     private EnvironmentController EC;
-    /*[Header("Fitness")]
-    public float overallFitness;*/
-    /* public float distanceMultipler = 1.4f;*/
-    /*public float avgSpeedMultiplier = 0.2f;
-    public float sensorMultiplier = 0.1f;*/
 
     [Header("Network Options")]
     public int[] layers;
     public float mutation_rate;
-    //  private Vector3 lastPosition;
-    /* private float totalDistanceTravelled;
-     private float avgSpeed;*/
 
-    //  private float aSensor, bSensor, cSensor;
-
-    /* private void Awake()
-     {
-         network = GetComponent<NNet>();
-         //TEST CODE
-         //network.Initialise(LAYERS, NEURONS);
-         network = new NNet(layers);
-     }*/
     [Header("Respawn point")]
     public Transform spawn_point;
 
-
-    /*public void Reset()
-    {
-
-        //TEST CODE
-        network.Initialise(LAYERS, NEURONS);
-
-        cur_hunger = 0f;
-        cur_maturity = 0f;
-        lastPosition = startPosition;
-        overallFitness = 0f;
-        transform.position = startPosition;
-        transform.eulerAngles = startRotation;
-    }*/
-
-    /*private void OnCollisionEnter2D(Collision2D collision)
-      {
-          Die();
-      }*/
+    [Header("TESTING")]
+    public bool is_test = false;
 
     private void Start()
     {
-        GetComponentInChildren<Canvas>().worldCamera = Camera.main;
-        EC = FindObjectOfType<EnvironmentController>();
-        spawn_point = EC.prey_pos;
+        if (!is_test)
+        {
+            GetComponentInChildren<Canvas>().worldCamera = Camera.main;
+            EC = FindObjectOfType<EnvironmentController>();
+            spawn_point = EC.prey_pos;
+        }
         transform.localScale = size;
         spr.sprite = sprite;
         spr.color = color;
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -101,34 +71,41 @@ public class PreyController : MonoBehaviour
 
     private void Update()
     {
-        float[] output = network.FeedForward(InputSensors());
-        Move(output[0]/*, output[1]*/);
+        if (!is_test)
+        {
+            float[] output = network.FeedForward(InputSensors());
+            Move(output[0]/*, output[1]*/);
+        }
     }
 
     private void FixedUpdate()
     {
-        if (cur_maturity >= maturity)
+        if (!is_test)
         {
-            Reproduce();
-            cur_maturity = 0f;
-        }
-        else
-        {
-            cur_maturity += Time.deltaTime;
-        }
+            if (cur_maturity >= maturity)
+            {
+                Reproduce();
+                cur_maturity = 0f;
+            }
+            else
+            {
+                cur_maturity += Time.deltaTime;
+            }
 
-        if (cur_hunger >= max_hunger)
-        {
-            Die(-10);
-        }
-        else
-        {
-            cur_hunger += Time.deltaTime;
-        }
+            if (cur_hunger >= max_hunger)
+            {
+                Die(-10);
+            }
+            else
+            {
+                cur_hunger += Time.deltaTime;
+            }
 
-        if(EC.camera_pos_ref == this.gameObject)
-        {
-            EC.UpdateInfo("Prey", network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString());
+
+            if (EC.camera_pos_ref == this.gameObject)
+            {
+                EC.UpdateInfo("Prey", network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString());
+            }
         }
     }
 
@@ -197,19 +174,11 @@ public class PreyController : MonoBehaviour
         }
         if (min == null)
         {
-            /*input_arr.Add(UnityEngine.Random.Range(-1f,1f));
-            input_arr.Add(UnityEngine.Random.Range(-1f, 1f));*/
-            //input_arr.Add(UnityEngine.Random.Range(-1f, 1f));
-            /* input_arr.Add(0f);*/
              input_arr.Add(0f);
              input_arr.Add(0f);
         }
         else
         {
-            /* input_arr.Add(min.transform.position.x / sight_radius);
-             input_arr.Add(min.transform.position.y / sight_radius);*/
-
-            //  input_arr.Add(min.transform.position.x / 100f);
             Vector2 vec = min.transform.position - transform.position;
             float angle = Vector2.Angle(transform.up, vec);
             if(angle >= 180f)

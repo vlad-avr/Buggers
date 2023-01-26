@@ -27,14 +27,21 @@ public class PredatorController : MonoBehaviour
     [Header("Respawn point")]
     public Transform spawn_point;
 
+    [Header("TESTING")]
+    public bool is_test;
+
     private void Start()
     {
-        GetComponentInChildren<Canvas>().worldCamera = Camera.main;
-        EC = FindObjectOfType<EnvironmentController>();
-        spawn_point = EC.predator_pos;
+        if (!is_test)
+        {
+            GetComponentInChildren<Canvas>().worldCamera = Camera.main;
+            EC = FindObjectOfType<EnvironmentController>();
+            spawn_point = EC.predator_pos;
+        }
         transform.localScale = size;
         spr.sprite = sprite;
         spr.color = color;
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -47,34 +54,40 @@ public class PredatorController : MonoBehaviour
 
     private void Update()
     {
-        float[] output = network.FeedForward(InputSensors());
-        Move(output[0]);
+        if (!is_test)
+        {
+            float[] output = network.FeedForward(InputSensors());
+            Move(output[0]);
+        }
     }
 
     private void FixedUpdate()
     {
-        if (cur_maturity >= maturity)
+        if (!is_test)
         {
-            Reproduce();
-            cur_maturity = 0f;
-        }
-        else
-        {
-            cur_maturity += Time.deltaTime;
-        }
+            if (cur_maturity >= maturity)
+            {
+                Reproduce();
+                cur_maturity = 0f;
+            }
+            else
+            {
+                cur_maturity += Time.deltaTime;
+            }
 
-        if (cur_hunger >= max_hunger)
-        {
-            Die(-10);
-        }
-        else
-        {
-            cur_hunger += Time.deltaTime;
-        }
+            if (cur_hunger >= max_hunger)
+            {
+                Die(-10);
+            }
+            else
+            {
+                cur_hunger += Time.deltaTime;
+            }
 
-        if (EC.camera_pos_ref == this.gameObject)
-        {
-            EC.UpdateInfo("Predator", network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString());
+            if (EC.camera_pos_ref == this.gameObject)
+            {
+                EC.UpdateInfo("Predator", network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString());
+            }
         }
     }
 

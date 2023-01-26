@@ -6,27 +6,27 @@ using UnityEngine.TestTools;
 
 public class AgentTest
 {
-
+    private GameObject prey, pred;
+    private PreyController prey_ctrl;
+    private PredatorController pred_ctrl;
     [SetUp]
     public void SetUp()
     {
-       /* prey_test = GameObject.Instantiate(Resources.Load<GameObject>("Prey"), new Vector3(0, 0, 0), Quaternion.identity);
-        predator_test = GameObject.Instantiate(Resources.Load<GameObject>("Predator"), new Vector3(0, 5, 0), Quaternion.identity);
-        prey_ctrl = prey_test.GetComponent<PreyController>();*/
+        prey = GameObject.Instantiate(Resources.Load<GameObject>("Prey_test"), new Vector3(-5, 0, 0), Quaternion.identity);
+        prey_ctrl = prey.GetComponent<PreyController>();
+        pred = GameObject.Instantiate(Resources.Load<GameObject>("Predator_test"), new Vector3(5, 0, 0), Quaternion.identity);
+        pred_ctrl = pred.GetComponent<PredatorController>();
     }
    
     [UnityTest]
     public IEnumerator AgentMoveTest()
     {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        /* GameObject prey = new GameObject();
-         prey.AddComponent<PreyController>();
-         prey.AddComponent<Rigidbody2D>();
-         Vector2 ctrl_pos = prey.transform.position;
-         prey.GetComponent<PreyController>().Move(0f);
-         yield return new WaitForSeconds(1);
-         Assert.IsTrue(prey.transform.position.y > ctrl_pos.y);*/
-        yield return null;
+        Vector3 prey_orig = prey.transform.position;
+        Vector3 pred_orig = pred.transform.position;
+        prey_ctrl.Move(0);
+        pred_ctrl.Move(0);
+        yield return new WaitForSeconds(0.1f);
+        Assert.AreNotEqual(prey_orig, prey.transform.position);
+        Assert.AreNotEqual(pred_orig, pred.transform.position);
     }
 }
