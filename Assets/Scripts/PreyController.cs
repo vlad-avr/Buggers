@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PreyController : MonoBehaviour
+public class PreyController : AgentController
 {
-    public NNet network;
+ /*   public NNet network;
 
     [Header("gameObject Settings")]
     public float max_hunger = 10;
@@ -25,14 +25,36 @@ public class PreyController : MonoBehaviour
     [Header("Network Options")]
     public int[] layers;
     public float mutation_rate;
+    */
+    /* [Header("Respawn point")]
+     public Transform spawn_point;
 
-    [Header("Respawn point")]
-    public Transform spawn_point;
+     [Header("TESTING")]
+     public bool is_test = false;
+     */
+    /* private void Start()
+     {
+         if (!is_test)
+         {
+             GetComponentInChildren<Canvas>().worldCamera = Camera.main;
+             EC = FindObjectOfType<EnvironmentController>();
+             spawn_point = EC.prey_pos;
+         }
+         transform.localScale = size;
+         spr.sprite = sprite;
+         spr.color = color;
 
-    [Header("TESTING")]
-    public bool is_test = false;
+     }
 
-    private void Start()
+     private void OnTriggerEnter2D(Collider2D collision)
+     {
+         if (collision.CompareTag("Wall"))
+         {
+             transform.position = spawn_point.position;
+         }
+     }*/
+
+    void Awake()
     {
         if (!is_test)
         {
@@ -40,20 +62,7 @@ public class PreyController : MonoBehaviour
             EC = FindObjectOfType<EnvironmentController>();
             spawn_point = EC.prey_pos;
         }
-        transform.localScale = size;
-        spr.sprite = sprite;
-        spr.color = color;
-        
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Wall"))
-        {
-            transform.position = spawn_point.position;
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Predator"))
@@ -69,12 +78,12 @@ public class PreyController : MonoBehaviour
         Die(-5);
     }
 
-    private void Update()
+  /*  private void Update()
     {
         if (!is_test)
         {
             float[] output = network.FeedForward(InputSensors());
-            Move(output[0]/*, output[1]*/);
+            Move(output[0]/*, output[1]);
         }
     }
 
@@ -108,9 +117,9 @@ public class PreyController : MonoBehaviour
             }
         }
     }
+    */
 
-
-    public void Reproduce()
+    public override void Reproduce()
     {
         GameObject obj = Instantiate(succesor, transform.position, transform.rotation);
         obj.GetComponent<PreyController>().network = new NNet(this.network);
@@ -126,7 +135,7 @@ public class PreyController : MonoBehaviour
     }
 
     
-    private float[] InputSensors()
+    public override float[] InputSensors()
     {
         Collider2D[] hit_food = Physics2D.OverlapCircleAll(transform.position, sight_radius, LayerMask.GetMask("Food"));
         Collider2D[] hit_predator = Physics2D.OverlapCircleAll(transform.position, sight_radius, LayerMask.GetMask("Predator"));
@@ -134,7 +143,6 @@ public class PreyController : MonoBehaviour
         Collider2D min = null;
         for (int i = 0; i < hit_food.Length; i++)
         {
-          //  Debug.DrawLine(transform.position, hit_food[i].transform.position);
             if(min == null || Vector2.Distance(transform.position, min.transform.position) > Vector2.Distance(transform.position, hit_food[i].transform.position))
             {
                 min = hit_food[i];
@@ -142,18 +150,11 @@ public class PreyController : MonoBehaviour
         }
         if (min == null)
         {
-            /*input_arr.Add(UnityEngine.Random.Range(-1f, 1f));
-            input_arr.Add(UnityEngine.Random.Range(-1f, 1f));*/
-          //  input_arr.Add(UnityEngine.Random.Range(-1f, 1f));
-            /* input_arr.Add(0f);*/
              input_arr.Add(0f);
              input_arr.Add(0f);
         }
         else
         {
-            /*input_arr.Add(min.transform.position.x / sight_radius);
-            input_arr.Add(min.transform.position.y / sight_radius);*/
-            // input_arr.Add(min.transform.position.x / 100f);
             Vector2 vec = min.transform.position - transform.position;
             float angle = Vector2.Angle(transform.up, vec);
             if (angle >= 180f)
@@ -166,7 +167,6 @@ public class PreyController : MonoBehaviour
         min = null;
         for (int i = 0; i < hit_predator.Length; i++)
         {
-           // Debug.DrawLine(transform.position, hit_predator[i].transform.position);
             if (min == null || Vector2.Distance(transform.position, min.transform.position) > Vector2.Distance(transform.position, hit_predator[i].transform.position))
             {
                 min = hit_predator[i];
@@ -192,17 +192,17 @@ public class PreyController : MonoBehaviour
         return input_arr.ToArray();
 
     }
-    public void Move(float v/*, float h*/)
+   /* public void Move(float v)
     {
-        GetComponent<Rigidbody2D>().velocity = transform.up * speed /** v*/;
+        GetComponent<Rigidbody2D>().velocity = transform.up * speed ;
         GetComponent<Rigidbody2D>().angularVelocity = angular_drag * v;
     }
-
-    public void GetLockedOn()
+    */
+  /*  public void GetLockedOn()
     {
         EC.LockCamera("Prey", network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString(),  this.gameObject);
-    }
-    public void Die(int fitness)
+    }*/
+    public override void Die(int fitness)
     {
         this.network.AddFitness(fitness);
         EC.AddPrey(this.network);
