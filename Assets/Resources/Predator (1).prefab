@@ -78,6 +78,7 @@ MonoBehaviour:
   cur_hunger: 0
   maturity: 40
   speed: 4
+  angular_drag: 720
   sight_radius: 50
   size: {x: 2, y: 2}
   color: {r: 1, g: 0.2628515, b: 0, a: 0}

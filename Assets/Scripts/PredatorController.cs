@@ -12,6 +12,7 @@ public class PredatorController : MonoBehaviour
     public float maturity = 20;
     private float cur_maturity;
     public float speed;
+    public float angular_drag;
     public float sight_radius;
     public Vector2 size;
     public Color color;
@@ -137,7 +138,7 @@ public class PredatorController : MonoBehaviour
     public void Move(float v)
     {
         GetComponent<Rigidbody2D>().velocity = transform.up * speed ;
-        GetComponent<Rigidbody2D>().angularVelocity = 500f * v;
+        GetComponent<Rigidbody2D>().angularVelocity = angular_drag * v;
     }
 
     /*    public void NetworkReset(NNet net)
