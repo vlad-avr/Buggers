@@ -434,7 +434,7 @@ public class EnvironmentController : MonoBehaviour
         PreyController temp = prey_objs[0];
         for(int i = 1; i < prey_objs.Length; i++)
         {
-            if(temp.network.fitness < prey_objs[i].network.fitness)
+            if(prey_objs[i].network.CompareNNets(temp.network) == 1)
             {
                 temp = prey_objs[i];
             }
@@ -447,7 +447,7 @@ public class EnvironmentController : MonoBehaviour
         PredatorController temp = pred_objs[0];
         for (int i = 1; i < pred_objs.Length; i++)
         {
-            if (temp.network.fitness < pred_objs[i].network.fitness)
+            if (pred_objs[i].network.CompareNNets(temp.network) == 1)
             {
                 temp = pred_objs[i];
             }

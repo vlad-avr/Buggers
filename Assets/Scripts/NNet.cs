@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class NNet
 {
-    public float fitness;
+    private float fitness;
     private int[] layers;
     private float[][] neurons;
     private float[][][] weights;
@@ -178,13 +178,14 @@ public class NNet
         {
             return 1;
         }
-        else if(fitness < other.GetFitness())
+        else if(fitness <= other.GetFitness())
         {
-            return -1;
+            return 0;
         }
         else
         {
-            return 0;
+            //should not trigger
+            return -1;
         }
     }
 
