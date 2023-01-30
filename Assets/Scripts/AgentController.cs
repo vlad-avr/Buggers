@@ -52,7 +52,7 @@ public abstract class AgentController : MonoBehaviour
         if (!is_test)
         {
             float[] output = network.FeedForward(InputSensors());
-            Move(output[0]);
+            Move(output[0], output[1] + 1.5f);
         }
     }
 
@@ -91,9 +91,9 @@ public abstract class AgentController : MonoBehaviour
         EC.UImgr.LockCamera(gameObject.tag, network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString(), this.gameObject);
     }
 
-    public void Move(float v)
+    public void Move(float v, float a)
     {
-        GetComponent<Rigidbody2D>().velocity = transform.up * speed;
+        GetComponent<Rigidbody2D>().velocity = transform.up * speed * a;
         GetComponent<Rigidbody2D>().angularVelocity = angular_drag * v;
     }
 

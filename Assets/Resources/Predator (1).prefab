@@ -73,7 +73,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654024433075a2d4f8f47e1a78e53f50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  network: {fileID: 0}
   max_hunger: 20
   cur_hunger: 0
   maturity: 40
@@ -85,9 +84,10 @@ MonoBehaviour:
   sprite: {fileID: 0}
   spr: {fileID: 7993019375443875520}
   succesor: {fileID: 8852648651023317654, guid: eb8a2072c29b71c48b0db2603b2cca98, type: 3}
-  layers: 020000000200000001000000
+  layers: 020000000400000002000000
   mutation_rate: 0.3
   spawn_point: {fileID: 0}
+  is_test: 0
 --- !u!50 &7566124636240959563
 Rigidbody2D:
   serializedVersion: 4

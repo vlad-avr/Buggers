@@ -23,8 +23,8 @@ public class AgentTest
     {
         Vector3 prey_orig = prey.transform.position;
         Vector3 pred_orig = pred.transform.position;
-        prey_ctrl.Move(0);
-        pred_ctrl.Move(0);
+        prey_ctrl.Move(0, 1);
+        pred_ctrl.Move(0, 1);
         yield return new WaitForSeconds(0.1f);
         Assert.AreNotEqual(prey_orig, prey.transform.position);
         Assert.AreNotEqual(pred_orig, pred.transform.position);
