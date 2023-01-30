@@ -5459,8 +5459,6 @@ MonoBehaviour:
   spawn_num: 80
   food_obj: {fileID: 6193714717242651790, guid: ce6f923ad0c13754494db94ddf9fcb68, type: 3}
   spawn_room: {x: 60, y: 32, z: 0}
-  preys: []
-  predators: []
   prey_count: 0
   predator_count: 0
   start_gen_count: 80
@@ -5492,24 +5490,24 @@ MonoBehaviour:
   hunger_offset_prey: 10
   speed_offset_prey: 2
   size_offset_prey: 0.2
-  sight_offset_prey: 10
+  sight_offset_prey: 5
   maturity_offset_predator: 20
   hunger_offset_predator: 15
   speed_offset_predator: 3
   size_offset_predator: 0.4
-  sight_offset_predator: 30
+  sight_offset_predator: 15
   maturity_min_prey: 5
   hunger_min_prey: 5
   speed_min_prey: 0.2
-  sight_min_prey: 1
+  sight_min_prey: 8
   maturity_min_predator: 10
   hunger_min_predator: 5
   speed_min_predator: 0.4
-  sight_min_predator: 2
+  sight_min_predator: 16
   maturity_def_prey: 40
   hunger_def_prey: 20
   speed_def_prey: 4
-  sight_def_prey: 15
+  sight_def_prey: 20
   def_color_prey: {r: 0.2258136, g: 1, b: 0.09811318, a: 0}
   def_size_prey: {x: 0.5, y: 0.5}
   maturity_def_predator: 40

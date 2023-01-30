@@ -34,4 +34,31 @@ public class NNetTest
             }
         }
     }
+    [Test]
+    public void NNetFeedForwardTest()
+    {
+        int[] layers = { 2, 4, 4, 2 };
+        NNet net = new NNet(layers);
+        float[] inp = { Random.Range(0f, 1f), Random.Range(0f, 1f) };
+        float[] res = net.FeedForward(inp);
+        for(int i = 0; i < layers[layers.Length-1]; i++)
+        {
+            Assert.IsTrue(res[i] >= -1f && res[i] <= 1f);
+        }
+       
+    }
+    [Test]
+    public void NNetFitnessInfTest()
+    {
+        int[] layers = { 2, 2, 2 };
+        NNet net = new NNet(layers);
+        net.SetFitness(10);
+        Assert.AreEqual(10, net.GetFitness());
+        net.AddFitness(5);
+        Assert.AreEqual(15, net.GetFitness());
+        NNet net_other = new NNet(layers);
+        net_other.SetFitness(20);
+        int t = net.CompareNNets(net_other);
+        Assert.IsTrue(t == -1);
+    }
 }
