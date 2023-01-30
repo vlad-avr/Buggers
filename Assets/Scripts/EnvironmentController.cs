@@ -56,34 +56,34 @@ public class EnvironmentController : MonoBehaviour
     public float hunger_offset_prey;
     public float speed_offset_prey;
     public float size_offset_prey;
-    public float sight_offset_prey;
+   // public float sight_offset_prey;
     public float maturity_offset_predator;
     public float hunger_offset_predator;
     public float speed_offset_predator;
     public float size_offset_predator;
-    public float sight_offset_predator;
+  //  public float sight_offset_predator;
 
     [Header("Minimal Allowed values")]
     public float maturity_min_prey;
     public float hunger_min_prey;
     public float speed_min_prey;
-    public float sight_min_prey;
+    //public float sight_min_prey;
     public float maturity_min_predator;
     public float hunger_min_predator;
     public float speed_min_predator;
-    public float sight_min_predator;
+   // public float sight_min_predator;
 
     [Header("Default parameters")]
     public float maturity_def_prey;
     public float hunger_def_prey;
     public float speed_def_prey;
-    public float sight_def_prey;
+  //  public float sight_def_prey;
     public Color def_color_prey;
     public Vector2 def_size_prey;
     public float maturity_def_predator;
     public float hunger_def_predator;
     public float speed_def_predator;
-    public float sight_def_predator;
+   // public float sight_def_predator;
     public Color def_color_predator;
     public Vector2 def_size_predator;
 
@@ -143,7 +143,7 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-        rand = Random.Range(0f, 1f);
+    /*    rand = Random.Range(0f, 1f);
         prey.sight_radius = sight_def_prey;
         if (rand <= spwn_mutation_prob)
         {
@@ -152,7 +152,7 @@ public class EnvironmentController : MonoBehaviour
             {
                 prey.sight_radius += t;
             }
-        }
+        }*/
 
         rand = Random.Range(0f, 1f);
         prey.maturity = maturity_def_prey;
@@ -205,7 +205,7 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-        rand = Random.Range(0f, 1f);
+     /*   rand = Random.Range(0f, 1f);
         predator.sight_radius = sight_def_predator;
         if (rand <= spwn_mutation_prob)
         {
@@ -215,7 +215,7 @@ public class EnvironmentController : MonoBehaviour
                 predator.sight_radius += t;
             }
         }
-
+        */
         rand = Random.Range(0f, 1f);
         predator.maturity = maturity_def_predator;
         if (rand <= spwn_mutation_prob)
@@ -267,7 +267,7 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-        rand = Random.Range(0f, 1f);
+       /* rand = Random.Range(0f, 1f);
         prey.sight_radius = parent.sight_radius;
         if (rand <= reptoduction_mutation_prob)
         {
@@ -276,7 +276,7 @@ public class EnvironmentController : MonoBehaviour
             {
                 prey.sight_radius += t;
             }
-        }
+        }*/
 
         rand = Random.Range(0f, 1f);
         prey.maturity = parent.maturity;
@@ -319,7 +319,7 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-        rand = Random.Range(0f, 1f);
+    /*    rand = Random.Range(0f, 1f);
         predator.sight_radius = parent.sight_radius;
         if (rand <= reptoduction_mutation_prob)
         {
@@ -329,7 +329,7 @@ public class EnvironmentController : MonoBehaviour
                 predator.sight_radius += t;
             }
         }
-
+        */
         rand = Random.Range(0f, 1f);
         predator.maturity = parent.maturity;
         if (rand <= reptoduction_mutation_prob)

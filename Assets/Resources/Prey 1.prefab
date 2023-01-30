@@ -173,13 +173,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca24a0ec64a2bd4a8d5f6c36d5b6db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  network: {fileID: 0}
   max_hunger: 20
   cur_hunger: 0
   maturity: 40
   speed: 4
   angular_drag: 1440
-  sight_radius: 15
+  sight_radius: 20
   size: {x: 1, y: 1}
   color: {r: 0.5743803, g: 1, b: 0, a: 0}
   sprite: {fileID: 0}
@@ -188,6 +187,7 @@ MonoBehaviour:
   layers: 040000000400000001000000
   mutation_rate: 0.2
   spawn_point: {fileID: 0}
+  is_test: 0
 --- !u!1 &4577137059331931341
 GameObject:
   m_ObjectHideFlags: 0
