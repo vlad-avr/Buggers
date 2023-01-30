@@ -3815,8 +3815,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1099179814}
-        m_TargetAssemblyTypeName: EnvironmentController, Assembly-CSharp
+      - m_Target: {fileID: 1099179817}
+        m_TargetAssemblyTypeName: UIManager, Scripts
         m_MethodName: Praise
         m_Mode: 1
         m_Arguments:
@@ -4317,7 +4317,7 @@ GameObject:
   - component: {fileID: 970360645}
   - component: {fileID: 970360644}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5437,6 +5437,7 @@ GameObject:
   - component: {fileID: 1099179815}
   - component: {fileID: 1099179816}
   - component: {fileID: 1099179814}
+  - component: {fileID: 1099179817}
   m_Layer: 0
   m_Name: EnvironmentManager
   m_TagString: Untagged
@@ -5468,50 +5469,31 @@ MonoBehaviour:
   prey_pos: {fileID: 593030206}
   best_prey_count: 40
   best_predator_count: 20
-  cur_gen_text: {fileID: 1593157591}
-  population_text: {fileID: 1201656860}
-  info_panel: {fileID: 1722945874}
-  type_text: {fileID: 1248921322}
-  speed_text: {fileID: 484333313}
-  fit_text: {fileID: 1027098777}
-  maturity_text: {fileID: 1938625592}
-  sight_text: {fileID: 1051687690}
-  main_camera: {fileID: 519420031}
-  camera_zoom: 0.5
-  camera_pos_ref: {fileID: 1099179813}
-  NMC: {fileID: 928216969}
-  TMS: {fileID: 418218884}
-  TMR: {fileID: 681574912}
-  reptoduction_mutation_prob: 0.3
-  spwn_mutation_prob: 0.5
+  UImgr: {fileID: 1099179817}
+  reproduction_mutation_prob: 0.5
+  spawn_mutation_prob: 0.3
   maturity_offset_prey: 15
   hunger_offset_prey: 10
   speed_offset_prey: 2
   size_offset_prey: 0.2
-  sight_offset_prey: 5
   maturity_offset_predator: 20
   hunger_offset_predator: 15
   speed_offset_predator: 3
   size_offset_predator: 0.4
-  sight_offset_predator: 15
   maturity_min_prey: 5
   hunger_min_prey: 5
   speed_min_prey: 0.2
-  sight_min_prey: 8
   maturity_min_predator: 10
   hunger_min_predator: 5
   speed_min_predator: 0.4
-  sight_min_predator: 16
   maturity_def_prey: 40
   hunger_def_prey: 20
   speed_def_prey: 4
-  sight_def_prey: 20
   def_color_prey: {r: 0.2258136, g: 1, b: 0.09811318, a: 0}
   def_size_prey: {x: 0.5, y: 0.5}
   maturity_def_predator: 40
   hunger_def_predator: 20
   speed_def_predator: 4
-  sight_def_predator: 40
   def_color_predator: {r: 0.7924528, g: 0.1529517, b: 0, a: 0}
   def_size_predator: {x: 0.8, y: 0.8}
   SA:
@@ -5570,6 +5552,34 @@ MonoBehaviour:
   spawn_num: 80
   food_obj: {fileID: 6193714717242651790, guid: ce6f923ad0c13754494db94ddf9fcb68, type: 3}
   spawn_room: {x: 60, y: 32, z: 0}
+--- !u!114 &1099179817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099179813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f053ab9dcf4682640a920c105fbd9043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EC: {fileID: 1099179814}
+  cur_gen_text: {fileID: 1593157591}
+  population_text: {fileID: 1201656860}
+  info_panel: {fileID: 1722945874}
+  type_text: {fileID: 1248921322}
+  speed_text: {fileID: 484333313}
+  fit_text: {fileID: 1027098777}
+  maturity_text: {fileID: 1938625592}
+  sight_text: {fileID: 1051687690}
+  main_camera: {fileID: 519420031}
+  camera_zoom: 0.5
+  camera_pos_ref: {fileID: 1099179813}
+  gen_count: 0
+  NMC: {fileID: 928216969}
+  TMS: {fileID: 418218884}
+  TMR: {fileID: 681574912}
 --- !u!1 &1106708353
 GameObject:
   m_ObjectHideFlags: 0
@@ -5986,7 +5996,7 @@ GameObject:
   - component: {fileID: 1201656861}
   - component: {fileID: 1201656860}
   m_Layer: 5
-  m_Name: Text (TMP) (5)
+  m_Name: Population
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6572,8 +6582,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1099179814}
-        m_TargetAssemblyTypeName: EnvironmentController, Assembly-CSharp
+      - m_Target: {fileID: 1099179817}
+        m_TargetAssemblyTypeName: UIManager, Scripts
         m_MethodName: Kill
         m_Mode: 1
         m_Arguments:
@@ -7739,7 +7749,7 @@ GameObject:
   - component: {fileID: 1593157592}
   - component: {fileID: 1593157591}
   m_Layer: 5
-  m_Name: Text (TMP) (6)
+  m_Name: Generation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

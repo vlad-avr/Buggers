@@ -206,9 +206,9 @@ public class PreyController : AgentController
     {
         this.network.AddFitness(fitness);
         EC.AddPrey(this.network);
-        if (EC.camera_pos_ref == this.gameObject)
+        if (EC.UImgr.camera_pos_ref == this.gameObject)
         {
-            EC.ReleaseCamera();
+            EC.UImgr.ReleaseCamera();
         }
         Destroy(gameObject);
     }

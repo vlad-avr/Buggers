@@ -80,15 +80,15 @@ public abstract class AgentController : MonoBehaviour
             }
 
 
-            if (EC.camera_pos_ref == this.gameObject)
+            if (EC.UImgr.camera_pos_ref == this.gameObject)
             {
-                EC.UpdateInfo(gameObject.tag, network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString());
+                EC.UImgr.UpdateInfo(gameObject.tag, network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString());
             }
         }
     }
     public void GetLockedOn()
     {
-        EC.LockCamera(gameObject.tag, network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString(), this.gameObject);
+        EC.UImgr.LockCamera(gameObject.tag, network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString(), this.gameObject);
     }
 
     public void Move(float v)

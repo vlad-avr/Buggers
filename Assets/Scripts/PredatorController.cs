@@ -162,9 +162,9 @@ public class PredatorController : AgentController
     {
         this.network.AddFitness(fitness);
         EC.AddPredator(network);
-        if (EC.camera_pos_ref == this.gameObject)
+        if (EC.UImgr.camera_pos_ref == this.gameObject)
         {
-            EC.ReleaseCamera();
+            EC.UImgr.ReleaseCamera();
         }
         Destroy(gameObject);
     }
