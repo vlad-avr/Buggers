@@ -150,8 +150,8 @@ public class PreyController : AgentController
         }
         if (min == null)
         {
-             input_arr.Add(0f);
-             input_arr.Add(0f);
+             input_arr.Add(UnityEngine.Random.Range(-180f, 180f)/180f);
+             input_arr.Add(UnityEngine.Random.Range(0f, sight_radius)/sight_radius);
         }
         else
         {
@@ -174,8 +174,8 @@ public class PreyController : AgentController
         }
         if (min == null)
         {
-             input_arr.Add(0f);
-             input_arr.Add(0f);
+            input_arr.Add(UnityEngine.Random.Range(-180f, 180f)/180f);
+            input_arr.Add(UnityEngine.Random.Range(0f, sight_radius)/sight_radius);
         }
         else
         {
