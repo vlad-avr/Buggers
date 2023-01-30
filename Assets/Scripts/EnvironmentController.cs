@@ -11,15 +11,16 @@ public class EnvironmentController : MonoBehaviour
     // Name of file with some trained networks
     const string file_name = "NNet.dat";
 
-
+    /*
     [Header("Food Spawn Settings")]
     public float rand_spawn_rate;
     public int spawn_num;
     private float cur_rand_spawn_rate;
     public Food food_obj;
-    public Vector3 spawn_room;
+    public Vector3 spawn_room;*/
 
     [Header("Entities Controller / Environment Settings")]
+    public FoodSpawner FS;
     public List<NNet> preys = new List<NNet>();
     public List<NNet> predators = new List<NNet>();
     public int prey_count;
@@ -106,7 +107,7 @@ public class EnvironmentController : MonoBehaviour
             new_obj.GetComponent<PredatorController>().spawn_point = predator_pos;
             MutatePredator(new_obj.GetComponent<PredatorController>());
         }
-        cur_rand_spawn_rate = rand_spawn_rate;
+        //cur_rand_spawn_rate = rand_spawn_rate;
         prey_count = start_gen_count;
         predator_count = start_predator_count;
         camera_pos_ref = this.gameObject;
@@ -472,7 +473,7 @@ public class EnvironmentController : MonoBehaviour
             Debug.Log("ECOSYSTEM IS DEAD");
         }
 
-        if (cur_rand_spawn_rate >= rand_spawn_rate)
+        /*if (cur_rand_spawn_rate >= rand_spawn_rate)
         {
             Spawn_food(spawn_num);
             cur_rand_spawn_rate = 0;
@@ -480,7 +481,7 @@ public class EnvironmentController : MonoBehaviour
         else
         {
             cur_rand_spawn_rate += Time.deltaTime;
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -554,7 +555,7 @@ public class EnvironmentController : MonoBehaviour
                 // prey_list.Add(new NNet(obj.GetComponent<PreyController>().network));
             }
         }
-        cur_rand_spawn_rate = rand_spawn_rate;
+        FS.ResetFoodSpawnRate();
         preys.Clear();
         predators.Clear();
         gen_count++;
@@ -562,7 +563,7 @@ public class EnvironmentController : MonoBehaviour
         predator_count = start_predator_count;
         //  return prey_list;
     }
-
+    /*
     public void Spawn_food(int num)
     {
         while (num > 0)
@@ -571,7 +572,7 @@ public class EnvironmentController : MonoBehaviour
             Instantiate(food_obj, spawn_pos, food_obj.transform.rotation);
             num--;
         }
-    }
+    }*/
     
     public void Pause()
     {
