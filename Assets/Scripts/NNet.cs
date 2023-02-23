@@ -5,13 +5,18 @@ using System;
 
 using Random = UnityEngine.Random;
 
+///Neural Network class
 public class NNet
 {
+    ///Defines how efficient particular NNet is
     private float fitness;
+    ///NNet matrices
     private int[] layers;
     private float[][] neurons;
     private float[][][] weights;
 
+    ///New NNet constructor
+    ///@param layers array of ints that define how many neurons are in every layer
      public NNet(int[] layers)
     {
         this.layers = new int[layers.Length];
@@ -23,6 +28,7 @@ public class NNet
         InitWeights();
     }
 
+    ///Copying constructor
     public NNet(NNet copy_network)
     {
         this.layers = new int[copy_network.layers.Length];
@@ -30,12 +36,13 @@ public class NNet
         {
             this.layers[i] = copy_network.layers[i];
         }
-        //this.fitness = copy_network.fitness;
         InitNeurons();
         InitWeights();
         CopyWeights(copy_network.weights);
     }
 
+
+    ///Copying constructor (copies directly from weights matrices and layers array)
     public NNet(int[] layers, float[][][] weights)
     {
         this.layers = new int[layers.Length];
@@ -48,6 +55,8 @@ public class NNet
         CopyWeights(weights);
     }
 
+
+    ///Copies weights
     private void CopyWeights(float[][][] copy_weights)
     {
         for (int i = 0; i < weights.Length; i++)
@@ -62,6 +71,7 @@ public class NNet
         }
     }
 
+    ///Initializes neuron matrix
     private void InitNeurons()
     {
         List<float[]> neuron_list = new List<float[]>();
@@ -72,6 +82,7 @@ public class NNet
         neurons = neuron_list.ToArray();
     }
 
+    ///Initializes weights matrices
     private void InitWeights()
     {
         List<float[][]> weight_list = new List<float[][]>();
@@ -93,6 +104,8 @@ public class NNet
         weights = weight_list.ToArray();
     }
 
+    ///Feeds forward data until all the layers of neurons are passed
+    ///@param inputs array of sensory data passed by AgentController script
     public float[] FeedForward(float[] inputs)
     {
         for(int i = 0; i < inputs.Length; i++)
@@ -117,6 +130,7 @@ public class NNet
         return neurons[neurons.Length-1];
     }
 
+    ///Changes some weights in NNet
     public void Mutate()
     {
         for(int i = 0; i < weights.Length; i++)
@@ -153,21 +167,26 @@ public class NNet
         }
     }
 
+    ///Adds fitness
     public void AddFitness(float fit)
     {
         fitness += fit;
     }
 
+    ///Sets new fitness
     public void SetFitness(float fit)
     {
         fitness = fit;
     }
 
+    ///Returns fitness
     public float GetFitness()
     {
         return fitness;
     }
 
+    ///Compares to NNets according to their fitnesses
+    ///@returns 1 if other NNet is NULL or has lower fitness and 0 otherwise (-1 should not be returned)
     public int CompareNNets(NNet other)
     {
         if(other == null)
@@ -189,11 +208,13 @@ public class NNet
         }
     }
 
+    ///Returns weights matrices
     public float[][][] GetWeights()
     {
         return weights;
     }
 
+    ///Returns layers array
     public int[] GetLayers()
     {
         return layers;

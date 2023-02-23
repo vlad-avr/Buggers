@@ -6,13 +6,16 @@ using TMPro;
 using System.IO;
 using System.Text;
 
+///Class that controls Environment floaw? learning prosses and agent balance, serves as link between other classes
 public class EnvironmentController : MonoBehaviour
 {
     // Name of file with some trained networks
     const string file_name = "NNet.dat";
 
     [Header("Entities Controller / Environment Settings")]
+    ///Reference to FoodSpawner script
     public FoodSpawner FS;
+    ///Lists of agents` NNets
     public List<NNet> preys = new List<NNet>();
     public List<NNet> predators = new List<NNet>();
     public int prey_count;
@@ -28,22 +31,11 @@ public class EnvironmentController : MonoBehaviour
     public int best_predator_count;
     private PreyController[] prey_objs;
     private PredatorController[] pred_objs;
-
+    ///UIManager reeference
     [Header("UI Manager")]
     public UIManager UImgr;
 
-   /* [Header("UI settings")]
-    public TextMeshProUGUI cur_gen_text, population_text;
-    public GameObject info_panel;
-    public TextMeshProUGUI type_text, speed_text, fit_text, maturity_text, sight_text;
-    public Camera main_camera;
-    public float camera_zoom;
-    private float def_zoom;
-    public GameObject camera_pos_ref;
-    //public TMP_Dropdown prey_list, predator_list;
-    private int gen_count;
-    public Slider NMC, TMS, TMR;*/
-
+    ///Agents mutation probability and offset values
     [Header("Mutation settings")]
     public float reproduction_mutation_prob;
     public float spawn_mutation_prob;
@@ -51,49 +43,46 @@ public class EnvironmentController : MonoBehaviour
     public float hunger_offset_prey;
     public float speed_offset_prey;
     public float size_offset_prey;
-   // public float sight_offset_prey;
     public float maturity_offset_predator;
     public float hunger_offset_predator;
     public float speed_offset_predator;
     public float size_offset_predator;
-  //  public float sight_offset_predator;
 
+    ///Minimal allowed agent parameters
     [Header("Minimal Allowed values")]
     public float maturity_min_prey;
     public float hunger_min_prey;
     public float speed_min_prey;
-    //public float sight_min_prey;
     public float maturity_min_predator;
     public float hunger_min_predator;
     public float speed_min_predator;
-   // public float sight_min_predator;
 
+    ///Default agent parameters
     [Header("Default parameters")]
     public float maturity_def_prey;
     public float hunger_def_prey;
     public float speed_def_prey;
-  //  public float sight_def_prey;
     public Color def_color_prey;
     public Vector2 def_size_prey;
     public float maturity_def_predator;
     public float hunger_def_predator;
     public float speed_def_predator;
-   // public float sight_def_predator;
     public Color def_color_predator;
     public Vector2 def_size_predator;
 
+    ///Array of Sprites
     [Header("Sprite Array")]
     public Sprite[] SA;
+
+    ///Awake is called when the script instnce is loaded
     private void Awake()
     {
-       // gen_count = 0;
         for (int i = 0; i < start_gen_count; i++)
         {
             GameObject new_obj = Instantiate(prey_obj, prey_pos.position, Quaternion.identity);
             new_obj.GetComponent<PreyController>().network = new NNet(new_obj.GetComponent<PreyController>().layers);
             new_obj.GetComponent<PreyController>().spawn_point = prey_pos;
             MutatePrey(new_obj.GetComponent<PreyController>());
-           // preys.Add(new NNet(new_obj.GetComponent<PreyController>().network));
         }
         for(int i = 0; i < start_predator_count; i++)
         {
@@ -102,17 +91,11 @@ public class EnvironmentController : MonoBehaviour
             new_obj.GetComponent<PredatorController>().spawn_point = predator_pos;
             MutatePredator(new_obj.GetComponent<PredatorController>());
         }
-        //cur_rand_spawn_rate = rand_spawn_rate;
         prey_count = start_gen_count;
         predator_count = start_predator_count;
-       /* camera_pos_ref = this.gameObject;
-        def_zoom = main_camera.orthographicSize;
-        info_panel.SetActive(false);
-        NMC.value = mutation_rate;
-        TMR.value = reptoduction_mutation_prob;
-        TMS.value = spwn_mutation_prob;*/
     }
 
+    ///Slighty changes some PreyController parameters
     void MutatePrey(PreyController prey)
     {
         float rand = Random.Range(0f, 1f);
@@ -137,18 +120,6 @@ public class EnvironmentController : MonoBehaviour
                 prey.max_hunger += t;
             }
         }
-
-    /*    rand = Random.Range(0f, 1f);
-        prey.sight_radius = sight_def_prey;
-        if (rand <= spwn_mutation_prob)
-        {
-            float t = Random.Range(-sight_offset_prey, sight_offset_prey);
-            if (prey.sight_radius + t >= sight_min_prey)
-            {
-                prey.sight_radius += t;
-            }
-        }*/
-
         rand = Random.Range(0f, 1f);
         prey.maturity = maturity_def_prey;
         if (rand <= spawn_mutation_prob)
@@ -175,6 +146,7 @@ public class EnvironmentController : MonoBehaviour
         prey.color = randcolor;
     }
 
+    ///Slighty changes some PredatorController parameters
     void MutatePredator(PredatorController predator)
     {
         float rand = Random.Range(0f, 1f);
@@ -200,17 +172,6 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-     /*   rand = Random.Range(0f, 1f);
-        predator.sight_radius = sight_def_predator;
-        if (rand <= spwn_mutation_prob)
-        {
-            float t = Random.Range(-sight_offset_predator, sight_offset_predator);
-            if (predator.sight_radius + t >= sight_min_predator)
-            {
-                predator.sight_radius += t;
-            }
-        }
-        */
         rand = Random.Range(0f, 1f);
         predator.maturity = maturity_def_predator;
         if (rand <= spawn_mutation_prob)
@@ -237,6 +198,7 @@ public class EnvironmentController : MonoBehaviour
         predator.color = randcolor;
     }
 
+    ///Slighty changes certain PreyConttroller scripts parameters according to the parent script parameters
     public void ReproducePrey(PreyController parent, PreyController prey)
     {
         float rand = Random.Range(0f, 1f);
@@ -262,17 +224,6 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-       /* rand = Random.Range(0f, 1f);
-        prey.sight_radius = parent.sight_radius;
-        if (rand <= reptoduction_mutation_prob)
-        {
-            float t = Random.Range(-sight_offset_prey, sight_offset_prey);
-            if (prey.sight_radius + t >= sight_min_prey)
-            {
-                prey.sight_radius += t;
-            }
-        }*/
-
         rand = Random.Range(0f, 1f);
         prey.maturity = parent.maturity;
         if (rand <= reproduction_mutation_prob)
@@ -289,6 +240,7 @@ public class EnvironmentController : MonoBehaviour
         prey.sprite = parent.sprite;
     }
 
+    ///Slighty changes certain PredatorConttroller scripts parameters according to the parent script parameters
     public void ReproducePredator(PredatorController parent, PredatorController predator)
     {
         float rand = Random.Range(0f, 1f);
@@ -314,17 +266,6 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-    /*    rand = Random.Range(0f, 1f);
-        predator.sight_radius = parent.sight_radius;
-        if (rand <= reptoduction_mutation_prob)
-        {
-            float t = Random.Range(-sight_offset_predator, sight_offset_predator);
-            if (predator.sight_radius + t >= sight_min_predator)
-            {
-                predator.sight_radius += t;
-            }
-        }
-        */
         rand = Random.Range(0f, 1f);
         predator.maturity = parent.maturity;
         if (rand <= reproduction_mutation_prob)
@@ -341,90 +282,7 @@ public class EnvironmentController : MonoBehaviour
         predator.sprite = parent.sprite;
     }
 
-   /* public void UpdateUI(PreyController[] preys, PredatorController[] predators)
-    {
-        /*prey_list.ClearOptions();
-        predator_list.ClearOptions();*/
-       /* cur_gen_text.text = gen_count.ToString();
-        population_text.text = prey_count.ToString() + " / " + predator_count.ToString();
-        main_camera.transform.position = new Vector3(camera_pos_ref.transform.position.x, camera_pos_ref.transform.position.y, -10);
-        mutation_rate = NMC.value;
-        reproduction_mutation_prob = TMR.value;
-        spawn_mutation_prob = TMS.value;
-       /* for (int i = 0; i < preys.Length; i++)
-        {
-            prey_list.options.Add(new TMP_Dropdown.OptionData() { text = " prey " + i.ToString() + " fit " + preys[i].network.GetFitness().ToString() });
-        }
-        for (int i = 0; i < predators.Length; i++)
-        {
-            predator_list.options.Add(new TMP_Dropdown.OptionData() { text = " predator " + i.ToString() + " fit " + predators[i].network.GetFitness().ToString() });
-        }*//*
-    }*/
-
-   /* public void Kill()
-    {
-        if (camera_pos_ref.CompareTag("Prey"))
-        {
-            camera_pos_ref.GetComponent<PreyController>().Die(0);
-        }
-        else if(camera_pos_ref.CompareTag("Predator"))
-        {
-            camera_pos_ref.GetComponent<PredatorController>().Die(0);
-        }
-    }
-
-    public void Praise()
-    {
-        if (camera_pos_ref.CompareTag("Prey"))
-        {
-            camera_pos_ref.GetComponent<PreyController>().network.AddFitness(1);
-        }
-        else if (camera_pos_ref.CompareTag("Predator"))
-        {
-            camera_pos_ref.GetComponent<PredatorController>().network.AddFitness(1);
-        }
-    }*/
-
- /*   public void CrossBreed()
-    {
-        Pause();
-        is_breeding = true;
-        GameObject parent1 = camera_pos_ref;
-        if (camera_pos_ref.CompareTag("Prey"))
-        {
-            hint_obj.SetActive(true);
-        }
-    }
-    */
-   /* public void UpdateInfo(string type, string fitness, string speed, string maturity, string sight)
-    {
-        type_text.text = type;
-        fit_text.text = fitness;
-        speed_text.text = speed;
-        maturity_text.text = maturity;
-    }
-
-    public void LockCamera(string type, string fitness, string speed, string maturity, string sight, GameObject obj)
-    {
-        main_camera.orthographicSize = def_zoom;
-        info_panel.SetActive(true);
-        type_text.text = type;
-        fit_text.text = fitness;
-        speed_text.text = speed;
-        maturity_text.text = maturity;
-        sight_text.text = sight;
-        camera_pos_ref = obj;
-        main_camera.transform.position = new Vector3(camera_pos_ref.transform.position.x, camera_pos_ref.transform.position.y, -10);
-        main_camera.orthographicSize *= camera_zoom;
-    }
-
-    public void ReleaseCamera()
-    {
-        info_panel.SetActive(false);
-        camera_pos_ref = this.gameObject;
-        main_camera.orthographicSize = def_zoom;
-    }*/
-
+    ///Sets UIManager camera reference to GameObject that has PreyController script with highest fitness value of NNet attached to it
     public void FiitestPrey()
     {
         PreyController temp = prey_objs[0];
@@ -438,6 +296,7 @@ public class EnvironmentController : MonoBehaviour
         temp.GetLockedOn();
     }
 
+    ///Sets UIManager camera reference to GameObject that has PredatorController script with highest fitness value of NNet attached to it
     public void FiitestPredator()
     {
         PredatorController temp = pred_objs[0];
@@ -451,14 +310,7 @@ public class EnvironmentController : MonoBehaviour
         temp.GetLockedOn();
     }
 
-    /*private void UpdateAgentCount()
-    {
-        PreyController[] prey_objs = FindObjectsOfType<PreyController>();
-        prey_count = prey_objs.Length;
-        PredatorController[] pred_objs = FindObjectsOfType<PredatorController>();
-        predator_count = pred_objs.Length;
-    }*/
-
+    /// FixedUpdate is called every fixed framerate frame
     private void FixedUpdate()
     {
         if(prey_count <= 0 || predator_count <= 0)
@@ -467,21 +319,6 @@ public class EnvironmentController : MonoBehaviour
             Repopulate();
             Debug.Log("ECOSYSTEM IS DEAD");
         }
-
-        /*if (cur_rand_spawn_rate >= rand_spawn_rate)
-        {
-            Spawn_food(spawn_num);
-            cur_rand_spawn_rate = 0;
-        }
-        else
-        {
-            cur_rand_spawn_rate += Time.deltaTime;
-        }*/
-
-      /* if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ReleaseCamera();
-        }*/
         prey_objs = FindObjectsOfType<PreyController>();
         prey_count = prey_objs.Length;
         pred_objs = FindObjectsOfType<PredatorController>();
@@ -489,6 +326,7 @@ public class EnvironmentController : MonoBehaviour
         UImgr.UpdateUI(prey_objs, pred_objs);
     }
 
+    ///Destroys any remaining AgentController or Food instances in the scene and Spawns next generation of Agents 
     public void Repopulate()
     {
         UImgr.ReleaseCamera();
@@ -530,7 +368,6 @@ public class EnvironmentController : MonoBehaviour
                     obj.GetComponent<PreyController>().network.Mutate();
                 }
                 MutatePrey(obj.GetComponent<PreyController>());
-                // prey_list.Add(new NNet(obj.GetComponent<PreyController>().network));
             }
         }
         num = start_predator_count / best_predator_count;
@@ -547,7 +384,7 @@ public class EnvironmentController : MonoBehaviour
                     obj.GetComponent<PredatorController>().network.Mutate();
                 }
                 MutatePredator(obj.GetComponent<PredatorController>());
-                // prey_list.Add(new NNet(obj.GetComponent<PreyController>().network));
+              
             }
         }
         FS.ResetFoodSpawnRate();
@@ -556,30 +393,21 @@ public class EnvironmentController : MonoBehaviour
         UImgr.gen_count++;
         prey_count = start_gen_count;
         predator_count = start_predator_count;
-        //  return prey_list;
     }
-    /*
-    public void Spawn_food(int num)
-    {
-        while (num > 0)
-        {
-            Vector3 spawn_pos = new Vector3(Random.Range(-spawn_room.x, spawn_room.x), Random.Range(-spawn_room.y, spawn_room.y), 0);
-            Instantiate(food_obj, spawn_pos, food_obj.transform.rotation);
-            num--;
-        }
-    }*/
     
+    ///Pauses simulation
     public void Pause()
     {
         Time.timeScale = 0f;
     }
 
-
+    ///Unpauses siulation
     public void UnPause()
     {
         Time.timeScale = 1f;
     }
 
+    ///Adds new NNet record of PreyController script 
     public void AddPrey(NNet net)
     {
         if (preys.Count == 0)
@@ -636,11 +464,9 @@ public class EnvironmentController : MonoBehaviour
                 }
             }
         }
-     /*   Debug.Log(preys.Count.ToString() + " PREYS");
-        Debug.Log(preys[0].GetFitness());
-        Debug.Log(preys[preys.Count - 1].GetFitness());*/
     }
 
+    ///Adds new NNet record of PredatorController script
     public void AddPredator(NNet net)
     {
         if (predators.Count == 0)
@@ -697,12 +523,9 @@ public class EnvironmentController : MonoBehaviour
                 }
             }
         }
-      /*  Debug.Log(predators.Count.ToString() + " PREDATORS");
-        Debug.Log(predators[0].GetFitness());
-        Debug.Log(predators[predators.Count - 1].GetFitness());*/
-
     }
 
+    ///Writes NNet Pool to .dat file and repopulates the Environment
     public void WriteFile()
     {
         if (prey_count > 0)
@@ -780,6 +603,7 @@ public class EnvironmentController : MonoBehaviour
         }
     }
 
+    ///Reads NNet Pool from .dat file and repopulates the Environment
     public void ReadFile()
     {
         if (File.Exists(file_name))

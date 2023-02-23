@@ -4,11 +4,15 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+///Class for agent movement logic testing
 public class AgentTest
 {
+    ///Test objects and scripts references
     private GameObject prey, pred;
     private PreyController prey_ctrl;
     private PredatorController pred_ctrl;
+
+    ///Allows to Set up testing scene
     [SetUp]
     public void SetUp()
     {
@@ -18,6 +22,7 @@ public class AgentTest
         pred_ctrl = pred.GetComponent<PredatorController>();
     }
    
+    ///Testing enumerator
     [UnityTest]
     public IEnumerator AgentMoveTest()
     {

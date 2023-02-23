@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+///Class for UI manipulations
 public class UIManager : MonoBehaviour
 {
     [Header("Environment Controller")]
@@ -17,10 +18,10 @@ public class UIManager : MonoBehaviour
     public float camera_zoom;
     private float def_zoom;
     public GameObject camera_pos_ref;
-    //public TMP_Dropdown prey_list, predator_list;
     public int gen_count;
     public Slider NMC, TMS, TMR;
 
+    ///Awake is called when the script instnce is loaded
     private void Awake()
     {
         gen_count = 0;
@@ -31,13 +32,13 @@ public class UIManager : MonoBehaviour
         TMR.value = EC.reproduction_mutation_prob;
         TMS.value = EC.spawn_mutation_prob;
     }
-    // Start is called before the first frame update
+    /// Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    /// Update is called once per frame
     void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -51,7 +52,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
+    ///Updates info about object that the camera is currently locked on
     public void UpdateInfo(string type, string fitness, string speed, string maturity, string sight)
     {
         type_text.text = type;
@@ -61,6 +62,7 @@ public class UIManager : MonoBehaviour
         sight_text.text = sight;
     }
 
+    ///Locks the camera on the object displaying info about it
     public void LockCamera(string type, string fitness, string speed, string maturity, string sight, GameObject obj)
     {
         main_camera.orthographicSize = def_zoom;
@@ -75,6 +77,7 @@ public class UIManager : MonoBehaviour
         main_camera.orthographicSize *= camera_zoom;
     }
 
+    ///Cancels locck on 
     public void ReleaseCamera()
     {
         info_panel.SetActive(false);
@@ -82,6 +85,8 @@ public class UIManager : MonoBehaviour
         main_camera.orthographicSize = def_zoom;
     }
 
+
+    ///Sends signal to Destroy the object that the Camera is locked on
     public void Kill()
     {
         if (camera_pos_ref.CompareTag("Prey"))
@@ -94,6 +99,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    ///Increases the fitness of the NNet of the object that the Camera is locked on
     public void Praise()
     {
         if (camera_pos_ref.CompareTag("Prey"))
@@ -106,6 +112,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    ///Updates info about the current generation of Agents
     public void UpdateUI(PreyController[] preys, PredatorController[] predators)
     {
         cur_gen_text.text = gen_count.ToString();

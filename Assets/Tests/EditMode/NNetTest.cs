@@ -4,9 +4,10 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+///Class for testing NNet Logic
 public class NNetTest
 {
-    // A Test behaves as an ordinary method
+    ///Tests whether NNet copying constructors works properly
     [Test]
     public void NNetCopyTest()
     {
@@ -34,6 +35,8 @@ public class NNetTest
             }
         }
     }
+
+    ///Tests whether input and output arrays of NNet are of correct dimension
     [Test]
     public void NNetFeedForwardTest()
     {
@@ -47,6 +50,8 @@ public class NNetTest
         }
        
     }
+
+    ///Tests function for Fitness manipulation
     [Test]
     public void NNetFitnessInfTest()
     {

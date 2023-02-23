@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+///Class controls Food spawn
 public class FoodSpawner : MonoBehaviour
 {
 
@@ -31,6 +32,7 @@ public class FoodSpawner : MonoBehaviour
         }
     }
 
+    ///Instantiates *num* objects of type Food
     public void Spawn_food(int num)
     {
         while (num > 0)
@@ -41,6 +43,7 @@ public class FoodSpawner : MonoBehaviour
         }
     }
 
+    ///Resets timer
     public void ResetFoodSpawnRate()
     {
         cur_rand_spawn_rate = rand_spawn_rate;

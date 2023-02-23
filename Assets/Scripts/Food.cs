@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+///Class represents food for Prey gameObjects
 public class Food : MonoBehaviour
 {
+    ///How long before the object is destroyed
     [Header("Food settings")]
     public float lifetime;
-
+    /// FixedUpdate is called every fixed framerate frame
     private void FixedUpdate()
     {
         if(lifetime <= 0)
@@ -18,7 +20,7 @@ public class Food : MonoBehaviour
             lifetime -= Time.deltaTime;
         }
     }
-
+    ///Detects if object has collided with object of type PreyController
     private void OnCollisionEnter2D(UnityEngine.Collision2D collision)
     {
         if (collision.gameObject.GetComponent<PreyController>())
@@ -27,6 +29,7 @@ public class Food : MonoBehaviour
         }
     }
 
+    ///Ensures that food object is destroyed properly when collided with object of type PreyController
     private void GetEaten(PreyController prey)
     {
         prey.cur_hunger = 0;
