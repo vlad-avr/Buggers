@@ -1,0 +1,85 @@
+\hypertarget{class_n_net}{}\doxysection{NNet Class Reference}
+\label{class_n_net}\index{NNet@{NNet}}
+
+
+Neural Network class.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_n_net_a946f41ae071571ead75b48e389a646b3}{NNet}} (int\mbox{[}$\,$\mbox{]} layers)
+\item 
+\mbox{\Hypertarget{class_n_net_a00ee01b507d1d715ea331b83896395b4}\label{class_n_net_a00ee01b507d1d715ea331b83896395b4}} 
+{\bfseries NNet} (\mbox{\hyperlink{class_n_net}{NNet}} copy\+\_\+network)
+\begin{DoxyCompactList}\small\item\em Copying constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_net_a612c597efd63c6699094a7eb63e7119b}\label{class_n_net_a612c597efd63c6699094a7eb63e7119b}} 
+{\bfseries NNet} (int\mbox{[}$\,$\mbox{]} layers, float\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} weights)
+\begin{DoxyCompactList}\small\item\em Copying constructor (copies directly from weights matrices and layers array) \end{DoxyCompactList}\item 
+float\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_n_net_a07a1ba5def231257a8aea8e8832f9a08}{Feed\+Forward}} (float\mbox{[}$\,$\mbox{]} inputs)
+\item 
+\mbox{\Hypertarget{class_n_net_ad4e241f501ec13f739b38e571deae7d2}\label{class_n_net_ad4e241f501ec13f739b38e571deae7d2}} 
+void {\bfseries Mutate} ()
+\begin{DoxyCompactList}\small\item\em Changes some weights in \mbox{\hyperlink{class_n_net}{NNet}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_net_a614344c296a561c1e5de9ca4292517f5}\label{class_n_net_a614344c296a561c1e5de9ca4292517f5}} 
+void {\bfseries Add\+Fitness} (float fit)
+\begin{DoxyCompactList}\small\item\em Adds fitness. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_net_af3d0cef75b662efe1d89dfccf71979ec}\label{class_n_net_af3d0cef75b662efe1d89dfccf71979ec}} 
+void {\bfseries Set\+Fitness} (float fit)
+\begin{DoxyCompactList}\small\item\em Sets new fitness. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_net_a6fa21c8d71004ae9f62d60d415ecfeac}\label{class_n_net_a6fa21c8d71004ae9f62d60d415ecfeac}} 
+float {\bfseries Get\+Fitness} ()
+\begin{DoxyCompactList}\small\item\em Returns fitness. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_n_net_afb5225ea504ce6b2450a31131209d030}{Compare\+NNets}} (\mbox{\hyperlink{class_n_net}{NNet}} other)
+\item 
+\mbox{\Hypertarget{class_n_net_a5a15906bc648942fc5c5ecbc53bad2d3}\label{class_n_net_a5a15906bc648942fc5c5ecbc53bad2d3}} 
+float\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]}\mbox{[}$\,$\mbox{]} {\bfseries Get\+Weights} ()
+\begin{DoxyCompactList}\small\item\em Returns weights matrices. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_n_net_a3fbae5a5de78e2920a0e8b524fbcfbb6}\label{class_n_net_a3fbae5a5de78e2920a0e8b524fbcfbb6}} 
+int\mbox{[}$\,$\mbox{]} {\bfseries Get\+Layers} ()
+\begin{DoxyCompactList}\small\item\em Returns layers array. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Neural Network class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_n_net_a946f41ae071571ead75b48e389a646b3}\label{class_n_net_a946f41ae071571ead75b48e389a646b3}} 
+\index{NNet@{NNet}!NNet@{NNet}}
+\index{NNet@{NNet}!NNet@{NNet}}
+\doxysubsubsection{\texorpdfstring{NNet()}{NNet()}}
+{\footnotesize\ttfamily NNet.\+NNet (\begin{DoxyParamCaption}\item[{int\mbox{[}$\,$\mbox{]}}]{layers }\end{DoxyParamCaption})}
+
+New \mbox{\hyperlink{class_n_net}{NNet}} constructor 
+\begin{DoxyParams}{Parameters}
+{\em layers} & array of ints that define how many neurons are in every layer \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_n_net_afb5225ea504ce6b2450a31131209d030}\label{class_n_net_afb5225ea504ce6b2450a31131209d030}} 
+\index{NNet@{NNet}!CompareNNets@{CompareNNets}}
+\index{CompareNNets@{CompareNNets}!NNet@{NNet}}
+\doxysubsubsection{\texorpdfstring{CompareNNets()}{CompareNNets()}}
+{\footnotesize\ttfamily int NNet.\+Compare\+NNets (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_n_net}{NNet}}}]{other }\end{DoxyParamCaption})}
+
+Compares to NNets according to their fitnesses \begin{DoxyReturn}{Returns}
+1 if other \mbox{\hyperlink{class_n_net}{NNet}} is NULL or has lower fitness and 0 otherwise (-\/1 should not be returned) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_n_net_a07a1ba5def231257a8aea8e8832f9a08}\label{class_n_net_a07a1ba5def231257a8aea8e8832f9a08}} 
+\index{NNet@{NNet}!FeedForward@{FeedForward}}
+\index{FeedForward@{FeedForward}!NNet@{NNet}}
+\doxysubsubsection{\texorpdfstring{FeedForward()}{FeedForward()}}
+{\footnotesize\ttfamily float\mbox{[}$\,$\mbox{]} NNet.\+Feed\+Forward (\begin{DoxyParamCaption}\item[{float\mbox{[}$\,$\mbox{]}}]{inputs }\end{DoxyParamCaption})}
+
+Feeds forward data until all the layers of neurons are passed 
+\begin{DoxyParams}{Parameters}
+{\em inputs} & array of sensory data passed by \mbox{\hyperlink{class_agent_controller}{Agent\+Controller}} script \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+NNet.\+cs\end{DoxyCompactItemize}

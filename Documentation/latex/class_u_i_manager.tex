@@ -1,0 +1,93 @@
+\hypertarget{class_u_i_manager}{}\doxysection{UIManager Class Reference}
+\label{class_u_i_manager}\index{UIManager@{UIManager}}
+
+
+Class for UI manipulations.  
+
+
+Inheritance diagram for UIManager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_u_i_manager}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_aee371c17f555bf28fe8e686f5c5df9a5}\label{class_u_i_manager_aee371c17f555bf28fe8e686f5c5df9a5}} 
+void {\bfseries Update\+Info} (string type, string fitness, string speed, string maturity, string sight)
+\begin{DoxyCompactList}\small\item\em Updates info about object that the camera is currently locked on. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_u_i_manager_aed72e977146fe9fa2a6405e1529da400}\label{class_u_i_manager_aed72e977146fe9fa2a6405e1529da400}} 
+void {\bfseries Lock\+Camera} (string type, string fitness, string speed, string maturity, string sight, Game\+Object obj)
+\begin{DoxyCompactList}\small\item\em Locks the camera on the object displaying info about it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_u_i_manager_a906e022f348d20d169b457eba688136d}\label{class_u_i_manager_a906e022f348d20d169b457eba688136d}} 
+void {\bfseries Release\+Camera} ()
+\begin{DoxyCompactList}\small\item\em Cancels locck on. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_u_i_manager_ad82fe4c54df1735b3be1eaa51ebb4186}\label{class_u_i_manager_ad82fe4c54df1735b3be1eaa51ebb4186}} 
+void {\bfseries Kill} ()
+\begin{DoxyCompactList}\small\item\em Sends signal to Destroy the object that the Camera is locked on. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_u_i_manager_a389758d52c7a36855c82ce4540045bf2}\label{class_u_i_manager_a389758d52c7a36855c82ce4540045bf2}} 
+void {\bfseries Praise} ()
+\begin{DoxyCompactList}\small\item\em Increases the fitness of the \mbox{\hyperlink{class_n_net}{NNet}} of the object that the Camera is locked on. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_u_i_manager_a1717299c12370136b22ce0e217e8f8de}\label{class_u_i_manager_a1717299c12370136b22ce0e217e8f8de}} 
+void {\bfseries Update\+UI} (\mbox{\hyperlink{class_prey_controller}{Prey\+Controller}}\mbox{[}$\,$\mbox{]} preys, \mbox{\hyperlink{class_predator_controller}{Predator\+Controller}}\mbox{[}$\,$\mbox{]} predators)
+\begin{DoxyCompactList}\small\item\em Updates info about the current generation of Agents. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_ad5f64c2b3a8ae5ddcfe4a08fde071dbf}\label{class_u_i_manager_ad5f64c2b3a8ae5ddcfe4a08fde071dbf}} 
+\mbox{\hyperlink{class_environment_controller}{Environment\+Controller}} {\bfseries EC}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a66031d50a16d65dbab2c14f63603de5e}\label{class_u_i_manager_a66031d50a16d65dbab2c14f63603de5e}} 
+Text\+Mesh\+Pro\+UGUI {\bfseries cur\+\_\+gen\+\_\+text}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a2e1a9f2984d59fecc0302fb464d3c974}\label{class_u_i_manager_a2e1a9f2984d59fecc0302fb464d3c974}} 
+Text\+Mesh\+Pro\+UGUI {\bfseries population\+\_\+text}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a178191205c5818d12e1be6071e134f13}\label{class_u_i_manager_a178191205c5818d12e1be6071e134f13}} 
+Game\+Object {\bfseries info\+\_\+panel}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_aebe988f250136663ed7e23604ba81d31}\label{class_u_i_manager_aebe988f250136663ed7e23604ba81d31}} 
+Text\+Mesh\+Pro\+UGUI {\bfseries type\+\_\+text}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_ab1d101fa34363b8d6dd7b14aaab6967d}\label{class_u_i_manager_ab1d101fa34363b8d6dd7b14aaab6967d}} 
+Text\+Mesh\+Pro\+UGUI {\bfseries speed\+\_\+text}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a6c0c6fefa02f205336fb3d9d7926b631}\label{class_u_i_manager_a6c0c6fefa02f205336fb3d9d7926b631}} 
+Text\+Mesh\+Pro\+UGUI {\bfseries fit\+\_\+text}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a04377c1ce40d916cdbfccae3d5d3adda}\label{class_u_i_manager_a04377c1ce40d916cdbfccae3d5d3adda}} 
+Text\+Mesh\+Pro\+UGUI {\bfseries maturity\+\_\+text}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a3180ea24d4b9d85368ac6679c7e56e90}\label{class_u_i_manager_a3180ea24d4b9d85368ac6679c7e56e90}} 
+Text\+Mesh\+Pro\+UGUI {\bfseries sight\+\_\+text}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a5f492f4c9131368e1aab41611dc89f0e}\label{class_u_i_manager_a5f492f4c9131368e1aab41611dc89f0e}} 
+Camera {\bfseries main\+\_\+camera}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_aee6347a154bc792c8fec949c121f0d1a}\label{class_u_i_manager_aee6347a154bc792c8fec949c121f0d1a}} 
+float {\bfseries camera\+\_\+zoom}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a016ad3d5cee2c30c9df88c1ddf960b78}\label{class_u_i_manager_a016ad3d5cee2c30c9df88c1ddf960b78}} 
+Game\+Object {\bfseries camera\+\_\+pos\+\_\+ref}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a3bed4059a5ba980780cd1056a8eb9fa2}\label{class_u_i_manager_a3bed4059a5ba980780cd1056a8eb9fa2}} 
+int {\bfseries gen\+\_\+count}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_aff7859922baec09c0998ddac1e2af0eb}\label{class_u_i_manager_aff7859922baec09c0998ddac1e2af0eb}} 
+Slider {\bfseries NMC}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a7e2e95560d793d5ea379383bdb267484}\label{class_u_i_manager_a7e2e95560d793d5ea379383bdb267484}} 
+Slider {\bfseries TMS}
+\item 
+\mbox{\Hypertarget{class_u_i_manager_a3c98fd996a9a24e0a3d68bed719dcd16}\label{class_u_i_manager_a3c98fd996a9a24e0a3d68bed719dcd16}} 
+Slider {\bfseries TMR}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for UI manipulations. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+UIManager.\+cs\end{DoxyCompactItemize}

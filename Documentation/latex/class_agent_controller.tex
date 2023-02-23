@@ -1,0 +1,160 @@
+\hypertarget{class_agent_controller}{}\doxysection{Agent\+Controller Class Reference}
+\label{class_agent_controller}\index{AgentController@{AgentController}}
+
+
+Parent class for Agents.  
+
+
+Inheritance diagram for Agent\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_agent_controller}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_agent_controller_aced51a2a9dd6ab04f45cbdae6f03a40f}\label{class_agent_controller_aced51a2a9dd6ab04f45cbdae6f03a40f}} 
+void {\bfseries Get\+Locked\+On} ()
+\begin{DoxyCompactList}\small\item\em Passes Agent data to the UI elements and resets Camera position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_agent_controller_a5cd0cffe36c6663e708cdf2663e88afe}{Move}} (float v, float a)
+\item 
+abstract void \mbox{\hyperlink{class_agent_controller_a885dbff8d4062b7b1d95eb5376bbc7a5}{Die}} (int fitness)
+\item 
+abstract void \mbox{\hyperlink{class_agent_controller_abeb7035d26d994c96926563a0a100da2}{Reproduce}} ()
+\begin{DoxyCompactList}\small\item\em Abstract function for allowing agent to clone itself. \end{DoxyCompactList}\item 
+abstract float\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_agent_controller_a9c95ed9194b68cd1264b49a4688c84f8}{Input\+Sensors}} ()
+\begin{DoxyCompactList}\small\item\em Abstract function that stands for sensory input. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_agent_controller_aebe7b308997d88217b1079afa9c9079c}\label{class_agent_controller_aebe7b308997d88217b1079afa9c9079c}} 
+\mbox{\hyperlink{class_n_net}{NNet}} {\bfseries network}
+\begin{DoxyCompactList}\small\item\em Reference to \mbox{\hyperlink{class_n_net}{NNet}} script. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_agent_controller_aeb650b2d157e34d688ff559bdf60d278}\label{class_agent_controller_aeb650b2d157e34d688ff559bdf60d278}} 
+float {\bfseries max\+\_\+hunger} = 10
+\begin{DoxyCompactList}\small\item\em game\+Object physical parameters setting \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_agent_controller_a99e4462fadd030f4577fb318c066c604}\label{class_agent_controller_a99e4462fadd030f4577fb318c066c604}} 
+float {\bfseries cur\+\_\+hunger}
+\item 
+\mbox{\Hypertarget{class_agent_controller_a88c645242ec6cc17655e58ac03dffa3d}\label{class_agent_controller_a88c645242ec6cc17655e58ac03dffa3d}} 
+float {\bfseries maturity} = 20
+\item 
+\mbox{\Hypertarget{class_agent_controller_a9e7249a895dd683e419ebc3a528d442a}\label{class_agent_controller_a9e7249a895dd683e419ebc3a528d442a}} 
+float {\bfseries speed}
+\item 
+\mbox{\Hypertarget{class_agent_controller_aca101ff0225e2d46d986276b9faadb41}\label{class_agent_controller_aca101ff0225e2d46d986276b9faadb41}} 
+float {\bfseries angular\+\_\+drag}
+\item 
+\mbox{\Hypertarget{class_agent_controller_acb066dffc1ebc20216c2262f6a976b3f}\label{class_agent_controller_acb066dffc1ebc20216c2262f6a976b3f}} 
+float {\bfseries sight\+\_\+radius}
+\item 
+\mbox{\Hypertarget{class_agent_controller_a4a6546dd12de0f82fd5fcbc38277e56e}\label{class_agent_controller_a4a6546dd12de0f82fd5fcbc38277e56e}} 
+Vector2 {\bfseries size}
+\item 
+\mbox{\Hypertarget{class_agent_controller_a14f009d67c74126bd221afa40b3e59cb}\label{class_agent_controller_a14f009d67c74126bd221afa40b3e59cb}} 
+Color {\bfseries color}
+\item 
+\mbox{\Hypertarget{class_agent_controller_acb71ee4c714caaa33da6da98d894ddfe}\label{class_agent_controller_acb71ee4c714caaa33da6da98d894ddfe}} 
+Sprite {\bfseries sprite}
+\item 
+\mbox{\Hypertarget{class_agent_controller_a9f085371e720620d26b383f395560cea}\label{class_agent_controller_a9f085371e720620d26b383f395560cea}} 
+Sprite\+Renderer {\bfseries spr}
+\item 
+\mbox{\Hypertarget{class_agent_controller_a7c523df366311e67e404b215414f1e85}\label{class_agent_controller_a7c523df366311e67e404b215414f1e85}} 
+Game\+Object {\bfseries succesor}
+\begin{DoxyCompactList}\small\item\em Successor object prefab. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_agent_controller_ac04762904838910513afd776ea99c148}\label{class_agent_controller_ac04762904838910513afd776ea99c148}} 
+int\mbox{[}$\,$\mbox{]} {\bfseries layers}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_n_net}{NNet}} script settings. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_agent_controller_addd331d7c1f3d5370de48f0d874d4864}\label{class_agent_controller_addd331d7c1f3d5370de48f0d874d4864}} 
+float {\bfseries mutation\+\_\+rate}
+\item 
+\mbox{\Hypertarget{class_agent_controller_aa54feea6d6886e4d253fb79f45d0776f}\label{class_agent_controller_aa54feea6d6886e4d253fb79f45d0776f}} 
+Transform {\bfseries spawn\+\_\+point}
+\begin{DoxyCompactList}\small\item\em Spawn point in the scene reference. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_agent_controller_a5e250301acd2d11ca632e7b0182fbe90}\label{class_agent_controller_a5e250301acd2d11ca632e7b0182fbe90}} 
+bool {\bfseries is\+\_\+test}
+\begin{DoxyCompactList}\small\item\em Boolean varaible to switch on\textbackslash{}off testing mode (dev tool)s. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_agent_controller_a8a6f50b5e1278a4ec48a56de00afde67}\label{class_agent_controller_a8a6f50b5e1278a4ec48a56de00afde67}} 
+void {\bfseries On\+Trigger\+Enter2D} (Collider2D collision)
+\begin{DoxyCompactList}\small\item\em Detects if Agent has entered a Trigger collider. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_agent_controller_ae14c4cddcae5df219a5c440df2a58b4a}\label{class_agent_controller_ae14c4cddcae5df219a5c440df2a58b4a}} 
+float {\bfseries cur\+\_\+maturity}
+\item 
+\mbox{\Hypertarget{class_agent_controller_a828f0c1789535816e4677474416d12f7}\label{class_agent_controller_a828f0c1789535816e4677474416d12f7}} 
+\mbox{\hyperlink{class_environment_controller}{Environment\+Controller}} {\bfseries EC}
+\begin{DoxyCompactList}\small\item\em Reference to \mbox{\hyperlink{class_environment_controller}{Environment\+Controller}} script in the scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Parent class for Agents. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_agent_controller_a885dbff8d4062b7b1d95eb5376bbc7a5}\label{class_agent_controller_a885dbff8d4062b7b1d95eb5376bbc7a5}} 
+\index{AgentController@{AgentController}!Die@{Die}}
+\index{Die@{Die}!AgentController@{AgentController}}
+\doxysubsubsection{\texorpdfstring{Die()}{Die()}}
+{\footnotesize\ttfamily abstract void Agent\+Controller.\+Die (\begin{DoxyParamCaption}\item[{int}]{fitness }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Abstract function for assuring propper destrucyion of the Agent object 
+\begin{DoxyParams}{Parameters}
+{\em fitness} & allows adjust fitness value of corresponding to this agent \mbox{\hyperlink{class_n_net}{NNet}} according to the way the agent was destroyed \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_predator_controller_a4ebe566d7f310f0c2fd90b5ffe968845}{Predator\+Controller}}, and \mbox{\hyperlink{class_prey_controller_a2b4791585f1a3c73746094af8b15ae72}{Prey\+Controller}}.
+
+\mbox{\Hypertarget{class_agent_controller_a9c95ed9194b68cd1264b49a4688c84f8}\label{class_agent_controller_a9c95ed9194b68cd1264b49a4688c84f8}} 
+\index{AgentController@{AgentController}!InputSensors@{InputSensors}}
+\index{InputSensors@{InputSensors}!AgentController@{AgentController}}
+\doxysubsubsection{\texorpdfstring{InputSensors()}{InputSensors()}}
+{\footnotesize\ttfamily abstract float\mbox{[}$\,$\mbox{]} Agent\+Controller.\+Input\+Sensors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Abstract function that stands for sensory input. 
+
+
+
+Implemented in \mbox{\hyperlink{class_predator_controller_aee58d65ff494406cc835e60a383826d8}{Predator\+Controller}}, and \mbox{\hyperlink{class_prey_controller_abdf140b9516c2f2eb8fd3c21137e8558}{Prey\+Controller}}.
+
+\mbox{\Hypertarget{class_agent_controller_a5cd0cffe36c6663e708cdf2663e88afe}\label{class_agent_controller_a5cd0cffe36c6663e708cdf2663e88afe}} 
+\index{AgentController@{AgentController}!Move@{Move}}
+\index{Move@{Move}!AgentController@{AgentController}}
+\doxysubsubsection{\texorpdfstring{Move()}{Move()}}
+{\footnotesize\ttfamily void Agent\+Controller.\+Move (\begin{DoxyParamCaption}\item[{float}]{v,  }\item[{float}]{a }\end{DoxyParamCaption})}
+
+Move function 
+\begin{DoxyParams}{Parameters}
+{\em v} & stands for angular velocity \\
+\hline
+{\em a} & stands for acceleration \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_agent_controller_abeb7035d26d994c96926563a0a100da2}\label{class_agent_controller_abeb7035d26d994c96926563a0a100da2}} 
+\index{AgentController@{AgentController}!Reproduce@{Reproduce}}
+\index{Reproduce@{Reproduce}!AgentController@{AgentController}}
+\doxysubsubsection{\texorpdfstring{Reproduce()}{Reproduce()}}
+{\footnotesize\ttfamily abstract void Agent\+Controller.\+Reproduce (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Abstract function for allowing agent to clone itself. 
+
+
+
+Implemented in \mbox{\hyperlink{class_predator_controller_a251d23aa8bd9b03f1db639020f0e2411}{Predator\+Controller}}, and \mbox{\hyperlink{class_prey_controller_ab05e045ec397bd040071486898fbd942}{Prey\+Controller}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Agent\+Controller.\+cs\end{DoxyCompactItemize}

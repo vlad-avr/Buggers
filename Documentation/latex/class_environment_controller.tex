@@ -1,0 +1,186 @@
+\hypertarget{class_environment_controller}{}\doxysection{Environment\+Controller Class Reference}
+\label{class_environment_controller}\index{EnvironmentController@{EnvironmentController}}
+
+
+Class that controls Environment floaw? learning prosses and agent balance, serves as link between other classes.  
+
+
+Inheritance diagram for Environment\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_environment_controller}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a5bf8c87a20bad539431e6806d7918d9f}\label{class_environment_controller_a5bf8c87a20bad539431e6806d7918d9f}} 
+void {\bfseries Reproduce\+Prey} (\mbox{\hyperlink{class_prey_controller}{Prey\+Controller}} parent, \mbox{\hyperlink{class_prey_controller}{Prey\+Controller}} prey)
+\begin{DoxyCompactList}\small\item\em Slighty changes certain Prey\+Conttroller scripts parameters according to the parent script parameters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a8b5015c8719c0fb9faaf499c2b57da15}\label{class_environment_controller_a8b5015c8719c0fb9faaf499c2b57da15}} 
+void {\bfseries Reproduce\+Predator} (\mbox{\hyperlink{class_predator_controller}{Predator\+Controller}} parent, \mbox{\hyperlink{class_predator_controller}{Predator\+Controller}} predator)
+\begin{DoxyCompactList}\small\item\em Slighty changes certain Predator\+Conttroller scripts parameters according to the parent script parameters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a00865e57a7f2597f395fb05e8ff102ba}\label{class_environment_controller_a00865e57a7f2597f395fb05e8ff102ba}} 
+void {\bfseries Fiitest\+Prey} ()
+\begin{DoxyCompactList}\small\item\em Sets \mbox{\hyperlink{class_u_i_manager}{UIManager}} camera reference to Game\+Object that has \mbox{\hyperlink{class_prey_controller}{Prey\+Controller}} script with highest fitness value of \mbox{\hyperlink{class_n_net}{NNet}} attached to it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a33c929ce57fa9213edd92d097d543806}\label{class_environment_controller_a33c929ce57fa9213edd92d097d543806}} 
+void {\bfseries Fiitest\+Predator} ()
+\begin{DoxyCompactList}\small\item\em Sets \mbox{\hyperlink{class_u_i_manager}{UIManager}} camera reference to Game\+Object that has \mbox{\hyperlink{class_predator_controller}{Predator\+Controller}} script with highest fitness value of \mbox{\hyperlink{class_n_net}{NNet}} attached to it. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a21369612f32ae66d4ae240743e8b4561}\label{class_environment_controller_a21369612f32ae66d4ae240743e8b4561}} 
+void {\bfseries Repopulate} ()
+\begin{DoxyCompactList}\small\item\em Destroys any remaining \mbox{\hyperlink{class_agent_controller}{Agent\+Controller}} or \mbox{\hyperlink{class_food}{Food}} instances in the scene and Spawns next generation of Agents. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a0367048fb4b59ca1f57a5c73f57641b3}\label{class_environment_controller_a0367048fb4b59ca1f57a5c73f57641b3}} 
+void {\bfseries Pause} ()
+\begin{DoxyCompactList}\small\item\em Pauses simulation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_ad267e97df3d22b628a491ee4ea61e687}\label{class_environment_controller_ad267e97df3d22b628a491ee4ea61e687}} 
+void {\bfseries Un\+Pause} ()
+\begin{DoxyCompactList}\small\item\em Unpauses siulation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a4eca9f2de831fe6bcd338c522ef1e6f9}\label{class_environment_controller_a4eca9f2de831fe6bcd338c522ef1e6f9}} 
+void {\bfseries Add\+Prey} (\mbox{\hyperlink{class_n_net}{NNet}} net)
+\begin{DoxyCompactList}\small\item\em Adds new \mbox{\hyperlink{class_n_net}{NNet}} record of \mbox{\hyperlink{class_prey_controller}{Prey\+Controller}} script. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a4bb124ca6623eb3cdd5e704ef0f16967}\label{class_environment_controller_a4bb124ca6623eb3cdd5e704ef0f16967}} 
+void {\bfseries Add\+Predator} (\mbox{\hyperlink{class_n_net}{NNet}} net)
+\begin{DoxyCompactList}\small\item\em Adds new \mbox{\hyperlink{class_n_net}{NNet}} record of \mbox{\hyperlink{class_predator_controller}{Predator\+Controller}} script. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a8a9c8d3815e868ea01c226bf6f23aca5}\label{class_environment_controller_a8a9c8d3815e868ea01c226bf6f23aca5}} 
+void {\bfseries Write\+File} ()
+\begin{DoxyCompactList}\small\item\em Writes \mbox{\hyperlink{class_n_net}{NNet}} Pool to .dat file and repopulates the Environment. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a8c978412a6e3288dbf29407d96d0d454}\label{class_environment_controller_a8c978412a6e3288dbf29407d96d0d454}} 
+void {\bfseries Read\+File} ()
+\begin{DoxyCompactList}\small\item\em Reads \mbox{\hyperlink{class_n_net}{NNet}} Pool from .dat file and repopulates the Environment. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_environment_controller_ac5089a396cf73fff3d1394409450327b}\label{class_environment_controller_ac5089a396cf73fff3d1394409450327b}} 
+\mbox{\hyperlink{class_food_spawner}{Food\+Spawner}} {\bfseries FS}
+\begin{DoxyCompactList}\small\item\em Reference to \mbox{\hyperlink{class_food_spawner}{Food\+Spawner}} script. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a6c7c598cf4106922b65cd1ec7c892f7b}\label{class_environment_controller_a6c7c598cf4106922b65cd1ec7c892f7b}} 
+List$<$ \mbox{\hyperlink{class_n_net}{NNet}} $>$ {\bfseries preys} = new List$<$\mbox{\hyperlink{class_n_net}{NNet}}$>$()
+\begin{DoxyCompactList}\small\item\em Lists of agents\`{} NNets. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a08c4c6659dc4d65070eb323732bb7a99}\label{class_environment_controller_a08c4c6659dc4d65070eb323732bb7a99}} 
+List$<$ \mbox{\hyperlink{class_n_net}{NNet}} $>$ {\bfseries predators} = new List$<$\mbox{\hyperlink{class_n_net}{NNet}}$>$()
+\item 
+\mbox{\Hypertarget{class_environment_controller_aa954a7377ed01057e0974861db3f5b1c}\label{class_environment_controller_aa954a7377ed01057e0974861db3f5b1c}} 
+int {\bfseries prey\+\_\+count}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a665eba337072f0ef267a75b9d54ddaf0}\label{class_environment_controller_a665eba337072f0ef267a75b9d54ddaf0}} 
+int {\bfseries predator\+\_\+count}
+\item 
+\mbox{\Hypertarget{class_environment_controller_aca0d71b5e870d50e9625fe7275bcb90f}\label{class_environment_controller_aca0d71b5e870d50e9625fe7275bcb90f}} 
+int {\bfseries start\+\_\+gen\+\_\+count}
+\item 
+\mbox{\Hypertarget{class_environment_controller_adea4a08638836687c877484e06b0ccef}\label{class_environment_controller_adea4a08638836687c877484e06b0ccef}} 
+int {\bfseries start\+\_\+predator\+\_\+count}
+\item 
+\mbox{\Hypertarget{class_environment_controller_ac717bef0b15decdf419cd23394b86fa5}\label{class_environment_controller_ac717bef0b15decdf419cd23394b86fa5}} 
+float {\bfseries mutation\+\_\+rate}
+\item 
+\mbox{\Hypertarget{class_environment_controller_ab75b666ff70fb8f90833a05072559b76}\label{class_environment_controller_ab75b666ff70fb8f90833a05072559b76}} 
+Game\+Object {\bfseries prey\+\_\+obj}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a42c2ce253fd5c1e2be086aa947a51cb4}\label{class_environment_controller_a42c2ce253fd5c1e2be086aa947a51cb4}} 
+Game\+Object {\bfseries predator\+\_\+obj}
+\item 
+\mbox{\Hypertarget{class_environment_controller_aa64bb13db8be6516fdf0c4943c9adb51}\label{class_environment_controller_aa64bb13db8be6516fdf0c4943c9adb51}} 
+Transform {\bfseries predator\+\_\+pos}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a65fdd4321689b960106433bbb2af487c}\label{class_environment_controller_a65fdd4321689b960106433bbb2af487c}} 
+Transform {\bfseries prey\+\_\+pos}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a0f7a6c33de4023206939608a3b6727e8}\label{class_environment_controller_a0f7a6c33de4023206939608a3b6727e8}} 
+int {\bfseries best\+\_\+prey\+\_\+count}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a2bfbeb92080de3bc78ff399682a89fc9}\label{class_environment_controller_a2bfbeb92080de3bc78ff399682a89fc9}} 
+int {\bfseries best\+\_\+predator\+\_\+count}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a2aec94e0859bed16b0216281f1d1352c}\label{class_environment_controller_a2aec94e0859bed16b0216281f1d1352c}} 
+\mbox{\hyperlink{class_u_i_manager}{UIManager}} {\bfseries UImgr}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_u_i_manager}{UIManager}} reeference. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_af5346ae8df6d65bfad078dbd0f9f1fb2}\label{class_environment_controller_af5346ae8df6d65bfad078dbd0f9f1fb2}} 
+float {\bfseries reproduction\+\_\+mutation\+\_\+prob}
+\begin{DoxyCompactList}\small\item\em Agents mutation probability and offset values. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_a3ead83ee959c7820a7420a197842cf24}\label{class_environment_controller_a3ead83ee959c7820a7420a197842cf24}} 
+float {\bfseries spawn\+\_\+mutation\+\_\+prob}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a2040507c3a7c7c485f887b82e8f5bc0d}\label{class_environment_controller_a2040507c3a7c7c485f887b82e8f5bc0d}} 
+float {\bfseries maturity\+\_\+offset\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a8035b5af60cb809905823f1495a97305}\label{class_environment_controller_a8035b5af60cb809905823f1495a97305}} 
+float {\bfseries hunger\+\_\+offset\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_ae2da443e3e7b808ba6dfdc827de33127}\label{class_environment_controller_ae2da443e3e7b808ba6dfdc827de33127}} 
+float {\bfseries speed\+\_\+offset\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a4985212ad7a61f9abcb7d6e6a87577d5}\label{class_environment_controller_a4985212ad7a61f9abcb7d6e6a87577d5}} 
+float {\bfseries size\+\_\+offset\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a2d40843aae1ae0299ca91f3c393a5827}\label{class_environment_controller_a2d40843aae1ae0299ca91f3c393a5827}} 
+float {\bfseries maturity\+\_\+offset\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a362767e45b60bb4e28a0f9a57d4deb5b}\label{class_environment_controller_a362767e45b60bb4e28a0f9a57d4deb5b}} 
+float {\bfseries hunger\+\_\+offset\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_aad965bf3d5630f980a3ba6fb59f76d30}\label{class_environment_controller_aad965bf3d5630f980a3ba6fb59f76d30}} 
+float {\bfseries speed\+\_\+offset\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_ab65998697e6eded74a9ce3de3ab8aeba}\label{class_environment_controller_ab65998697e6eded74a9ce3de3ab8aeba}} 
+float {\bfseries size\+\_\+offset\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_aeb41b3efe26783ba5c525e010a63f906}\label{class_environment_controller_aeb41b3efe26783ba5c525e010a63f906}} 
+float {\bfseries maturity\+\_\+min\+\_\+prey}
+\begin{DoxyCompactList}\small\item\em Minimal allowed agent parameters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_afcabd1b08c11e1f2cb6b538c1411554f}\label{class_environment_controller_afcabd1b08c11e1f2cb6b538c1411554f}} 
+float {\bfseries hunger\+\_\+min\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_ab519a33e26bfb9b77f8daf960e2f595f}\label{class_environment_controller_ab519a33e26bfb9b77f8daf960e2f595f}} 
+float {\bfseries speed\+\_\+min\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a086c41b7a473149539cd2a22701e46b0}\label{class_environment_controller_a086c41b7a473149539cd2a22701e46b0}} 
+float {\bfseries maturity\+\_\+min\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_aceedf7f167241eec2c9cf081ece01120}\label{class_environment_controller_aceedf7f167241eec2c9cf081ece01120}} 
+float {\bfseries hunger\+\_\+min\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a60b9e8281de741ccce608111b0b1d8e2}\label{class_environment_controller_a60b9e8281de741ccce608111b0b1d8e2}} 
+float {\bfseries speed\+\_\+min\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a2759536c6abc834ee67b8cfca4d4068a}\label{class_environment_controller_a2759536c6abc834ee67b8cfca4d4068a}} 
+float {\bfseries maturity\+\_\+def\+\_\+prey}
+\begin{DoxyCompactList}\small\item\em Default agent parameters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_environment_controller_aa08a22e2c0837e3dbbf90d3372595819}\label{class_environment_controller_aa08a22e2c0837e3dbbf90d3372595819}} 
+float {\bfseries hunger\+\_\+def\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a1f8c42cc81e2b90cf085a5c9d4920ff0}\label{class_environment_controller_a1f8c42cc81e2b90cf085a5c9d4920ff0}} 
+float {\bfseries speed\+\_\+def\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a28d816b50ea6f23d246a41e0e5316b0d}\label{class_environment_controller_a28d816b50ea6f23d246a41e0e5316b0d}} 
+Color {\bfseries def\+\_\+color\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_aacb63566fbcb878e7392c8f682f44c06}\label{class_environment_controller_aacb63566fbcb878e7392c8f682f44c06}} 
+Vector2 {\bfseries def\+\_\+size\+\_\+prey}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a2787e91db39433f1ada26575c1784e06}\label{class_environment_controller_a2787e91db39433f1ada26575c1784e06}} 
+float {\bfseries maturity\+\_\+def\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a66de86503d7841788c0f1142a7f4cc92}\label{class_environment_controller_a66de86503d7841788c0f1142a7f4cc92}} 
+float {\bfseries hunger\+\_\+def\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_aaeb16d42ec682062c39c73580f1e7937}\label{class_environment_controller_aaeb16d42ec682062c39c73580f1e7937}} 
+float {\bfseries speed\+\_\+def\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a8e27523b82c10e487ccd2942381699c1}\label{class_environment_controller_a8e27523b82c10e487ccd2942381699c1}} 
+Color {\bfseries def\+\_\+color\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a74c838c3155d43b38356c5d5d8607fcc}\label{class_environment_controller_a74c838c3155d43b38356c5d5d8607fcc}} 
+Vector2 {\bfseries def\+\_\+size\+\_\+predator}
+\item 
+\mbox{\Hypertarget{class_environment_controller_a5e3f2c451d6d0d1347b49be76adcf811}\label{class_environment_controller_a5e3f2c451d6d0d1347b49be76adcf811}} 
+Sprite\mbox{[}$\,$\mbox{]} {\bfseries SA}
+\begin{DoxyCompactList}\small\item\em Array of Sprites. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class that controls Environment floaw? learning prosses and agent balance, serves as link between other classes. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Environment\+Controller.\+cs\end{DoxyCompactItemize}
