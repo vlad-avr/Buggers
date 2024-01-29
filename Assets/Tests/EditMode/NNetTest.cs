@@ -63,7 +63,7 @@ public class NNetTest
         Assert.AreEqual(15, net.GetFitness());
         NNet net_other = new NNet(layers);
         net_other.SetFitness(20);
-        int t = net.CompareNNets(net_other);
+        int t = NNet.CompareNNets(net, net_other);
         Assert.IsTrue(t == 0);
     }
 }

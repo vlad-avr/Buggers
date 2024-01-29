@@ -306,7 +306,7 @@ public class EnvironmentController : MonoBehaviour
         PreyController temp = prey_objs[0];
         for(int i = 1; i < prey_objs.Length; i++)
         {
-            if(prey_objs[i].network.CompareNNets(temp.network) == 1)
+            if(NNet.CompareNNets(prey_objs[i].network, temp.network) == 1)
             {
                 temp = prey_objs[i];
             }
@@ -320,7 +320,7 @@ public class EnvironmentController : MonoBehaviour
         PredatorController temp = pred_objs[0];
         for (int i = 1; i < pred_objs.Length; i++)
         {
-            if (pred_objs[i].network.CompareNNets(temp.network) == 1)
+            if (NNet.CompareNNets(pred_objs[i].network, temp.network) == 1)
             {
                 temp = pred_objs[i];
             }
@@ -429,119 +429,131 @@ public class EnvironmentController : MonoBehaviour
     ///Adds new NNet record of PreyController script 
     public void AddPrey(NNet net)
     {
-        if (preys.Count == 0)
+        preys.Add(new NNet(net));
+        preys.Sort((net1, net2) => NNet.CompareNNets(net1, net2));
+        if(preys.Count > best_prey_count)
         {
-            preys.Add(new NNet(net));
+            preys.RemoveAt(preys.Count - 1);
         }
-        else
-        {
-            if (preys.Count == best_prey_count)
-            {
-                if (net.GetFitness() < preys[preys.Count - 1].GetFitness())
-                {
-                    return;
-                }
-                else
-                {
-                    preys.Add(new NNet(net));
-                    for (int i = 0; i < preys.Count - 1; i++)
-                    {
-                        for (int j = i; j < preys.Count; j++)
-                        {
-                            if (preys[i].GetFitness() < preys[j].GetFitness())
-                            {
-                                NNet temp = preys[i];
-                                preys[i] = preys[j];
-                                preys[j] = temp;
-                            }
-                        }
-                    }
-                    preys.RemoveAt(preys.Count - 1);
-                }
-            }
-            else
-            {
-                if (net.GetFitness() < preys[preys.Count - 1].GetFitness())
-                {
-                    preys.Add(new NNet(net));
-                }
-                else
-                {
-                    preys.Add(new NNet(net));
-                    for (int i = 0; i < preys.Count - 1; i++)
-                    {
-                        for (int j = i; j < preys.Count; j++)
-                        {
-                            if (preys[i].GetFitness() < preys[j].GetFitness())
-                            {
-                                NNet temp = preys[i];
-                                preys[i] = preys[j];
-                                preys[j] = temp;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //if (preys.Count == 0)
+        //{
+        //    preys.Add(new NNet(net));
+        //}
+        //else
+        //{
+        //    if (preys.Count == best_prey_count)
+        //    {
+        //        if (net.GetFitness() < preys[preys.Count - 1].GetFitness())
+        //        {
+        //            return;
+        //        }
+        //        else
+        //        {
+        //            preys.Add(new NNet(net));
+        //            for (int i = 0; i < preys.Count - 1; i++)
+        //            {
+        //                for (int j = i; j < preys.Count; j++)
+        //                {
+        //                    if (preys[i].GetFitness() < preys[j].GetFitness())
+        //                    {
+        //                        NNet temp = preys[i];
+        //                        preys[i] = preys[j];
+        //                        preys[j] = temp;
+        //                    }
+        //                }
+        //            }
+        //            preys.RemoveAt(preys.Count - 1);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (net.GetFitness() < preys[preys.Count - 1].GetFitness())
+        //        {
+        //            preys.Add(new NNet(net));
+        //        }
+        //        else
+        //        {
+        //            preys.Add(new NNet(net));
+        //            for (int i = 0; i < preys.Count - 1; i++)
+        //            {
+        //                for (int j = i; j < preys.Count; j++)
+        //                {
+        //                    if (preys[i].GetFitness() < preys[j].GetFitness())
+        //                    {
+        //                        NNet temp = preys[i];
+        //                        preys[i] = preys[j];
+        //                        preys[j] = temp;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     ///Adds new NNet record of PredatorController script
     public void AddPredator(NNet net)
     {
-        if (predators.Count == 0)
+        predators.Add(new NNet(net));
+        predators.Sort((net1, net2) => NNet.CompareNNets(net1, net2));
+        if (predators.Count > best_predator_count)
         {
-            predators.Add(new NNet(net));
+            predators.RemoveAt(predators.Count - 1);
         }
-        else
-        {
-            if (predators.Count == best_predator_count)
-            {
-                if (net.GetFitness() < predators[predators.Count - 1].GetFitness())
-                {
-                    return;
-                }
-                else
-                {
-                    predators.Add(new NNet(net));
-                    for (int i = 0; i < predators.Count - 1; i++)
-                    {
-                        for (int j = i; j < predators.Count; j++)
-                        {
-                            if (predators[i].GetFitness() < predators[j].GetFitness())
-                            {
-                                NNet temp = predators[i];
-                                predators[i] = predators[j];
-                                predators[j] = temp;
-                            }
-                        }
-                    }
-                    predators.RemoveAt(predators.Count - 1);
-                }
-            }
-            else
-            {
-                if (net.GetFitness() < predators[predators.Count - 1].GetFitness())
-                {
-                    predators.Add(new NNet(net));
-                }
-                else
-                {
-                    predators.Add(new NNet(net));
-                    for (int i = 0; i < predators.Count - 1; i++)
-                    {
-                        for (int j = i; j < predators.Count; j++)
-                        {
-                            if (predators[i].GetFitness() < predators[j].GetFitness())
-                            {
-                                NNet temp = predators[i];
-                                predators[i] = predators[j];
-                                predators[j] = temp;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //if (predators.Count == 0)
+        //{
+        //    predators.Add(new NNet(net));
+        //}
+        //else
+        //{
+        //    if (predators.Count == best_predator_count)
+        //    {
+        //        if (net.GetFitness() < predators[predators.Count - 1].GetFitness())
+        //        {
+        //            return;
+        //        }
+        //        else
+        //        {
+        //            predators.Add(new NNet(net));
+        //            for (int i = 0; i < predators.Count - 1; i++)
+        //            {
+        //                for (int j = i; j < predators.Count; j++)
+        //                {
+        //                    if (predators[i].GetFitness() < predators[j].GetFitness())
+        //                    {
+        //                        NNet temp = predators[i];
+        //                        predators[i] = predators[j];
+        //                        predators[j] = temp;
+        //                    }
+        //                }
+        //            }
+        //            predators.RemoveAt(predators.Count - 1);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (net.GetFitness() < predators[predators.Count - 1].GetFitness())
+        //        {
+        //            predators.Add(new NNet(net));
+        //        }
+        //        else
+        //        {
+        //            predators.Add(new NNet(net));
+        //            for (int i = 0; i < predators.Count - 1; i++)
+        //            {
+        //                for (int j = i; j < predators.Count; j++)
+        //                {
+        //                    if (predators[i].GetFitness() < predators[j].GetFitness())
+        //                    {
+        //                        NNet temp = predators[i];
+        //                        predators[i] = predators[j];
+        //                        predators[j] = temp;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     ///Writes NNet Pool to .dat file and repopulates the Environment

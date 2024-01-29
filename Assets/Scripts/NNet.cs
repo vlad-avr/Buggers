@@ -187,24 +187,23 @@ public class NNet
 
     ///Compares to NNets according to their fitnesses
     ///@returns 1 if other NNet is NULL or has lower fitness and 0 otherwise (-1 should not be returned)
-    public int CompareNNets(NNet other)
+    public static int CompareNNets(NNet net1, NNet net2)
     {
-        if(other == null)
+        if(net2 == null || net1 == null)
         {
             return 1;
         }
-        if(fitness > other.GetFitness())
+        if(net1.fitness > net2.fitness)
         {
             return 1;
         }
-        else if(fitness <= other.GetFitness())
+        else if(net1.fitness < net2.fitness)
         {
-            return 0;
+            return -1;
         }
         else
         {
-            //should not trigger
-            return -1;
+            return 0;
         }
     }
 
