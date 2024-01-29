@@ -20,7 +20,7 @@ public class EnvironmentController : MonoBehaviour
     public List<NNet> predators = new List<NNet>();
     public int prey_count;
     public int predator_count;
-    public int start_gen_count;
+    public int start_prey_count;
     public int start_predator_count;
     public float mutation_rate;
     public GameObject prey_obj;
@@ -74,24 +74,42 @@ public class EnvironmentController : MonoBehaviour
     [Header("Sprite Array")]
     public Sprite[] SA;
 
+
     ///Awake is called when the script instnce is loaded
     private void Awake()
     {
-        for (int i = 0; i < start_gen_count; i++)
+        spawnPreys();
+        spawnPredators();
+    }
+
+    private void Start()
+    {
+        FS.Spawn_food(FS.spawn_num);
+    }
+
+    private void spawnPreys()
+    {
+        for (int i = 0; i < start_prey_count; i++)
         {
-            GameObject new_obj = Instantiate(prey_obj, prey_pos.position, Quaternion.identity);
+            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y)); GameObject new_obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
             new_obj.GetComponent<PreyController>().network = new NNet(new_obj.GetComponent<PreyController>().layers);
             new_obj.GetComponent<PreyController>().spawn_point = prey_pos;
             MutatePrey(new_obj.GetComponent<PreyController>());
         }
-        for(int i = 0; i < start_predator_count; i++)
+        prey_count = start_prey_count;
+    }
+
+    private void spawnPredators()
+    {
+        for (int i = 0; i < start_predator_count; i++)
         {
-            GameObject new_obj = Instantiate(predator_obj, predator_pos.position, Quaternion.identity);
+            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y));
+            GameObject new_obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
             new_obj.GetComponent<PredatorController>().network = new NNet(new_obj.GetComponent<PredatorController>().layers);
             new_obj.GetComponent<PredatorController>().spawn_point = predator_pos;
             MutatePredator(new_obj.GetComponent<PredatorController>());
         }
-        prey_count = start_gen_count;
+
         predator_count = start_predator_count;
     }
 
@@ -340,7 +358,7 @@ public class EnvironmentController : MonoBehaviour
             GameObject[] prey_objs = GameObject.FindGameObjectsWithTag("Prey");
             for (int i = 0; i < prey_objs.Length; i++)
             {
-                prey_objs[i].GetComponent<PreyController>().network.AddFitness(10f);
+                //prey_objs[i].GetComponent<PreyController>().network.AddFitness(10f);
                 prey_objs[i].GetComponent<PreyController>().Die(0);
             }
         }
@@ -350,16 +368,16 @@ public class EnvironmentController : MonoBehaviour
             GameObject[] pred_objs = GameObject.FindGameObjectsWithTag("Predator");
             for (int i = 0; i < pred_objs.Length; i++)
             {
-                pred_objs[i].GetComponent<PredatorController>().network.AddFitness(5f);
+                //pred_objs[i].GetComponent<PredatorController>().network.AddFitness(5f);
                 pred_objs[i].GetComponent<PredatorController>().Die(0);
             }
         }
-        int num = start_gen_count / best_prey_count;
+        int num = start_prey_count / best_prey_count;
         for (int j = 0; j < num; j++)
         {
             for (int i = 0; i < best_prey_count; i++)
             {
-                GameObject obj = Instantiate(prey_obj, prey_pos.position, Quaternion.identity);
+                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y)); GameObject obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PreyController>().network = new NNet(preys[i]);
                 obj.GetComponent<PreyController>().network.SetFitness(0f);
                 float rand = Random.Range(0f, 1f);
@@ -375,7 +393,7 @@ public class EnvironmentController : MonoBehaviour
         {
             for (int i = 0; i < best_predator_count; i++)
             {
-                GameObject obj = Instantiate(predator_obj, predator_pos.position, Quaternion.identity);
+                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y)); GameObject obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PredatorController>().network = new NNet(predators[i]);
                 obj.GetComponent<PredatorController>().network.SetFitness(0f);
                 float rand = Random.Range(0f, 1f);
@@ -388,10 +406,11 @@ public class EnvironmentController : MonoBehaviour
             }
         }
         FS.ResetFoodSpawnRate();
+        FS.Spawn_food(FS.spawn_num);
         preys.Clear();
         predators.Clear();
         UImgr.gen_count++;
-        prey_count = start_gen_count;
+        prey_count = start_prey_count;
         predator_count = start_predator_count;
     }
     

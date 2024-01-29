@@ -5460,9 +5460,9 @@ MonoBehaviour:
   FS: {fileID: 1099179816}
   prey_count: 0
   predator_count: 0
-  start_gen_count: 80
+  start_prey_count: 80
   start_predator_count: 40
-  mutation_rate: 0.1
+  mutation_rate: 0.05
   prey_obj: {fileID: 8648281372460763466, guid: 8528d2f7c04365e4dbce4229449a98db, type: 3}
   predator_obj: {fileID: 8852648651023317654, guid: eb8a2072c29b71c48b0db2603b2cca98, type: 3}
   predator_pos: {fileID: 448340062}

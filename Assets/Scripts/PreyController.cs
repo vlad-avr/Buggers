@@ -69,11 +69,7 @@ public class PreyController : AgentController
         else
         {
             Vector2 vec = min.transform.position - transform.position;
-            float angle = Vector2.Angle(transform.up, vec);
-            if (angle >= 180f)
-            {
-                angle = -1f * (360f - angle);
-            }
+            float angle = Vector2.SignedAngle(transform.up, vec);
             input_arr.Add(angle / 180f);
             input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
         }
@@ -94,12 +90,8 @@ public class PreyController : AgentController
         {
             Vector2 vec = min.transform.position - transform.position;
             float angle = Vector2.Angle(transform.up, vec);
-            if(angle >= 180f)
-            {
-                angle = -1f * (360f - angle);
-            }
             input_arr.Add(angle / 180f);
-            input_arr.Add(Vector3.Distance(transform.position, min.transform.position) / sight_radius);
+            input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
         }
 
         return input_arr.ToArray();
