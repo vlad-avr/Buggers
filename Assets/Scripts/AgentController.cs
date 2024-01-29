@@ -63,7 +63,7 @@ public abstract class AgentController : MonoBehaviour
         if (!is_test)
         {
             float[] output = network.FeedForward(InputSensors());
-            Move(output[0], output[1] + 1.5f);
+            Move(output[0], output[1] + 1f);
         }
     }
     /// FixedUpdate is called every fixed framerate frame

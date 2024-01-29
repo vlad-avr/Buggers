@@ -75,7 +75,7 @@ public class PreyController : AgentController
                 angle = -1f * (360f - angle);
             }
             input_arr.Add(angle / 180f);
-            input_arr.Add(Vector3.Distance(transform.position, min.transform.position) / sight_radius);
+            input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
         }
         min = null;
         for (int i = 0; i < hit_predator.Length; i++)

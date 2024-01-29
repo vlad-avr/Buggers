@@ -5472,13 +5472,13 @@ MonoBehaviour:
   UImgr: {fileID: 1099179817}
   reproduction_mutation_prob: 0.5
   spawn_mutation_prob: 0.3
-  maturity_offset_prey: 15
-  hunger_offset_prey: 10
-  speed_offset_prey: 2
+  maturity_offset_prey: 0
+  hunger_offset_prey: 0
+  speed_offset_prey: 0
   size_offset_prey: 0.2
-  maturity_offset_predator: 20
-  hunger_offset_predator: 15
-  speed_offset_predator: 3
+  maturity_offset_predator: 0
+  hunger_offset_predator: 0
+  speed_offset_predator: 0
   size_offset_predator: 0.4
   maturity_min_prey: 5
   hunger_min_prey: 5
