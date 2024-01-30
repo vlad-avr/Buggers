@@ -500,7 +500,7 @@ MonoBehaviour:
   sprite: {fileID: 0}
   spr: {fileID: 5488951085075579297}
   succesor: {fileID: 2766728119706196527, guid: e8fee21df7317f64280500d6888dbb09, type: 3}
-  layers: 0400000008000000080000000400000002000000
-  mutation_rate: 0.2
+  layers: 040000000600000002000000
+  mutation_rate: 0
   spawn_point: {fileID: 0}
   is_test: 0

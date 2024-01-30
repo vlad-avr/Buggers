@@ -22,13 +22,15 @@ public class EnvironmentController : MonoBehaviour
     public int predator_count;
     public int start_prey_count;
     public int start_predator_count;
+    public double best_prey_ratio;
+    public double best_predator_ratio;
     public float mutation_rate;
     public GameObject prey_obj;
     public GameObject predator_obj;
     public Transform predator_pos;
     public Transform prey_pos;
-    public int best_prey_count;
-    public int best_predator_count;
+    private int best_prey_count;
+    private int best_predator_count;
     private PreyController[] prey_objs;
     private PredatorController[] pred_objs;
     ///UIManager reeference
@@ -80,6 +82,8 @@ public class EnvironmentController : MonoBehaviour
     {
         spawnPreys();
         spawnPredators();
+        best_prey_count = (int)(prey_count * best_prey_ratio);
+        best_predator_count = (int)(predator_count * best_predator_ratio);
     }
 
     private void Start()

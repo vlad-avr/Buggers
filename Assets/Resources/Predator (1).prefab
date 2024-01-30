@@ -84,8 +84,8 @@ MonoBehaviour:
   sprite: {fileID: 0}
   spr: {fileID: 7993019375443875520}
   succesor: {fileID: 8852648651023317654, guid: eb8a2072c29b71c48b0db2603b2cca98, type: 3}
-  layers: 02000000040000000400000002000000
-  mutation_rate: 0.3
+  layers: 020000000400000002000000
+  mutation_rate: 0
   spawn_point: {fileID: 0}
   is_test: 0
 --- !u!50 &7566124636240959563

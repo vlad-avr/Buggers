@@ -5460,15 +5460,15 @@ MonoBehaviour:
   FS: {fileID: 1099179816}
   prey_count: 0
   predator_count: 0
-  start_prey_count: 80
-  start_predator_count: 40
+  start_prey_count: 100
+  start_predator_count: 30
+  best_prey_ratio: 0.2
+  best_predator_ratio: 0.33
   mutation_rate: 0.05
   prey_obj: {fileID: 8648281372460763466, guid: 8528d2f7c04365e4dbce4229449a98db, type: 3}
   predator_obj: {fileID: 8852648651023317654, guid: eb8a2072c29b71c48b0db2603b2cca98, type: 3}
   predator_pos: {fileID: 448340062}
   prey_pos: {fileID: 593030206}
-  best_prey_count: 40
-  best_predator_count: 20
   UImgr: {fileID: 1099179817}
   reproduction_mutation_prob: 0.5
   spawn_mutation_prob: 0.3
