@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SetupManager
+public class SetupManager : MonoBehaviour
 {
 
     public class Trait
@@ -73,5 +74,25 @@ public class SetupManager
     private const int min_neurons = 1;
     private const int max_neurons = 16;
     private const string config_path = "Assets/Resources/Config/enironment_config.txt";
+
+    private void Awake()
+    {
+
+    }
+    private void clampFloat(InputField field, string value, float min, float max)
+    {
+        if (float.TryParse(value, out float floatValue))
+        {
+            // Clamp the value within the specified range
+            floatValue = Mathf.Clamp(floatValue, min, max);
+
+            // Update the input field text with the clamped value
+            field.text = floatValue.ToString();
+        }
+        else
+        {
+            field.text = min.ToString();
+        }
+    }
     
 }
