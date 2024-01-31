@@ -204,8 +204,9 @@ public class SetupManager : MonoBehaviour
 
     public static void clampInt(InputField field, int min, int max)
     {
-        if (int.TryParse(field.text, out int intValue))
+        if (float.TryParse(field.text, out float rawVal))
         {
+            int intValue = Mathf.FloorToInt(rawVal);
             // Clamp the value within the specified range
             intValue = Mathf.Clamp(intValue, min, max);
 
