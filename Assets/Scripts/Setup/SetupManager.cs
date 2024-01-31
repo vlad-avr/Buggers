@@ -27,7 +27,6 @@ public class SetupManager : MonoBehaviour
 
         public void initialize(GameObject setupUI)
         {
-            Debug.Log("Initialising");
             Transform env_panel = setupUI.transform.Find("ENV_PANEL");
             InputField first = env_panel.Find("ROOM").Find("ROOM_X").GetComponent<InputField>();
             InputField second = env_panel.Find("ROOM").Find("ROOM_Y").GetComponent<InputField>();
@@ -88,7 +87,27 @@ public class SetupManager : MonoBehaviour
             prey_traits[1][0].onEndEdit.AddListener(value => clampFloat(prey_traits[1][0], min_maturity, max_maturity));
             prey_traits[2][0].onEndEdit.AddListener(value => clampFloat(prey_traits[2][0], min_energy, max_energy));
             prey_traits[3][0].onEndEdit.AddListener(value => clampFloat(prey_traits[3][0], min_size_mod, max_size_mod));
-            
+            prey_traits[0][1].onEndEdit.AddListener(value => clampFloat(prey_traits[0][1], 0f, 1f));
+            prey_traits[0][2].onEndEdit.AddListener(value => clampFloat(prey_traits[0][2], 0f, 1f));
+            prey_traits[1][1].onEndEdit.AddListener(value => clampFloat(prey_traits[1][1], 0f, 1f));
+            prey_traits[1][2].onEndEdit.AddListener(value => clampFloat(prey_traits[1][2], 0f, 1f));
+            prey_traits[2][1].onEndEdit.AddListener(value => clampFloat(prey_traits[2][1], 0f, 1f));
+            prey_traits[2][2].onEndEdit.AddListener(value => clampFloat(prey_traits[2][2], 0f, 1f));
+            prey_traits[3][1].onEndEdit.AddListener(value => clampFloat(prey_traits[3][1], 0f, 1f));
+            prey_traits[3][2].onEndEdit.AddListener(value => clampFloat(prey_traits[3][2], 0f, 1f));
+
+            predator_traits[0][0].onEndEdit.AddListener(value => clampFloat(predator_traits[0][0], min_speed, max_speed));
+            predator_traits[1][0].onEndEdit.AddListener(value => clampFloat(predator_traits[1][0], min_maturity, max_maturity));
+            predator_traits[2][0].onEndEdit.AddListener(value => clampFloat(predator_traits[2][0], min_energy, max_energy));
+            predator_traits[3][0].onEndEdit.AddListener(value => clampFloat(predator_traits[3][0], min_size_mod, max_size_mod));
+            predator_traits[0][1].onEndEdit.AddListener(value => clampFloat(predator_traits[0][1], 0f, 1f));
+            predator_traits[0][2].onEndEdit.AddListener(value => clampFloat(predator_traits[0][2], 0f, 1f));
+            predator_traits[1][1].onEndEdit.AddListener(value => clampFloat(predator_traits[1][1], 0f, 1f));
+            predator_traits[1][2].onEndEdit.AddListener(value => clampFloat(predator_traits[1][2], 0f, 1f));
+            predator_traits[2][1].onEndEdit.AddListener(value => clampFloat(predator_traits[2][1], 0f, 1f));
+            predator_traits[2][2].onEndEdit.AddListener(value => clampFloat(predator_traits[2][2], 0f, 1f));
+            predator_traits[3][1].onEndEdit.AddListener(value => clampFloat(predator_traits[3][1], 0f, 1f));
+            predator_traits[3][2].onEndEdit.AddListener(value => clampFloat(predator_traits[3][2], 0f, 1f));
 
         }
     }
@@ -164,22 +183,8 @@ public class SetupManager : MonoBehaviour
 
     private void Awake()
     {
-        //foreach(var field in inputFields)
-        //{
-        //    switch (field.name)
-        //    {
-        //        case "speed":
-        //            field.onValueChanged.AddListener(value => clampFloat(field, field.text, min_speed, max_speed));
-        //            break;
-
-        //        default:
-        //            break;
-        //    }
-        //}
         inputMap.initialize(GameObject.Find("SETUP"));
-        Debug.Log("Initialised");
         inputMap.setListeners();
-        Debug.Log("Listener");
     }
     public static void clampFloat(InputField field, float min, float max)
     {
