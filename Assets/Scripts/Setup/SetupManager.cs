@@ -262,10 +262,12 @@ public class SetupManager : MonoBehaviour
             return;
         }
         GameObject copy_layer = Instantiate(net_objs[0]);
-        copy_layer.transform.parent = net_objs[0].transform.parent;
-        copy_layer.transform.position = new Vector3(net_objs[0].transform.position.x + (net_objs.Count - 1) * (net_objs[0].transform.localScale.x), net_objs[0].transform.position.y, net_objs[0].transform.position.z);
+        copy_layer.transform.SetParent(net_objs[0].transform.parent, false);
+        RectTransform ref_rect_transform = net_objs[0].GetComponent<RectTransform>();
+        copy_layer.GetComponent<RectTransform>().anchoredPosition = new Vector2(ref_rect_transform.anchoredPosition.x + (net_objs.Count - 1) * ref_rect_transform.sizeDelta.x, ref_rect_transform.anchoredPosition.y);
         copy_layer.GetComponent<InputField>().readOnly = false;
         copy_layer.GetComponent<InputField>().text = value;
+        net_objs.Insert(net_objs.Count - 1, copy_layer);
         inputMap.addNetLayerInput(input_fileds, copy_layer.GetComponent<InputField>());
     }
 
@@ -275,9 +277,9 @@ public class SetupManager : MonoBehaviour
         {
             return;
         }
-        GameObject obj_ref = net_objs[net_objs.Count - 1];
-        net_objs.RemoveAt(net_objs.Count - 1);
-        input_fileds.RemoveAt(input_fileds.Count - 1);
+        GameObject obj_ref = net_objs[net_objs.Count - 2];
+        net_objs.RemoveAt(net_objs.Count - 2);
+        input_fileds.RemoveAt(input_fileds.Count - 2);
         Destroy(obj_ref);
     }
     public static void clampFloat(InputField field, float min, float max)
