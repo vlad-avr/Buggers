@@ -132,12 +132,37 @@ public class SetupManager : MonoBehaviour
         public float default_value;
         public float offset;
         public float probability;
+
+        public Trait(float default_value, float offset, float probability)
+        {
+            this.default_value = default_value;
+            this.offset = offset;
+            this.probability = probability;
+        }
+
+        public override string ToString()
+        {
+            return default_value + " " + offset + " " + probability;
+        }
     }
     public class Config
     {
+
+        /* FPRMATTING OF CONFIG ENTRIES
+         * !name
+         * roomX rooomY
+         * fdr fdn fl
+         * preyN preyR
+         * predN predR
+         * mut prey net layers 
+         * mut pred net layer
+         * for each trait:
+         * prey val offset prob
+         * pred val offset prob
+         */
         public string name;
 
-        public Vector2 room;
+        public Vector2Int room;
 
         public float food_drop_rate;
         public int food_drop_num;
@@ -153,14 +178,89 @@ public class SetupManager : MonoBehaviour
         public float prey_neuron_mutation_chance;
         public float predator_neuron_mutation_chance;
 
-        public Trait prey_speed;
-        public Trait predator_speed;
-        public Trait prey_energy;
-        public Trait predator_energy;
-        public Trait prey_maturity;
-        public Trait predator_maturity;
-        public Trait prey_size_mod;
-        public Trait predator_size_mod;
+        //TRAIT SEQUENCE: speed -> energy -> maturity -> size
+        public List<Trait> prey_traits;
+        public List<Trait> predator_traits;
+
+        public void parseChunk(string chunk)
+        {
+            string[] parts = chunk.Split('\n');
+            name = parts[0].Substring(1);
+            string[] subparts = parts[1].Split(' ');
+            room = new Vector2Int(int.Parse(subparts[0]), int.Parse(subparts[0]));
+            subparts = parts[2].Split(' ');
+            food_drop_rate = float.Parse(subparts[0]);
+            food_drop_num = int.Parse(subparts[1]);
+            food_lifespan = float.Parse(subparts[2]);
+
+            subparts = parts[3].Split(' ');
+            prey_count = int.Parse(subparts[0]);
+            prey_chosen_ratio = float.Parse(subparts[1]);
+
+            subparts = parts[4].Split(' ');
+            predator_count = int.Parse(subparts[0]);
+            predator_chosen_ratio = float.Parse(subparts[1]);
+
+            subparts = parts[4].Split(' ');
+            prey_neuron_mutation_chance = float.Parse(subparts[0]);
+            prey_net = new List<int>();
+            for(int i = 1; i < subparts.Length; i++)
+            {
+                prey_net.Add(int.Parse(subparts[i]));
+            }
+
+            subparts = parts[5].Split(' ');
+            predator_neuron_mutation_chance = float.Parse(subparts[0]);
+            predator_net = new List<int>();
+            for (int i = 1; i < subparts.Length; i++)
+            {
+                predator_net.Add(int.Parse(subparts[i]));
+            }
+
+            prey_traits = new List<Trait>();
+            for(int i = 6; i < 10; i++)
+            {
+                subparts = parts[i].Split(' ');
+                prey_traits.Add(new Trait(float.Parse(subparts[0]), float.Parse(subparts[1]), float.Parse(subparts[2])));
+            }
+
+            predator_traits = new List<Trait>();
+            for (int i = 10; i < 14; i++)
+            {
+                subparts = parts[i].Split(' ');
+                predator_traits.Add(new Trait(float.Parse(subparts[0]), float.Parse(subparts[1]), float.Parse(subparts[2])));
+            }
+        }
+
+        public string parseIntoChunk()
+        {
+            string res = "!" + name + "\n"
+                + room.x + " " + room.y + "\n"
+                + food_drop_rate + " " + food_drop_num + " " + food_lifespan + "\n"
+                + prey_count + " " + prey_chosen_ratio + "\n"
+                + predator_count + " " + predator_chosen_ratio + "\n";
+            res += prey_neuron_mutation_chance;
+            foreach(int layer in prey_net)
+            {
+                res += " " + layer;
+            }
+            res += "\n" + predator_neuron_mutation_chance;
+            foreach(int layer in predator_net)
+            {
+                res += " " + layer;
+            }
+            res += "\n";
+            foreach(Trait trait in prey_traits)
+            {
+                res += trait.ToString() + "\n";
+            }
+            foreach (Trait trait in predator_traits)
+            {
+                res += trait.ToString() + "\n";
+            }
+            res += "~\n";
+            return res;
+        }
     }
 
     //Defined constants (sort of config for default enviroment)
