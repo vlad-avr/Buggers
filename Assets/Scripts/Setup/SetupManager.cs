@@ -83,6 +83,7 @@ public class SetupManager : MonoBehaviour
             prey_neuron_mutation.onEndEdit.AddListener(value => clampFloat(prey_neuron_mutation, 0f, 1f));
             predator_neuron_mutation.onEndEdit.AddListener(value => clampFloat(predator_neuron_mutation, 0f, 1f));
 
+
             prey_traits[0][0].onEndEdit.AddListener(value => clampFloat(prey_traits[0][0], min_speed, max_speed));
             prey_traits[1][0].onEndEdit.AddListener(value => clampFloat(prey_traits[1][0], min_maturity, max_maturity));
             prey_traits[2][0].onEndEdit.AddListener(value => clampFloat(prey_traits[2][0], min_energy, max_energy));
@@ -109,6 +110,20 @@ public class SetupManager : MonoBehaviour
             predator_traits[3][1].onEndEdit.AddListener(value => clampFloat(predator_traits[3][1], 0f, 1f));
             predator_traits[3][2].onEndEdit.AddListener(value => clampFloat(predator_traits[3][2], 0f, 1f));
 
+        }
+
+        public void addNetLayerInput(List<InputField> inputs, InputField toAdd)
+        {
+            toAdd.onEndEdit.AddListener(value => clampInt(toAdd, min_neurons, max_neurons));
+            if(inputs.Count <= 1)
+            {
+                inputs.Add(toAdd);
+            }
+            else
+            {
+                inputs.Insert(inputs.Count - 1, toAdd);
+            }
+            
         }
     }
 
@@ -173,18 +188,97 @@ public class SetupManager : MonoBehaviour
     private const float min_size_mod = 0.1f;
     private const float max_size_mod = 4;
 
-    private const int min_layers = 1;
+    private const int min_layers = 0;
     private const int max_layers = 10;
     private const int min_neurons = 1;
     private const int max_neurons = 16;
     private const string config_path = "Assets/Resources/Config/enironment_config.txt";
 
-    private InputMap inputMap = new InputMap();
+    private InputMap inputMap;
+
+    private GameObject prey_net_UI;
+    private GameObject predator_net_UI;
+    private List<GameObject> prey_layers = new List<GameObject>();
+    private List<GameObject> predator_layers = new List<GameObject>();
+    public List<Tuple<Button, Button>> net_buttons = new List<Tuple<Button, Button>>();
 
     private void Awake()
     {
-        inputMap.initialize(GameObject.Find("SETUP"));
+        inputMap = new InputMap();
+        GameObject setupUI = GameObject.Find("SETUP");
+        inputMap.initialize(setupUI);
         inputMap.setListeners();
+        setupNetRefs(setupUI);
+    }
+
+    private void setupNetRefs(GameObject setupUI)
+    {
+        Transform agent_panel = setupUI.transform.Find("AGENT_PANEL");
+        prey_net_UI = agent_panel.Find("PREY_PANEL").Find("NET").gameObject;
+        predator_net_UI = agent_panel.Find("PREDATOR_PANEL").Find("NET").gameObject;
+        prey_layers.Add(prey_net_UI.transform.Find("FIRST").gameObject);
+        inputMap.addNetLayerInput(inputMap.prey_net, prey_layers[0].GetComponent<InputField>());
+        prey_layers.Add(prey_net_UI.transform.Find("LAST").gameObject);
+        inputMap.addNetLayerInput(inputMap.prey_net, prey_layers[1].GetComponent<InputField>());
+        predator_layers.Add(predator_net_UI.transform.Find("FIRST").gameObject);
+        inputMap.addNetLayerInput(inputMap.predator_net, predator_layers[0].GetComponent<InputField>());
+        predator_layers.Add(predator_net_UI.transform.Find("LAST").gameObject);
+        inputMap.addNetLayerInput(inputMap.predator_net, predator_layers[1].GetComponent<InputField>());
+        Button add_button = agent_panel.Find("PREY_PANEL").Find("NET").Find("ADD").GetComponent<Button>();
+        add_button.onClick.AddListener(addListenerPrey);
+        Button remove_button = agent_panel.Find("PREY_PANEL").Find("NET").Find("REMOVE").GetComponent<Button>();
+        remove_button.onClick.AddListener(removeListenerPrey);
+        net_buttons.Add(Tuple.Create(add_button, remove_button));
+        add_button = agent_panel.Find("PREDATOR_PANEL").Find("NET").Find("ADD").GetComponent<Button>();
+        add_button.onClick.AddListener(addListenerPredator);
+        remove_button = agent_panel.Find("PREDATOR_PANEL").Find("NET").Find("REMOVE").GetComponent<Button>();
+        remove_button.onClick.AddListener(removeListenerPredator);
+        net_buttons.Add(Tuple.Create(add_button, remove_button));
+    }
+
+    private void addListenerPrey()
+    {
+        addNetLayer(prey_layers, inputMap.prey_net, min_neurons.ToString());
+    }
+
+    private void removeListenerPrey()
+    {
+        removeNetLayer(prey_layers, inputMap.prey_net);
+    }
+
+    private void addListenerPredator()
+    {
+        addNetLayer(predator_layers, inputMap.predator_net, min_neurons.ToString());
+    }
+
+    private void removeListenerPredator()
+    {
+        removeNetLayer(predator_layers, inputMap.predator_net);
+    }
+    private void addNetLayer(List<GameObject> net_objs, List<InputField> input_fileds, string value)
+    {
+        if (net_objs.Count - 2 >= max_layers)
+        {
+            return;
+        }
+        GameObject copy_layer = Instantiate(net_objs[0]);
+        copy_layer.transform.parent = net_objs[0].transform.parent;
+        copy_layer.transform.position = new Vector3(net_objs[0].transform.position.x + (net_objs.Count - 1) * (net_objs[0].transform.localScale.x), net_objs[0].transform.position.y, net_objs[0].transform.position.z);
+        copy_layer.GetComponent<InputField>().readOnly = false;
+        copy_layer.GetComponent<InputField>().text = value;
+        inputMap.addNetLayerInput(input_fileds, copy_layer.GetComponent<InputField>());
+    }
+
+    private void removeNetLayer(List<GameObject> net_objs, List<InputField> input_fileds)
+    {
+        if (net_objs.Count - 2 <= min_layers)
+        {
+            return;
+        }
+        GameObject obj_ref = net_objs[net_objs.Count - 1];
+        net_objs.RemoveAt(net_objs.Count - 1);
+        input_fileds.RemoveAt(input_fileds.Count - 1);
+        Destroy(obj_ref);
     }
     public static void clampFloat(InputField field, float min, float max)
     {
