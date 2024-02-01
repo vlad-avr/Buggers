@@ -125,6 +125,48 @@ public class SetupManager : MonoBehaviour
             }
             
         }
+
+        public Config getConfid()
+        {
+            Config conf = new Config();
+
+            conf.room = new Vector2Int(int.Parse(room.Item1.text), int.Parse(room.Item2.text));
+            conf.food_drop_rate = float.Parse(food_inputs[0].text);
+            conf.food_drop_num = int.Parse(food_inputs[1].text);
+            conf.food_lifespan = float.Parse(food_inputs[2].text);
+
+            conf.prey_count = int.Parse(population_settings[0].Item1.text);
+            conf.prey_chosen_ratio = float.Parse(population_settings[0].Item2.text);
+            conf.predator_count = int.Parse(population_settings[1].Item1.text);
+            conf.predator_chosen_ratio = float.Parse(population_settings[1].Item2.text);
+
+            conf.prey_neuron_mutation_chance = float.Parse(prey_neuron_mutation.text);
+            conf.predator_neuron_mutation_chance = float.Parse(predator_neuron_mutation.text);
+
+            conf.prey_net = new List<int>();
+            foreach(InputField inputField in prey_net)
+            {
+                conf.prey_net.Add(int.Parse(inputField.text));
+            }
+            conf.predator_net = new List<int>();
+            foreach (InputField inputField in predator_net)
+            {
+                conf.predator_net.Add(int.Parse(inputField.text));
+            }
+
+            conf.prey_traits = new List<Trait>();
+            foreach(List<InputField> traitInput in prey_traits)
+            {
+                conf.prey_traits.Add(new Trait(float.Parse(traitInput[0].text), float.Parse(traitInput[1].text), float.Parse(traitInput[2].text)));
+            }
+            conf.predator_traits = new List<Trait>();
+            foreach (List<InputField> traitInput in predator_traits)
+            {
+                conf.predator_traits.Add(new Trait(float.Parse(traitInput[0].text), float.Parse(traitInput[1].text), float.Parse(traitInput[2].text)));
+            }
+
+            return conf;
+        }
     }
 
     public class Trait
