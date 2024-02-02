@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -334,7 +337,9 @@ public class SetupManager : MonoBehaviour
     private const int max_layers = 10;
     private const int min_neurons = 1;
     private const int max_neurons = 16;
+
     private const string config_path = "Assets/Resources/Config/enironment_config.txt";
+    private string[] configs;
 
     private InputMap inputMap;
 
@@ -455,6 +460,103 @@ public class SetupManager : MonoBehaviour
         {
             field.text = min.ToString();
         }
+    }
+
+    private void appendConfigFile(Config newConfig)
+    {
+        if (configs.Contains(newConfig.name))
+        {
+            Debug.Log(newConfig.name + " already exists!");
+            return;
+        }
+        try
+        {
+            // Open the file with a StreamWriter in Append mode
+            using (StreamWriter writer = new StreamWriter(config_path, true))
+            {
+                // Append the new content to the file
+                writer.WriteLine(newConfig);
+            }
+        }
+        catch (IOException ex)
+        {
+            Debug.Log(ex.Message);
+        }
+    }
+
+
+    //private void writeToConfigFile(string content)
+    //{
+    //    try
+    //    {
+    //        File.WriteAllText(config_path, content);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log("ERROR WHILE WRITING : " + e.Message);
+    //    }
+    //}
+
+    private string loadChunkFromConfigFile(string configName)
+    {
+        string loaded = null;
+        try
+        {
+            // Open the file with a StreamReader
+            using (StreamReader reader = new StreamReader(config_path))
+            {
+                string line;
+
+                // Read lines until the end of the file
+                while ((line = reader.ReadLine()) != null)
+                {
+                    // Process each line as needed
+                    if (line.Equals("!" + configName + "\n"))
+                    {
+                        break;
+                    }
+                }
+                loaded = line;
+                do
+                {
+                    loaded += line;
+                } while ((line = reader.ReadLine()) != null && !line.Equals("~\n"));
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
+
+        return loaded;
+    }
+
+    private string[] getConfigNames()
+    {
+        List<string> names = new List<string>();
+        try
+        {
+            // Open the file with a StreamReader
+            using (StreamReader reader = new StreamReader(config_path))
+            {
+                string line;
+
+                // Read lines until the end of the file
+                while ((line = reader.ReadLine()) != null)
+                {
+                    // Process each line as needed
+                    if (line.StartsWith("!"))
+                    {
+                        names.Add(line.Substring(1, line.Length-2));
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
+        return names.ToArray();
     }
 
 }
