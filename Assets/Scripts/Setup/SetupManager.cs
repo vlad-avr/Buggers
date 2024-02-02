@@ -267,6 +267,10 @@ public class SetupManager : MonoBehaviour
         public void parseChunk(string chunk)
         {
             string[] parts = chunk.Split('\n');
+            foreach(string part in parts)
+            {
+                Debug.Log("part : " + part);
+            }
             name = parts[0].Substring(1);
             string[] subparts = parts[1].Split(' ');
             room = new Vector2Int(int.Parse(subparts[0]), int.Parse(subparts[0]));
@@ -283,7 +287,7 @@ public class SetupManager : MonoBehaviour
             predator_count = int.Parse(subparts[0]);
             predator_chosen_ratio = float.Parse(subparts[1]);
 
-            subparts = parts[4].Split(' ');
+            subparts = parts[5].Split(' ');
             prey_neuron_mutation_chance = float.Parse(subparts[0]);
             prey_net = new List<int>();
             for(int i = 1; i < subparts.Length; i++)
@@ -291,7 +295,7 @@ public class SetupManager : MonoBehaviour
                 prey_net.Add(int.Parse(subparts[i]));
             }
 
-            subparts = parts[5].Split(' ');
+            subparts = parts[6].Split(' ');
             predator_neuron_mutation_chance = float.Parse(subparts[0]);
             predator_net = new List<int>();
             for (int i = 1; i < subparts.Length; i++)
@@ -300,14 +304,14 @@ public class SetupManager : MonoBehaviour
             }
 
             prey_traits = new List<Trait>();
-            for(int i = 6; i < 10; i++)
+            for (int i = 7; i <= 10; i++)
             {
                 subparts = parts[i].Split(' ');
                 prey_traits.Add(new Trait(float.Parse(subparts[0]), float.Parse(subparts[1]), float.Parse(subparts[2])));
             }
 
             predator_traits = new List<Trait>();
-            for (int i = 10; i < 14; i++)
+            for (int i = 11; i <= 14; i++)
             {
                 subparts = parts[i].Split(' ');
                 predator_traits.Add(new Trait(float.Parse(subparts[0]), float.Parse(subparts[1]), float.Parse(subparts[2])));
@@ -399,6 +403,7 @@ public class SetupManager : MonoBehaviour
         inputMap.setListeners();
         setupNetRefs(setupUI);
         setupConfigUI(setupUI);
+        loadConfig("default");
     }
 
     private void setupConfigUI(GameObject setupUI)
@@ -442,7 +447,12 @@ public class SetupManager : MonoBehaviour
 
     public void loadConfig()
     {
-        string chunk = loadChunkFromConfigFile(config_dropdown.itemText.text);
+        loadConfig(inputMap.name.text);
+    }
+
+    public void loadConfig(string name)
+    {
+        string chunk = loadChunkFromConfigFile(name);
         if(chunk == null)
         {
             return;
@@ -521,11 +531,11 @@ public class SetupManager : MonoBehaviour
 
     private void loadNets(Config config)
     {
-        while(prey_layers.Count > min_layers)
+        while(prey_layers.Count - 2 > min_layers)
         {
             removeNetLayer(prey_layers, inputMap.prey_net);
         }
-        while (predator_layers.Count > min_layers)
+        while (predator_layers.Count - 2 > min_layers)
         {
             removeNetLayer(predator_layers, inputMap.predator_net);
         }
@@ -649,16 +659,16 @@ public class SetupManager : MonoBehaviour
                 while ((line = reader.ReadLine()) != null)
                 {
                     // Process each line as needed
-                    if (line.Equals("!" + configName + "\n"))
+                    if (line.Equals("!" + configName))
                     {
                         break;
                     }
                 }
-                loaded = line;
+                loaded = "";
                 do
                 {
-                    loaded += line;
-                } while ((line = reader.ReadLine()) != null && !line.Equals("~\n"));
+                    loaded += line + "\n";
+                } while ((line = reader.ReadLine()) != null && !line.Equals("~"));
             }
         }
         catch (Exception e)
