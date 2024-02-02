@@ -5,12 +5,15 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.Dropdown;
 
 public class SetupManager : MonoBehaviour
 {
 
     public class InputMap 
     {
+        public InputField name;
+
         public Tuple<InputField, InputField> room;
 
         public List<InputField> food_inputs = new List<InputField>();
@@ -30,6 +33,7 @@ public class SetupManager : MonoBehaviour
         public void initialize(GameObject setupUI)
         {
             Transform env_panel = setupUI.transform.Find("ENV_PANEL");
+            name = env_panel.Find("CONFIG").Find("NAME").GetComponent<InputField>();
             InputField first = env_panel.Find("ROOM").Find("ROOM_X").GetComponent<InputField>();
             InputField second = env_panel.Find("ROOM").Find("ROOM_Y").GetComponent<InputField>();
             room = Tuple.Create(first, second);
@@ -132,6 +136,8 @@ public class SetupManager : MonoBehaviour
         {
             Config conf = new Config();
 
+            conf.name = name.text;
+
             conf.room = new Vector2Int(int.Parse(room.Item1.text), int.Parse(room.Item2.text));
             conf.food_drop_rate = float.Parse(food_inputs[0].text);
             conf.food_drop_num = int.Parse(food_inputs[1].text);
@@ -172,6 +178,8 @@ public class SetupManager : MonoBehaviour
 
         public void setConfig(Config config)
         {
+            name.text = config.name;
+
             room.Item1.text = config.room.x.ToString();
             room.Item2.text = config.room.y.ToString();
 
@@ -390,6 +398,7 @@ public class SetupManager : MonoBehaviour
         inputMap.initialize(setupUI);
         inputMap.setListeners();
         setupNetRefs(setupUI);
+        setupConfigUI(setupUI);
     }
 
     private void setupConfigUI(GameObject setupUI)
@@ -400,7 +409,9 @@ public class SetupManager : MonoBehaviour
         load_config = config_panel.Find("LOAD").GetComponent<Button>();
         load_config.onClick.AddListener(loadConfig);
         update_config = config_panel.Find("UPDATE").GetComponent<Button>();
+        update_config.onClick.AddListener(updateConfig);
         delete_config = config_panel.Find("DELETE").GetComponent<Button>();
+        delete_config.onClick.AddListener(deleteConfig);
         config_dropdown = config_panel.Find("CONFIGS").GetComponent<Dropdown>();
     }
 
@@ -445,7 +456,67 @@ public class SetupManager : MonoBehaviour
     public void saveConfig()
     {
         Config config = inputMap.getConfig();
-        appendConfigFile(config);
+        if (configs.Contains(config.name))
+        {
+            Debug.Log(config.name + " already exists!");
+            return;
+        }
+        writeToConfigFile(config.parseIntoChunk(), true);
+        configs = getConfigNames();
+        updateDropdown();
+    }
+
+    private void updateDropdown()
+    {
+        config_dropdown.ClearOptions();
+        List<OptionData> options = new List<OptionData>();
+        foreach (var config in configs)
+        {
+            options.Add(new OptionData(config));
+        }
+        config_dropdown.AddOptions(options);
+    }
+
+    public void deleteConfig()
+    {
+        deleteConfig(false);
+    }
+
+    public void deleteConfig(bool isUpdate)
+    {
+        if (inputMap.name.text.Equals("default"))
+        {
+            Debug.Log("You have no write to fool around with default config, swashbuckler!");
+            return;
+        }
+        string chunks = "";
+        foreach(var config in configs)
+        {
+            if (config.Equals(inputMap.name.text))
+            {
+                continue;
+            }
+            string chunk = loadChunkFromConfigFile(config);
+            if (chunk != null)
+            {
+                chunks += chunk;
+            }
+        }
+        writeToConfigFile(chunks, false);
+        if (!isUpdate)
+        {
+            configs = getConfigNames();
+            updateDropdown();
+        }
+    }
+
+    public void updateConfig()
+    {
+        string configName = inputMap.name.text;
+        deleteConfig(true);
+        Config config = inputMap.getConfig();
+        config.name = configName;
+        writeToConfigFile(config.parseIntoChunk(), true);
     }
 
     private void loadNets(Config config)
@@ -546,38 +617,21 @@ public class SetupManager : MonoBehaviour
         }
     }
 
-    private void appendConfigFile(Config newConfig)
+    private void writeToConfigFile(string toWrite, bool toAppend)
     {
-        if (configs.Contains(newConfig.name))
-        {
-            Debug.Log(newConfig.name + " already exists!");
-            return;
-        }
+
         try
         {
             // Open the file with a StreamWriter in Append mode
-            using (StreamWriter writer = new StreamWriter(config_path, true))
+            using (StreamWriter writer = new StreamWriter(config_path, toAppend))
             {
                 // Append the new content to the file
-                writer.WriteLine(newConfig.parseIntoChunk());
+                writer.WriteLine(toWrite);
             }
         }
         catch (IOException ex)
         {
             Debug.Log(ex.Message);
-        }
-    }
-
-
-    private void writeToConfigFile(string content)
-    {
-        try
-        {
-            File.WriteAllText(config_path, content);
-        }
-        catch (Exception e)
-        {
-            Debug.Log("ERROR WHILE WRITING : " + e.Message);
         }
     }
 
