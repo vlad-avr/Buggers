@@ -267,10 +267,6 @@ public class SetupManager : MonoBehaviour
         public void parseChunk(string chunk)
         {
             string[] parts = chunk.Split('\n');
-            foreach(string part in parts)
-            {
-                Debug.Log("part : " + part);
-            }
             name = parts[0].Substring(1);
             string[] subparts = parts[1].Split(' ');
             room = new Vector2Int(int.Parse(subparts[0]), int.Parse(subparts[0]));
@@ -418,6 +414,8 @@ public class SetupManager : MonoBehaviour
         delete_config = config_panel.Find("DELETE").GetComponent<Button>();
         delete_config.onClick.AddListener(deleteConfig);
         config_dropdown = config_panel.Find("CONFIGS").GetComponent<Dropdown>();
+        configs = getConfigNames();
+        updateDropdown();
     }
 
     private void setupNetRefs(GameObject setupUI)
