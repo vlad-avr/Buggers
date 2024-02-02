@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -129,7 +128,7 @@ public class SetupManager : MonoBehaviour
             
         }
 
-        public Config getConfid()
+        public Config getConfig()
         {
             Config conf = new Config();
 
@@ -169,6 +168,36 @@ public class SetupManager : MonoBehaviour
             }
 
             return conf;
+        }
+
+        public void setConfig(Config config)
+        {
+            room.Item1.text = config.room.x.ToString();
+            room.Item2.text = config.room.y.ToString();
+
+            food_inputs[0].text = config.food_drop_rate.ToString();
+            food_inputs[1].text = config.food_drop_num.ToString();
+            food_inputs[2].text = config.food_lifespan.ToString();
+
+            population_settings[0].Item1.text = config.prey_count.ToString();
+            population_settings[0].Item2.text = config.prey_chosen_ratio.ToString();
+            population_settings[1].Item1.text = config.predator_count.ToString();
+            population_settings[1].Item2.text = config.predator_chosen_ratio.ToString();
+
+            for(int i = 0; i < prey_traits.Count; i++)
+            {
+                prey_traits[i][0].text = config.prey_traits[i].default_value.ToString();
+                prey_traits[i][1].text = config.prey_traits[i].offset.ToString();
+                prey_traits[i][2].text = config.prey_traits[i].probability.ToString();
+            }
+            for (int i = 0; i < predator_traits.Count; i++)
+            {
+                predator_traits[i][0].text = config.predator_traits[i].default_value.ToString();
+                predator_traits[i][1].text = config.predator_traits[i].offset.ToString();
+                predator_traits[i][2].text = config.predator_traits[i].probability.ToString();
+            }
+            prey_neuron_mutation.text = config.prey_neuron_mutation_chance.ToString();
+            predator_neuron_mutation.text = config.predator_neuron_mutation_chance.ToString();
         }
     }
 
@@ -348,6 +377,11 @@ public class SetupManager : MonoBehaviour
     private List<GameObject> prey_layers = new List<GameObject>();
     private List<GameObject> predator_layers = new List<GameObject>();
     public List<Tuple<Button, Button>> net_buttons = new List<Tuple<Button, Button>>();
+    public Button save_config;
+    public Button load_config;
+    public Button update_config;
+    public Button delete_config;
+    public Dropdown config_dropdown;
 
     private void Awake()
     {
@@ -356,6 +390,18 @@ public class SetupManager : MonoBehaviour
         inputMap.initialize(setupUI);
         inputMap.setListeners();
         setupNetRefs(setupUI);
+    }
+
+    private void setupConfigUI(GameObject setupUI)
+    {
+        Transform config_panel = setupUI.transform.Find("ENV_PANEL").Find("CONFIG");
+        save_config = config_panel.Find("SAVE").GetComponent<Button>();
+        save_config.onClick.AddListener(saveConfig);
+        load_config = config_panel.Find("LOAD").GetComponent<Button>();
+        load_config.onClick.AddListener(loadConfig);
+        update_config = config_panel.Find("UPDATE").GetComponent<Button>();
+        delete_config = config_panel.Find("DELETE").GetComponent<Button>();
+        config_dropdown = config_panel.Find("CONFIGS").GetComponent<Dropdown>();
     }
 
     private void setupNetRefs(GameObject setupUI)
@@ -381,6 +427,44 @@ public class SetupManager : MonoBehaviour
         remove_button = agent_panel.Find("PREDATOR_PANEL").Find("NET").Find("REMOVE").GetComponent<Button>();
         remove_button.onClick.AddListener(removeListenerPredator);
         net_buttons.Add(Tuple.Create(add_button, remove_button));
+    }
+
+    public void loadConfig()
+    {
+        string chunk = loadChunkFromConfigFile(config_dropdown.itemText.text);
+        if(chunk == null)
+        {
+            return;
+        }
+        Config loadedConfig = new Config();
+        loadedConfig.parseChunk(chunk);
+        inputMap.setConfig(loadedConfig);
+        loadNets(loadedConfig);
+    }
+
+    public void saveConfig()
+    {
+        Config config = inputMap.getConfig();
+        appendConfigFile(config);
+    }
+
+    private void loadNets(Config config)
+    {
+        while(prey_layers.Count > min_layers)
+        {
+            removeNetLayer(prey_layers, inputMap.prey_net);
+        }
+        while (predator_layers.Count > min_layers)
+        {
+            removeNetLayer(predator_layers, inputMap.predator_net);
+        }
+        for (int i = 1; i < config.prey_net.Count - 1; i++){
+            addNetLayer(prey_layers, inputMap.prey_net, config.prey_net[i].ToString());
+        }
+        for (int i = 1; i < config.predator_net.Count - 1; i++)
+        {
+            addNetLayer(predator_layers, inputMap.predator_net, config.predator_net[i].ToString());
+        }
     }
 
     private void addListenerPrey()
@@ -475,7 +559,7 @@ public class SetupManager : MonoBehaviour
             using (StreamWriter writer = new StreamWriter(config_path, true))
             {
                 // Append the new content to the file
-                writer.WriteLine(newConfig);
+                writer.WriteLine(newConfig.parseIntoChunk());
             }
         }
         catch (IOException ex)
@@ -485,17 +569,17 @@ public class SetupManager : MonoBehaviour
     }
 
 
-    //private void writeToConfigFile(string content)
-    //{
-    //    try
-    //    {
-    //        File.WriteAllText(config_path, content);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("ERROR WHILE WRITING : " + e.Message);
-    //    }
-    //}
+    private void writeToConfigFile(string content)
+    {
+        try
+        {
+            File.WriteAllText(config_path, content);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("ERROR WHILE WRITING : " + e.Message);
+        }
+    }
 
     private string loadChunkFromConfigFile(string configName)
     {
