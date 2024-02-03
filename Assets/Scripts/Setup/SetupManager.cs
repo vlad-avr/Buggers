@@ -269,7 +269,7 @@ public class SetupManager : MonoBehaviour
             string[] parts = chunk.Split('\n');
             name = parts[0].Substring(1);
             string[] subparts = parts[1].Split(' ');
-            room = new Vector2Int(int.Parse(subparts[0]), int.Parse(subparts[0]));
+            room = new Vector2Int(int.Parse(subparts[0]), int.Parse(subparts[1]));
             subparts = parts[2].Split(' ');
             food_drop_rate = float.Parse(subparts[0]);
             food_drop_num = int.Parse(subparts[1]);
@@ -322,14 +322,14 @@ public class SetupManager : MonoBehaviour
                 + prey_count + " " + prey_chosen_ratio + "\n"
                 + predator_count + " " + predator_chosen_ratio + "\n";
             res += prey_neuron_mutation_chance;
-            foreach(int layer in prey_net)
+            for(int i = 1; i < prey_net.Count-1; i++)
             {
-                res += " " + layer;
+                res += " " + prey_net[i];
             }
             res += "\n" + predator_neuron_mutation_chance;
-            foreach(int layer in predator_net)
+            for (int i = 1; i < predator_net.Count - 1; i++)
             {
-                res += " " + layer;
+                res += " " + predator_net[i];
             }
             res += "\n";
             foreach(Trait trait in prey_traits)
@@ -414,6 +414,7 @@ public class SetupManager : MonoBehaviour
         delete_config = config_panel.Find("DELETE").GetComponent<Button>();
         delete_config.onClick.AddListener(deleteConfig);
         config_dropdown = config_panel.Find("CONFIGS").GetComponent<Dropdown>();
+        config_dropdown.onValueChanged.AddListener(updateNameField);
         configs = getConfigNames();
         updateDropdown();
     }
@@ -446,6 +447,11 @@ public class SetupManager : MonoBehaviour
     public void loadConfig()
     {
         loadConfig(inputMap.name.text);
+    }
+
+    public void updateNameField(int index)
+    {
+        inputMap.name.text = config_dropdown.options[index].text;
     }
 
     public void loadConfig(string name)
@@ -502,6 +508,7 @@ public class SetupManager : MonoBehaviour
         {
             if (config.Equals(inputMap.name.text))
             {
+                Debug.Log("FOUND");
                 continue;
             }
             string chunk = loadChunkFromConfigFile(config);
@@ -537,10 +544,10 @@ public class SetupManager : MonoBehaviour
         {
             removeNetLayer(predator_layers, inputMap.predator_net);
         }
-        for (int i = 1; i < config.prey_net.Count - 1; i++){
+        for (int i = 0; i < config.prey_net.Count; i++){
             addNetLayer(prey_layers, inputMap.prey_net, config.prey_net[i].ToString());
         }
-        for (int i = 1; i < config.predator_net.Count - 1; i++)
+        for (int i = 0; i < config.predator_net.Count; i++)
         {
             addNetLayer(predator_layers, inputMap.predator_net, config.predator_net[i].ToString());
         }
@@ -686,14 +693,13 @@ public class SetupManager : MonoBehaviour
             using (StreamReader reader = new StreamReader(config_path))
             {
                 string line;
-
                 // Read lines until the end of the file
                 while ((line = reader.ReadLine()) != null)
                 {
                     // Process each line as needed
                     if (line.StartsWith("!"))
                     {
-                        names.Add(line.Substring(1, line.Length-2));
+                        names.Add(line.Substring(1, line.Length-1));
                     }
                 }
             }
