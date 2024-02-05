@@ -20,57 +20,59 @@ public class EnvironmentController : MonoBehaviour
     public List<NNet> predators = new List<NNet>();
     public int prey_count;
     public int predator_count;
-    public int start_prey_count;
-    public int start_predator_count;
-    public double best_prey_ratio;
-    public double best_predator_ratio;
-    public float mutation_rate;
+    //public int start_prey_count;
+    //public int start_predator_count;
+    //public double best_prey_ratio;
+    //public double best_predator_ratio;
+    //public float mutation_rate;
     public GameObject prey_obj;
     public GameObject predator_obj;
     public Transform predator_pos;
     public Transform prey_pos;
-    private int best_prey_count;
-    private int best_predator_count;
+    //private int best_prey_count;
+    //private int best_predator_count;
     private PreyController[] prey_objs;
     private PredatorController[] pred_objs;
+    [Header("Configuration")]
+    public SetupManager.Config config; 
     ///UIManager reeference
     [Header("UI Manager")]
     public UIManager UImgr;
 
     ///Agents mutation probability and offset values
-    [Header("Mutation settings")]
-    public float reproduction_mutation_prob;
-    public float spawn_mutation_prob;
-    public float maturity_offset_prey;
-    public float hunger_offset_prey;
-    public float speed_offset_prey;
-    public float size_offset_prey;
-    public float maturity_offset_predator;
-    public float hunger_offset_predator;
-    public float speed_offset_predator;
-    public float size_offset_predator;
+    //[Header("Mutation settings")]
+    //public float reproduction_mutation_prob;
+    //public float spawn_mutation_prob;
+    //public float maturity_offset_prey;
+    //public float hunger_offset_prey;
+    //public float speed_offset_prey;
+    //public float size_offset_prey;
+    //public float maturity_offset_predator;
+    //public float hunger_offset_predator;
+    //public float speed_offset_predator;
+    //public float size_offset_predator;
 
     ///Minimal allowed agent parameters
-    [Header("Minimal Allowed values")]
-    public float maturity_min_prey;
-    public float hunger_min_prey;
-    public float speed_min_prey;
-    public float maturity_min_predator;
-    public float hunger_min_predator;
-    public float speed_min_predator;
+    //[Header("Minimal Allowed values")]
+    //public float maturity_min_prey;
+    //public float hunger_min_prey;
+    //public float speed_min_prey;
+    //public float maturity_min_predator;
+    //public float hunger_min_predator;
+    //public float speed_min_predator;
 
     ///Default agent parameters
     [Header("Default parameters")]
-    public float maturity_def_prey;
-    public float hunger_def_prey;
-    public float speed_def_prey;
+    //public float maturity_def_prey;
+    //public float hunger_def_prey;
+    //public float speed_def_prey;
     public Color def_color_prey;
-    public Vector2 def_size_prey;
-    public float maturity_def_predator;
-    public float hunger_def_predator;
-    public float speed_def_predator;
+    //public Vector2 def_size_prey;
+    //public float maturity_def_predator;
+    //public float hunger_def_predator;
+    //public float speed_def_predator;
     public Color def_color_predator;
-    public Vector2 def_size_predator;
+    //public Vector2 def_size_predator;
 
     ///Array of Sprites
     [Header("Sprite Array")]
@@ -80,229 +82,297 @@ public class EnvironmentController : MonoBehaviour
     ///Awake is called when the script instnce is loaded
     private void Awake()
     {
-        spawnPreys();
-        spawnPredators();
-        best_prey_count = (int)(prey_count * best_prey_ratio);
-        best_predator_count = (int)(predator_count * best_predator_ratio);
+
+        
+        
+        //best_prey_count = (int)(prey_count * best_prey_ratio);
+        //best_predator_count = (int)(predator_count * best_predator_ratio);
     }
 
     private void Start()
     {
+        setConfig();
+        updateConfig();
+        spawnPreys();
+        spawnPredators();
         FS.Spawn_food(FS.spawn_num);
+    }
+
+    private void setConfig()
+    {
+        FS.spawn_room = config.room;
+        System.Tuple<Vector2, Vector2> spawns = getSpawnPos(config.room);
+        prey_pos.position = spawns.Item1;
+        predator_pos.position = spawns.Item2;
+    }
+
+    private void updateConfig()
+    {
+        FS.spawn_num = config.food_drop_num;
+        FS.rand_spawn_rate = config.food_drop_rate;
+        FS.food_lifespan = config.food_lifespan;
+    }
+
+    private System.Tuple<Vector2, Vector2> getSpawnPos(Vector2Int spawnRoom)
+    {
+        if(spawnRoom.x >= spawnRoom.y)
+        {
+            return System.Tuple.Create(new Vector2(-spawnRoom.x / 2.0f, 0), new Vector2(spawnRoom.x / 2.0f, 0));
+        }
+        else
+        {
+            return System.Tuple.Create(new Vector2(0, -spawnRoom.y / 2.0f), new Vector2(0, spawnRoom.y/2.0f));
+        }
+    }
+
+    private int getBestAgentCount(int num, float ratio)
+    {
+        return Mathf.CeilToInt(num * ratio);
     }
 
     private void spawnPreys()
     {
-        for (int i = 0; i < start_prey_count; i++)
+        for (int i = 0; i < config.prey_count; i++)
         {
-            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y)); GameObject new_obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
+            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x / 2, transform.position.x + FS.spawn_room.x / 2), Random.Range(transform.position.y - FS.spawn_room.y/2, transform.position.y + FS.spawn_room.y/2)); GameObject new_obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
             new_obj.GetComponent<PreyController>().network = new NNet(new_obj.GetComponent<PreyController>().layers);
             new_obj.GetComponent<PreyController>().spawn_point = prey_pos;
-            MutatePrey(new_obj.GetComponent<PreyController>());
+            MutateAgent(new_obj.GetComponent<PreyController>(), config.prey_traits, true);
         }
-        prey_count = start_prey_count;
+        prey_count = config.prey_count;
     }
 
     private void spawnPredators()
     {
-        for (int i = 0; i < start_predator_count; i++)
+        for (int i = 0; i < config.predator_count; i++)
         {
-            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y));
+            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x/2, transform.position.x + FS.spawn_room.x/2), Random.Range(transform.position.y - FS.spawn_room.y/2, transform.position.y + FS.spawn_room.y/2));
             GameObject new_obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
             new_obj.GetComponent<PredatorController>().network = new NNet(new_obj.GetComponent<PredatorController>().layers);
             new_obj.GetComponent<PredatorController>().spawn_point = predator_pos;
-            MutatePredator(new_obj.GetComponent<PredatorController>());
+            MutateAgent(new_obj.GetComponent<PredatorController>(), config.predator_traits, false);
         }
 
-        predator_count = start_predator_count;
+        predator_count = config.predator_count;
+    }
+
+    ///Mutates Agent parameters
+    void MutateAgent(AgentController controller, List<SetupManager.Trait> traits, bool is_prey)
+    {
+        controller.speed = traits[0].getValue();
+        controller.energy = traits[1].getValue();
+        controller.maturity = traits[2].getValue();
+        controller.size.x *= traits[3].getValue();
+        controller.size.y *= traits[3].getValue();
+        Color randcolor;
+        if (is_prey)
+        {
+            randcolor = new Color(def_color_prey.r, def_color_prey.g, Random.Range(0f, 1f));
+        }
+        else
+        {
+            randcolor = new Color(def_color_predator.r, def_color_predator.g, Random.Range(0f, 1f));
+        }
+        controller.sprite = SA[Random.Range(0, SA.Length)];
+        controller.color = randcolor;
+    }
+
+    public void MutateAgent(AgentController controller, List<SetupManager.Trait> traits, AgentController parent)
+    {
+        controller.speed = traits[0].getValue(parent.speed);
+        controller.energy = traits[1].getValue(parent.energy);
+        controller.maturity = traits[2].getValue(parent.maturity);
+        controller.size = parent.size;
+        controller.sprite = parent.sprite;
+        controller.color = parent.color;
     }
 
     ///Slighty changes some PreyController parameters
-    void MutatePrey(PreyController prey)
-    {
-        float rand = Random.Range(0f, 1f);
+    //void MutatePrey(PreyController prey)
+    //{
+    //    float rand = Random.Range(0f, 1f);
 
-        prey.speed = speed_def_prey;
-        if (rand <= spawn_mutation_prob)
-        {
-            float t = Random.Range(-speed_offset_prey, speed_offset_prey);
-            if (prey.speed + t >= speed_min_prey)
-            {
-                prey.speed += t;
-            }
-        }
+    //    prey.speed = speed_def_prey;
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float t = Random.Range(-speed_offset_prey, speed_offset_prey);
+    //        if (prey.speed + t >= speed_min_prey)
+    //        {
+    //            prey.speed += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        prey.max_hunger = hunger_def_prey;
-        if (rand <= spawn_mutation_prob)
-        {
-            float t = Random.Range(-hunger_offset_prey, hunger_offset_prey);
-            if (prey.max_hunger + t >= hunger_min_prey)
-            {
-                prey.max_hunger += t;
-            }
-        }
-        rand = Random.Range(0f, 1f);
-        prey.maturity = maturity_def_prey;
-        if (rand <= spawn_mutation_prob)
-        {
-            float t = Random.Range(-maturity_offset_prey, maturity_offset_prey);
-            if (prey.maturity + t >= maturity_min_prey)
-            {
-                prey.maturity += t;
-            }
-        }
+    //    rand = Random.Range(0f, 1f);
+    //    prey.energy = hunger_def_prey;
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float t = Random.Range(-hunger_offset_prey, hunger_offset_prey);
+    //        if (prey.energy + t >= hunger_min_prey)
+    //        {
+    //            prey.energy += t;
+    //        }
+    //    }
+    //    rand = Random.Range(0f, 1f);
+    //    prey.maturity = maturity_def_prey;
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float t = Random.Range(-maturity_offset_prey, maturity_offset_prey);
+    //        if (prey.maturity + t >= maturity_min_prey)
+    //        {
+    //            prey.maturity += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        prey.size = new Vector2(def_size_prey.x, def_size_prey.y);
-        if (rand <= spawn_mutation_prob)
-        {
-            float offst = Random.Range(-size_offset_prey, +size_offset_prey);
-            if (prey.size.x - offst >= 0.01 && prey.size.y - offst >= 0.01)
-            {
-                prey.size = new Vector2(def_size_prey.x + offst, def_size_prey.y + offst);
-            }
-        }
-        Color randcolor = new Color(def_color_prey.r, def_color_prey.g, Random.Range(0f, 1f));
-        prey.sprite = SA[Random.Range(0, SA.Length)];
-        prey.color = randcolor;
-    }
+    //    rand = Random.Range(0f, 1f);
+    //    prey.size = new Vector2(def_size_prey.x, def_size_prey.y);
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float offst = Random.Range(-size_offset_prey, +size_offset_prey);
+    //        if (prey.size.x - offst >= 0.01 && prey.size.y - offst >= 0.01)
+    //        {
+    //            prey.size = new Vector2(def_size_prey.x + offst, def_size_prey.y + offst);
+    //        }
+    //    }
+    //    Color randcolor = new Color(def_color_prey.r, def_color_prey.g, Random.Range(0f, 1f));
+    //    prey.sprite = SA[Random.Range(0, SA.Length)];
+    //    prey.color = randcolor;
+    //}
 
-    ///Slighty changes some PredatorController parameters
-    void MutatePredator(PredatorController predator)
-    {
-        float rand = Random.Range(0f, 1f);
+    /////Slighty changes some PredatorController parameters
+    //void MutatePredator(PredatorController predator)
+    //{
+    //    float rand = Random.Range(0f, 1f);
 
-        predator.speed = speed_def_predator;
-        if (rand <= spawn_mutation_prob)
-        {
-            float t = Random.Range(-speed_offset_predator, speed_offset_predator);
-            if (predator.speed + t >= speed_min_predator)
-            {
-                predator.speed += t;
-            }
-        }
+    //    predator.speed = speed_def_predator;
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float t = Random.Range(-speed_offset_predator, speed_offset_predator);
+    //        if (predator.speed + t >= speed_min_predator)
+    //        {
+    //            predator.speed += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        predator.max_hunger = hunger_def_predator;
-        if (rand <= spawn_mutation_prob)
-        {
-            float t = Random.Range(-hunger_offset_predator, hunger_offset_predator);
-            if (predator.max_hunger + t >= hunger_min_predator)
-            {
-                predator.max_hunger += t;
-            }
-        }
+    //    rand = Random.Range(0f, 1f);
+    //    predator.energy = hunger_def_predator;
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float t = Random.Range(-hunger_offset_predator, hunger_offset_predator);
+    //        if (predator.energy + t >= hunger_min_predator)
+    //        {
+    //            predator.energy += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        predator.maturity = maturity_def_predator;
-        if (rand <= spawn_mutation_prob)
-        {
-            float t = Random.Range(-maturity_offset_predator, maturity_offset_predator);
-            if (predator.maturity + t >= maturity_min_predator)
-            {
-                predator.maturity += t;
-            }
-        }
+    //    rand = Random.Range(0f, 1f);
+    //    predator.maturity = maturity_def_predator;
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float t = Random.Range(-maturity_offset_predator, maturity_offset_predator);
+    //        if (predator.maturity + t >= maturity_min_predator)
+    //        {
+    //            predator.maturity += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        predator.size = new Vector2(def_size_predator.x, def_size_predator.y);
-        if (rand <= spawn_mutation_prob)
-        {
-            float offst = Random.Range(-size_offset_predator, +size_offset_predator);
-            if (predator.size.x - offst >= 0.01 && predator.size.y - offst >= 0.01)
-            {
-                predator.size = new Vector2(def_size_predator.x + offst, def_size_predator.y + offst);
-            }
-        }
-        Color randcolor = new Color(def_color_predator.r, def_color_predator.g, Random.Range(0f, 1f));
-        predator.sprite = SA[Random.Range(0, SA.Length)];
-        predator.color = randcolor;
-    }
+    //    rand = Random.Range(0f, 1f);
+    //    predator.size = new Vector2(def_size_predator.x, def_size_predator.y);
+    //    if (rand <= spawn_mutation_prob)
+    //    {
+    //        float offst = Random.Range(-size_offset_predator, +size_offset_predator);
+    //        if (predator.size.x - offst >= 0.01 && predator.size.y - offst >= 0.01)
+    //        {
+    //            predator.size = new Vector2(def_size_predator.x + offst, def_size_predator.y + offst);
+    //        }
+    //    }
+    //    Color randcolor = new Color(def_color_predator.r, def_color_predator.g, Random.Range(0f, 1f));
+    //    predator.sprite = SA[Random.Range(0, SA.Length)];
+    //    predator.color = randcolor;
+    //}
 
     ///Slighty changes certain PreyConttroller scripts parameters according to the parent script parameters
-    public void ReproducePrey(PreyController parent, PreyController prey)
-    {
-        float rand = Random.Range(0f, 1f);
+    //public void ReproducePrey(PreyController parent, PreyController prey)
+    //{
+    //    float rand = Random.Range(0f, 1f);
 
-        prey.speed = parent.speed;
-        if (rand <= reproduction_mutation_prob)
-        {
-            float t = Random.Range(-speed_offset_prey, speed_offset_prey);
-            if (prey.speed + t >= speed_min_prey)
-            {
-                prey.speed += t;
-            }
-        }
+    //    prey.speed = parent.speed;
+    //    if (rand <= reproduction_mutation_prob)
+    //    {
+    //        float t = Random.Range(-speed_offset_prey, speed_offset_prey);
+    //        if (prey.speed + t >= speed_min_prey)
+    //        {
+    //            prey.speed += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        prey.max_hunger = parent.max_hunger;
-        if (rand <= reproduction_mutation_prob)
-        {
-            float t = Random.Range(-hunger_offset_prey, hunger_offset_prey);
-            if (prey.max_hunger + t >= hunger_min_prey)
-            {
-                prey.max_hunger += t;
-            }
-        }
+    //    rand = Random.Range(0f, 1f);
+    //    prey.energy = parent.energy;
+    //    if (rand <= reproduction_mutation_prob)
+    //    {
+    //        float t = Random.Range(-hunger_offset_prey, hunger_offset_prey);
+    //        if (prey.energy + t >= hunger_min_prey)
+    //        {
+    //            prey.energy += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        prey.maturity = parent.maturity;
-        if (rand <= reproduction_mutation_prob)
-        {
-            float t = Random.Range(-maturity_offset_prey, maturity_offset_prey);
-            if (prey.maturity + t >= maturity_min_prey)
-            {
-                prey.maturity += t;
-            }
-        }
+    //    rand = Random.Range(0f, 1f);
+    //    prey.maturity = parent.maturity;
+    //    if (rand <= reproduction_mutation_prob)
+    //    {
+    //        float t = Random.Range(-maturity_offset_prey, maturity_offset_prey);
+    //        if (prey.maturity + t >= maturity_min_prey)
+    //        {
+    //            prey.maturity += t;
+    //        }
+    //    }
 
-        prey.size = parent.size;
-        prey.color = parent.color;
-        prey.sprite = parent.sprite;
-    }
+    //    prey.size = parent.size;
+    //    prey.color = parent.color;
+    //    prey.sprite = parent.sprite;
+    //}
 
     ///Slighty changes certain PredatorConttroller scripts parameters according to the parent script parameters
-    public void ReproducePredator(PredatorController parent, PredatorController predator)
-    {
-        float rand = Random.Range(0f, 1f);
+    //public void ReproducePredator(PredatorController parent, PredatorController predator)
+    //{
+    //    float rand = Random.Range(0f, 1f);
 
-        predator.speed = parent.speed;
-        if (rand <= reproduction_mutation_prob)
-        {
-            float t = Random.Range(-speed_offset_predator, speed_offset_predator);
-            if (predator.speed + t >= speed_min_predator)
-            {
-                predator.speed += t;
-            }
-        }
+    //    predator.speed = parent.speed;
+    //    if (rand <= reproduction_mutation_prob)
+    //    {
+    //        float t = Random.Range(-speed_offset_predator, speed_offset_predator);
+    //        if (predator.speed + t >= speed_min_predator)
+    //        {
+    //            predator.speed += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        predator.max_hunger = parent.max_hunger;
-        if (rand <= reproduction_mutation_prob)
-        {
-            float t = Random.Range(-hunger_offset_predator, hunger_offset_predator);
-            if (predator.max_hunger + t >= hunger_min_predator)
-            {
-                predator.max_hunger += t;
-            }
-        }
+    //    rand = Random.Range(0f, 1f);
+    //    predator.energy = parent.energy;
+    //    if (rand <= reproduction_mutation_prob)
+    //    {
+    //        float t = Random.Range(-hunger_offset_predator, hunger_offset_predator);
+    //        if (predator.energy + t >= hunger_min_predator)
+    //        {
+    //            predator.energy += t;
+    //        }
+    //    }
 
-        rand = Random.Range(0f, 1f);
-        predator.maturity = parent.maturity;
-        if (rand <= reproduction_mutation_prob)
-        {
-            float t = Random.Range(-maturity_offset_predator, maturity_offset_predator);
-            if (predator.maturity + t >= maturity_min_predator)
-            {
-                predator.maturity += t;
-            }
-        }
+    //    rand = Random.Range(0f, 1f);
+    //    predator.maturity = parent.maturity;
+    //    if (rand <= reproduction_mutation_prob)
+    //    {
+    //        float t = Random.Range(-maturity_offset_predator, maturity_offset_predator);
+    //        if (predator.maturity + t >= maturity_min_predator)
+    //        {
+    //            predator.maturity += t;
+    //        }
+    //    }
 
-        predator.size = parent.size;
-        predator.color = parent.color;
-        predator.sprite = parent.sprite;
-    }
+    //    predator.size = parent.size;
+    //    predator.color = parent.color;
+    //    predator.sprite = parent.sprite;
+    //}
 
     ///Sets UIManager camera reference to GameObject that has PreyController script with highest fitness value of NNet attached to it
     public void FiitestPrey()
@@ -376,7 +446,8 @@ public class EnvironmentController : MonoBehaviour
                 pred_objs[i].GetComponent<PredatorController>().Die(0);
             }
         }
-        int num = start_prey_count / best_prey_count;
+        int best_prey_count = getBestAgentCount(config.prey_count, config.prey_chosen_ratio);
+        int num = config.prey_count / best_prey_count;
         for (int j = 0; j < num; j++)
         {
             for (int i = 0; i < best_prey_count; i++)
@@ -385,14 +456,15 @@ public class EnvironmentController : MonoBehaviour
                 obj.GetComponent<PreyController>().network = new NNet(preys[i]);
                 obj.GetComponent<PreyController>().network.SetFitness(0f);
                 float rand = Random.Range(0f, 1f);
-                if (rand <= mutation_rate * i)
+                if (rand <= config.prey_neuron_mutation_chance * i)
                 {
                     obj.GetComponent<PreyController>().network.Mutate();
                 }
-                MutatePrey(obj.GetComponent<PreyController>());
+                MutateAgent(obj.GetComponent<PreyController>(), config.prey_traits, true);
             }
         }
-        num = start_predator_count / best_predator_count;
+        int best_predator_count = getBestAgentCount(config.predator_count, config.predator_chosen_ratio);
+        num = config.predator_count / best_predator_count;
         for (int j = 0; j < num; j++)
         {
             for (int i = 0; i < best_predator_count; i++)
@@ -401,11 +473,11 @@ public class EnvironmentController : MonoBehaviour
                 obj.GetComponent<PredatorController>().network = new NNet(predators[i]);
                 obj.GetComponent<PredatorController>().network.SetFitness(0f);
                 float rand = Random.Range(0f, 1f);
-                if (rand <= mutation_rate * i)
+                if (rand <= config.predator_chosen_ratio * i)
                 {
                     obj.GetComponent<PredatorController>().network.Mutate();
                 }
-                MutatePredator(obj.GetComponent<PredatorController>());
+                MutateAgent(obj.GetComponent<PredatorController>(), config.predator_traits, false);
               
             }
         }
@@ -414,8 +486,8 @@ public class EnvironmentController : MonoBehaviour
         preys.Clear();
         predators.Clear();
         UImgr.gen_count++;
-        prey_count = start_prey_count;
-        predator_count = start_predator_count;
+        prey_count = config.prey_count;
+        predator_count = config.predator_count;
     }
     
     ///Pauses simulation
@@ -435,64 +507,10 @@ public class EnvironmentController : MonoBehaviour
     {
         preys.Add(new NNet(net));
         preys.Sort((net1, net2) => NNet.CompareNNets(net1, net2));
-        if(preys.Count > best_prey_count)
+        if(preys.Count > getBestAgentCount(config.prey_count, config.prey_chosen_ratio))
         {
             preys.RemoveAt(preys.Count - 1);
         }
-        //if (preys.Count == 0)
-        //{
-        //    preys.Add(new NNet(net));
-        //}
-        //else
-        //{
-        //    if (preys.Count == best_prey_count)
-        //    {
-        //        if (net.GetFitness() < preys[preys.Count - 1].GetFitness())
-        //        {
-        //            return;
-        //        }
-        //        else
-        //        {
-        //            preys.Add(new NNet(net));
-        //            for (int i = 0; i < preys.Count - 1; i++)
-        //            {
-        //                for (int j = i; j < preys.Count; j++)
-        //                {
-        //                    if (preys[i].GetFitness() < preys[j].GetFitness())
-        //                    {
-        //                        NNet temp = preys[i];
-        //                        preys[i] = preys[j];
-        //                        preys[j] = temp;
-        //                    }
-        //                }
-        //            }
-        //            preys.RemoveAt(preys.Count - 1);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (net.GetFitness() < preys[preys.Count - 1].GetFitness())
-        //        {
-        //            preys.Add(new NNet(net));
-        //        }
-        //        else
-        //        {
-        //            preys.Add(new NNet(net));
-        //            for (int i = 0; i < preys.Count - 1; i++)
-        //            {
-        //                for (int j = i; j < preys.Count; j++)
-        //                {
-        //                    if (preys[i].GetFitness() < preys[j].GetFitness())
-        //                    {
-        //                        NNet temp = preys[i];
-        //                        preys[i] = preys[j];
-        //                        preys[j] = temp;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
     }
 
     ///Adds new NNet record of PredatorController script
@@ -500,64 +518,10 @@ public class EnvironmentController : MonoBehaviour
     {
         predators.Add(new NNet(net));
         predators.Sort((net1, net2) => NNet.CompareNNets(net1, net2));
-        if (predators.Count > best_predator_count)
+        if (predators.Count > getBestAgentCount(config.predator_count, config.predator_chosen_ratio))
         {
             predators.RemoveAt(predators.Count - 1);
         }
-        //if (predators.Count == 0)
-        //{
-        //    predators.Add(new NNet(net));
-        //}
-        //else
-        //{
-        //    if (predators.Count == best_predator_count)
-        //    {
-        //        if (net.GetFitness() < predators[predators.Count - 1].GetFitness())
-        //        {
-        //            return;
-        //        }
-        //        else
-        //        {
-        //            predators.Add(new NNet(net));
-        //            for (int i = 0; i < predators.Count - 1; i++)
-        //            {
-        //                for (int j = i; j < predators.Count; j++)
-        //                {
-        //                    if (predators[i].GetFitness() < predators[j].GetFitness())
-        //                    {
-        //                        NNet temp = predators[i];
-        //                        predators[i] = predators[j];
-        //                        predators[j] = temp;
-        //                    }
-        //                }
-        //            }
-        //            predators.RemoveAt(predators.Count - 1);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (net.GetFitness() < predators[predators.Count - 1].GetFitness())
-        //        {
-        //            predators.Add(new NNet(net));
-        //        }
-        //        else
-        //        {
-        //            predators.Add(new NNet(net));
-        //            for (int i = 0; i < predators.Count - 1; i++)
-        //            {
-        //                for (int j = i; j < predators.Count; j++)
-        //                {
-        //                    if (predators[i].GetFitness() < predators[j].GetFitness())
-        //                    {
-        //                        NNet temp = predators[i];
-        //                        predators[i] = predators[j];
-        //                        predators[j] = temp;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
     }
 
     ///Writes NNet Pool to .dat file and repopulates the Environment

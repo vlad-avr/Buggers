@@ -25,7 +25,7 @@ public class PredatorController : AgentController
         {
             obj.GetComponent<PredatorController>().network.Mutate();
         }
-        EC.ReproducePredator(this, obj.GetComponent<PredatorController>());
+        EC.MutateAgent(obj.GetComponent<PredatorController>(), EC.config.predator_traits, this);
         EC.predator_count++;
         obj.GetComponent<PredatorController>().spawn_point = EC.predator_pos;
     }

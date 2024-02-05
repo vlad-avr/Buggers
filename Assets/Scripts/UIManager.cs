@@ -28,14 +28,20 @@ public class UIManager : MonoBehaviour
         camera_pos_ref = this.gameObject;
         def_zoom = main_camera.orthographicSize;
         info_panel.SetActive(false);
-        NMC.value = EC.mutation_rate;
-        TMR.value = EC.reproduction_mutation_prob;
-        TMS.value = EC.spawn_mutation_prob;
+        //NMC.value = EC.mutation_rate;
+        //TMR.value = EC.reproduction_mutation_prob;
+        //TMS.value = EC.spawn_mutation_prob;
     }
     /// Start is called before the first frame update
     void Start()
     {
-        
+        setCameraFocus();
+    }
+
+    ///Adjust Camera view field according to map size
+    void setCameraFocus()
+    {
+        main_camera.orthographicSize = Mathf.Max(EC.config.room.x, EC.config.room.y)/2.0f;
     }
 
     /// Update is called once per frame
@@ -44,11 +50,6 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ReleaseCamera();
-        }
-
-        if (info_panel.activeSelf)
-        {
-            
         }
     }
 
@@ -118,8 +119,8 @@ public class UIManager : MonoBehaviour
         cur_gen_text.text = gen_count.ToString();
         population_text.text = EC.prey_count.ToString() + " / " + EC.predator_count.ToString();
         main_camera.transform.position = new Vector3(camera_pos_ref.transform.position.x, camera_pos_ref.transform.position.y, -10);
-        EC.mutation_rate = NMC.value;
-        EC.reproduction_mutation_prob = TMR.value;
-        EC.spawn_mutation_prob = TMS.value;
+        //EC.mutation_rate = NMC.value;
+        //EC.reproduction_mutation_prob = TMR.value;
+        //EC.spawn_mutation_prob = TMS.value;
     }
 }

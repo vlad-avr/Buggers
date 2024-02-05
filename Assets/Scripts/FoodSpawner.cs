@@ -9,9 +9,10 @@ public class FoodSpawner : MonoBehaviour
     [Header("Food Spawn Settings")]
     public float rand_spawn_rate;
     public int spawn_num;
+    public float food_lifespan;
     private float cur_rand_spawn_rate;
     public Food food_obj;
-    public Vector3 spawn_room;
+    public Vector2Int spawn_room;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,8 +38,9 @@ public class FoodSpawner : MonoBehaviour
     {
         while (num > 0)
         {
-            Vector3 spawn_pos = new Vector3(Random.Range(-spawn_room.x, spawn_room.x), Random.Range(-spawn_room.y, spawn_room.y), 0);
-            Instantiate(food_obj, spawn_pos, food_obj.transform.rotation);
+            Vector3 spawn_pos = new Vector3(Random.Range(-spawn_room.x/2, spawn_room.x/2), Random.Range(-spawn_room.y/2, spawn_room.y / 2), 0);
+            Food food = Instantiate(food_obj, spawn_pos, food_obj.transform.rotation);
+            food.lifetime = food_lifespan;
             num--;
         }
     }

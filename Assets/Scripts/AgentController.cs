@@ -12,8 +12,8 @@ public abstract class AgentController : MonoBehaviour
 
     ///gameObject physical parameters setting
     [Header("gameObject Settings")]
-    public float max_hunger = 10;
-    public float cur_hunger;
+    public float energy = 10;
+    public float cur_energy;
     public float maturity = 20;
     protected float cur_maturity;
     public float speed;
@@ -81,13 +81,13 @@ public abstract class AgentController : MonoBehaviour
                 cur_maturity += Time.deltaTime;
             }
 
-            if (cur_hunger >= max_hunger)
+            if (cur_energy >= energy)
             {
                 Die(-10);
             }
             else
             {
-                cur_hunger += Time.deltaTime;
+                cur_energy += Time.deltaTime;
             }
 
 

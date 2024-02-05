@@ -28,7 +28,7 @@ public class PreyController : AgentController
     ///Ensures that Prey object is destroyed properly in case of collision with Predator
     private void GetEaten(PredatorController predator)
     {
-        predator.cur_hunger = 0f;
+        predator.cur_energy = 0f;
         predator.network.AddFitness(1f);
         Die(-5);
     }
@@ -42,7 +42,7 @@ public class PreyController : AgentController
         {
             obj.GetComponent<PreyController>().network.Mutate();
         }
-        EC.ReproducePrey(this, obj.GetComponent<PreyController>());
+        EC.MutateAgent(obj.GetComponent<PreyController>(), EC.config.prey_traits, this);
         EC.prey_count++;
         obj.GetComponent<PreyController>().spawn_point = EC.prey_pos;
     }

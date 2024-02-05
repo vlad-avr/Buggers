@@ -32,7 +32,7 @@ public class Food : MonoBehaviour
     ///Ensures that food object is destroyed properly when collided with object of type PreyController
     private void GetEaten(PreyController prey)
     {
-        prey.cur_hunger = 0;
+        prey.cur_energy = 0;
         prey.network.AddFitness(1f);
         Destroy(gameObject);
     }

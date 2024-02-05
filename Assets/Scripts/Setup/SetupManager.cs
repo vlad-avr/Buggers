@@ -94,26 +94,26 @@ public class SetupManager : MonoBehaviour
             prey_traits[1][0].onEndEdit.AddListener(value => clampFloat(prey_traits[1][0], min_maturity, max_maturity));
             prey_traits[2][0].onEndEdit.AddListener(value => clampFloat(prey_traits[2][0], min_energy, max_energy));
             prey_traits[3][0].onEndEdit.AddListener(value => clampFloat(prey_traits[3][0], min_size_mod, max_size_mod));
-            prey_traits[0][1].onEndEdit.AddListener(value => clampFloat(prey_traits[0][1], 0f, 1f));
+            prey_traits[0][1].onEndEdit.AddListener(value => clampFloat(prey_traits[0][1], 0f, 0.5f));
             prey_traits[0][2].onEndEdit.AddListener(value => clampFloat(prey_traits[0][2], 0f, 1f));
-            prey_traits[1][1].onEndEdit.AddListener(value => clampFloat(prey_traits[1][1], 0f, 1f));
+            prey_traits[1][1].onEndEdit.AddListener(value => clampFloat(prey_traits[1][1], 0f, 0.5f));
             prey_traits[1][2].onEndEdit.AddListener(value => clampFloat(prey_traits[1][2], 0f, 1f));
-            prey_traits[2][1].onEndEdit.AddListener(value => clampFloat(prey_traits[2][1], 0f, 1f));
+            prey_traits[2][1].onEndEdit.AddListener(value => clampFloat(prey_traits[2][1], 0f, 0.5f));
             prey_traits[2][2].onEndEdit.AddListener(value => clampFloat(prey_traits[2][2], 0f, 1f));
-            prey_traits[3][1].onEndEdit.AddListener(value => clampFloat(prey_traits[3][1], 0f, 1f));
+            prey_traits[3][1].onEndEdit.AddListener(value => clampFloat(prey_traits[3][1], 0f, 0.5f));
             prey_traits[3][2].onEndEdit.AddListener(value => clampFloat(prey_traits[3][2], 0f, 1f));
 
             predator_traits[0][0].onEndEdit.AddListener(value => clampFloat(predator_traits[0][0], min_speed, max_speed));
             predator_traits[1][0].onEndEdit.AddListener(value => clampFloat(predator_traits[1][0], min_maturity, max_maturity));
             predator_traits[2][0].onEndEdit.AddListener(value => clampFloat(predator_traits[2][0], min_energy, max_energy));
             predator_traits[3][0].onEndEdit.AddListener(value => clampFloat(predator_traits[3][0], min_size_mod, max_size_mod));
-            predator_traits[0][1].onEndEdit.AddListener(value => clampFloat(predator_traits[0][1], 0f, 1f));
+            predator_traits[0][1].onEndEdit.AddListener(value => clampFloat(predator_traits[0][1], 0f, 0.5f));
             predator_traits[0][2].onEndEdit.AddListener(value => clampFloat(predator_traits[0][2], 0f, 1f));
-            predator_traits[1][1].onEndEdit.AddListener(value => clampFloat(predator_traits[1][1], 0f, 1f));
+            predator_traits[1][1].onEndEdit.AddListener(value => clampFloat(predator_traits[1][1], 0f, 0.5f));
             predator_traits[1][2].onEndEdit.AddListener(value => clampFloat(predator_traits[1][2], 0f, 1f));
-            predator_traits[2][1].onEndEdit.AddListener(value => clampFloat(predator_traits[2][1], 0f, 1f));
+            predator_traits[2][1].onEndEdit.AddListener(value => clampFloat(predator_traits[2][1], 0f, 0.5f));
             predator_traits[2][2].onEndEdit.AddListener(value => clampFloat(predator_traits[2][2], 0f, 1f));
-            predator_traits[3][1].onEndEdit.AddListener(value => clampFloat(predator_traits[3][1], 0f, 1f));
+            predator_traits[3][1].onEndEdit.AddListener(value => clampFloat(predator_traits[3][1], 0f, 0.5f));
             predator_traits[3][2].onEndEdit.AddListener(value => clampFloat(predator_traits[3][2], 0f, 1f));
 
         }
@@ -220,6 +220,31 @@ public class SetupManager : MonoBehaviour
             this.default_value = default_value;
             this.offset = offset;
             this.probability = probability;
+        }
+
+        public float getValue()
+        {
+            return getValue(default_value);
+        }
+
+        public float getValue(float value)
+        {
+            if(probability == 0)
+            {
+                return value;
+            }
+            else
+            {
+                float roll = UnityEngine.Random.Range(0f, 1f);
+                if(roll <= probability)
+                {
+                    return value + value * UnityEngine.Random.Range(-offset, offset);
+                }
+                else
+                {
+                    return value;
+                }
+            }
         }
 
         public override string ToString()
@@ -384,12 +409,16 @@ public class SetupManager : MonoBehaviour
     private GameObject predator_net_UI;
     private List<GameObject> prey_layers = new List<GameObject>();
     private List<GameObject> predator_layers = new List<GameObject>();
+    [Header("UI references (autocompleted)")]
     public List<Tuple<Button, Button>> net_buttons = new List<Tuple<Button, Button>>();
     public Button save_config;
     public Button load_config;
     public Button update_config;
     public Button delete_config;
     public Dropdown config_dropdown;
+
+    [Header("EnvironmentController entity prefab")]
+    public GameObject environmentController;
 
     private void Awake()
     {
@@ -417,6 +446,13 @@ public class SetupManager : MonoBehaviour
         config_dropdown.onValueChanged.AddListener(updateNameField);
         configs = getConfigNames();
         updateDropdown();
+    }
+
+    public void initEnvironment()
+    {
+        GameObject controller = Instantiate(environmentController, transform.position, Quaternion.identity);
+        controller.transform.SetParent(this.transform);
+        controller.GetComponent<EnvironmentController>().config = inputMap.getConfig();
     }
 
     private void setupNetRefs(GameObject setupUI)
