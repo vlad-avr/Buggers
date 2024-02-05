@@ -170,7 +170,7 @@ public class EnvironmentController : MonoBehaviour
             controller.layers = getLayers(2, config.predator_net);
             controller.network = new NNet(controller.layers);
             controller.spawn_point = predator_pos;
-            MutateAgent(controller, config.predator_traits, true);
+            MutateAgent(controller, config.predator_traits, false);
         }
 
         predator_count = config.predator_count;
@@ -182,8 +182,9 @@ public class EnvironmentController : MonoBehaviour
         controller.speed = traits[0].getValue();
         controller.energy = traits[1].getValue();
         controller.maturity = traits[2].getValue();
-        controller.size.x *= traits[3].getValue();
-        controller.size.y *= traits[3].getValue();
+        float size_mod = traits[3].getValue();
+        controller.size.x *= size_mod;
+        controller.size.y *= size_mod;
         Color randcolor;
         if (is_prey)
         {

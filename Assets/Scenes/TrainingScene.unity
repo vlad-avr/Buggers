@@ -15200,7 +15200,7 @@ GameObject:
   - component: {fileID: 1348411738}
   - component: {fileID: 1348411737}
   m_Layer: 5
-  m_Name: SetupCanvas
+  m_Name: SETUP_CANVAS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19044,7 +19044,7 @@ MonoBehaviour:
   update_config: {fileID: 0}
   delete_config: {fileID: 0}
   config_dropdown: {fileID: 0}
-  environmentController: {fileID: 0}
+  environmentController: {fileID: 5624071503723790584, guid: f30a4896436fafc49b6df3a79f94dd3a, type: 3}
 --- !u!1 &1703386408
 GameObject:
   m_ObjectHideFlags: 0

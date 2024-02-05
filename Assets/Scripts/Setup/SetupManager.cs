@@ -69,10 +69,10 @@ public class SetupManager : MonoBehaviour
 
             prey_neuron_mutation = prey_panel.Find("N_CHANGE").Find("NEURON").GetComponent<InputField>();
             predator_neuron_mutation = predator_panel.Find("N_CHANGE").Find("NEURON").GetComponent<InputField>();
-            prey_net.Add(prey_panel.Find("NET").Find("FIRST").GetComponent<InputField>());
-            prey_net.Add(prey_panel.Find("NET").Find("LAST").GetComponent<InputField>());
-            predator_net.Add(predator_panel.Find("NET").Find("FIRST").GetComponent<InputField>());
-            predator_net.Add(predator_panel.Find("NET").Find("LAST").GetComponent<InputField>());
+            //prey_net.Add(prey_panel.Find("NET").Find("FIRST").GetComponent<InputField>());
+            //prey_net.Add(prey_panel.Find("NET").Find("LAST").GetComponent<InputField>());
+            //predator_net.Add(predator_panel.Find("NET").Find("FIRST").GetComponent<InputField>());
+            //predator_net.Add(predator_panel.Find("NET").Find("LAST").GetComponent<InputField>());
         }
 
         public void setListeners()
@@ -453,7 +453,7 @@ public class SetupManager : MonoBehaviour
         GameObject controller = Instantiate(environmentController, transform.position, Quaternion.identity);
         controller.transform.SetParent(this.transform);
         controller.GetComponent<EnvironmentController>().config = inputMap.getConfig();
-        controller.GetComponent<UIManager>().setupUI = this.gameObject;
+        GameObject.Find("SETUP_CANVAS").SetActive(false);
     }
 
     private void setupNetRefs(GameObject setupUI)
