@@ -152,12 +152,12 @@ public class SetupManager : MonoBehaviour
             conf.predator_neuron_mutation_chance = float.Parse(predator_neuron_mutation.text);
 
             conf.prey_net = new List<int>();
-            for(int i = 1; i < prey_net.Count-1; i++)
+            for(int i = 0; i < prey_net.Count; i++)
             {
                 conf.prey_net.Add(int.Parse(prey_net[i].text));
             }
             conf.predator_net = new List<int>();
-            for (int i = 1; i < predator_net.Count - 1; i++)
+            for (int i = 0; i < predator_net.Count; i++)
             {
                 conf.predator_net.Add(int.Parse(predator_net[i].text));
             }
@@ -371,8 +371,8 @@ public class SetupManager : MonoBehaviour
     }
 
     //Defined constants (sort of config for default enviroment)
-    private static Vector2Int min_room = new Vector2Int(10,10);
-    private static Vector2Int max_room = new Vector2Int(100, 100);
+    private static Vector2Int min_room = new Vector2Int(20,20);
+    private static Vector2Int max_room = new Vector2Int(200, 200);
 
     private const float min_food_drop_rate = 5;
     private const float max_food_drop_rate = 100;
@@ -711,6 +711,7 @@ public class SetupManager : MonoBehaviour
                 {
                     loaded += line + "\n";
                 } while ((line = reader.ReadLine()) != null && !line.Equals("~"));
+                loaded += "~\n";
             }
         }
         catch (Exception e)
