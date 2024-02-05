@@ -27,6 +27,19 @@ public class PredatorController : AgentController
         obj.GetComponent<PredatorController>().spawn_point = EC.predator_pos;
     }
 
+    public override void drawLine()
+    {
+        if(target == null)
+        {
+            line.enabled = false;
+            return;
+        }
+        line.positionCount = 2;
+        line.SetPosition(0, transform.position);
+        line.SetPosition(1, target.position);
+        line.enabled = true;
+    }
+
     ///Gets angle value and distance to the nearest object of type Prey (returns as array)
     public override float[] InputSensors()
     {
@@ -40,23 +53,16 @@ public class PredatorController : AgentController
                 min = hit_predator[i];
             }
         }
-        if (min == null)
+        target = min.transform;
+        Vector2 vec = min.transform.position - transform.position;
+        float angle = Vector2.Angle(transform.up, vec);
+        if (angle >= 180f)
         {
-            input_arr.Add(UnityEngine.Random.Range(-180f, 180f) / 180f);
-            input_arr.Add(UnityEngine.Random.Range(0f, sight_radius) / sight_radius);
+            angle = -1f * (360f - angle);
         }
-        else
-        {
-            Vector2 vec = min.transform.position - transform.position;
-            float angle = Vector2.Angle(transform.up, vec);
-            if (angle >= 180f)
-            {
-                angle = -1f * (360f - angle);
-            }
-            input_arr.Add(angle / 180f);
-            input_arr.Add(Vector3.Distance(transform.position, min.transform.position) / sight_radius);
-        }
-       
+        input_arr.Add(angle / 180f);
+        input_arr.Add(Vector3.Distance(transform.position, min.transform.position) / sight_radius);
+
         return input_arr.ToArray();
 
     }

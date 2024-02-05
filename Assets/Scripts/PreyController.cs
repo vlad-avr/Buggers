@@ -6,6 +6,8 @@ using UnityEngine;
 ///Class for Agents of type Prey
 public class PreyController : AgentController
 {
+
+    private Transform predator_pos;
     ///Awake is called when the script instnce is loaded
     void Awake()
     {
@@ -53,23 +55,16 @@ public class PreyController : AgentController
         Collider2D min = null;
         for (int i = 0; i < hit_food.Length; i++)
         {
-            if(min == null || Vector2.Distance(transform.position, min.transform.position) > Vector2.Distance(transform.position, hit_food[i].transform.position))
+            if (min == null || Vector2.Distance(transform.position, min.transform.position) > Vector2.Distance(transform.position, hit_food[i].transform.position))
             {
                 min = hit_food[i];
             }
         }
-        if (min == null)
-        {
-             input_arr.Add(UnityEngine.Random.Range(-180f, 180f)/180f);
-             input_arr.Add(UnityEngine.Random.Range(0f, sight_radius)/sight_radius);
-        }
-        else
-        {
-            Vector2 vec = min.transform.position - transform.position;
-            float angle = Vector2.SignedAngle(transform.up, vec);
-            input_arr.Add(angle / 180f);
-            input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
-        }
+        Vector2 vec = min.transform.position - transform.position;
+        float angle = Vector2.SignedAngle(transform.up, vec);
+        input_arr.Add(angle / 180f);
+        input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
+        target = min.transform;
         min = null;
         for (int i = 0; i < hit_predator.Length; i++)
         {
@@ -78,21 +73,12 @@ public class PreyController : AgentController
                 min = hit_predator[i];
             }
         }
-        if (min == null)
-        {
-            input_arr.Add(UnityEngine.Random.Range(-180f, 180f)/180f);
-            input_arr.Add(UnityEngine.Random.Range(0f, sight_radius)/sight_radius);
-        }
-        else
-        {
-            Vector2 vec = min.transform.position - transform.position;
-            float angle = Vector2.Angle(transform.up, vec);
-            input_arr.Add(angle / 180f);
-            input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
-        }
-
+        predator_pos = min.transform;
+        vec = min.transform.position - transform.position;
+        angle = Vector2.Angle(transform.up, vec);
+        input_arr.Add(angle / 180f);
+        input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
         return input_arr.ToArray();
-
     }
     ///Destroys GameObject sending according signal to EnvironmentController
     public override void Die(int fitness)
@@ -104,5 +90,19 @@ public class PreyController : AgentController
             EC.UImgr.ReleaseCamera();
         }
         Destroy(gameObject);
+    }
+
+    public override void drawLine()
+    {
+        if(target == null || predator_pos == null)
+        {
+            line.enabled = false;
+            return;
+        } 
+        line.positionCount = 3;
+        line.SetPosition(0, target.position);
+        line.SetPosition(1, transform.position);
+        line.SetPosition(2, predator_pos.position);
+        line.enabled = true;
     }
 }

@@ -26,11 +26,17 @@ public abstract class AgentController : MonoBehaviour
 
     ///Successor object prefab
     public GameObject succesor;
+    [Header("Environment Controller reference")]
     ///Reference to EnvironmentController script in the scene
     protected EnvironmentController EC;
 
+    [Header("Line Renderer")]
+    public LineRenderer line;
+    protected Transform target;
+    public bool locked_on = false;
+
     [Header("Decision making")]
-    public float delta_decision_time = 5;
+    public float delta_decision_time = 0.0001f;
     private float current_decision_time = 0;
     private float[] output;
     ///NNet script settings
@@ -46,10 +52,23 @@ public abstract class AgentController : MonoBehaviour
     /// Start is called before the first frame update
     void Start()
     {
+        cur_energy = energy;
+        setLine();
         sight_radius = Mathf.Max(EC.config.room.x, EC.config.room.y);
         transform.localScale = size;
         spr.sprite = sprite;
         spr.color = color;
+    }
+
+    protected void setLine()
+    {
+        line = this.gameObject.AddComponent<LineRenderer>();
+        line.startWidth = 0.2f;
+        line.endWidth = 0.2f;
+        line.enabled = false;
+        Material lineMaterial = new Material(Shader.Find("Standard"));
+        lineMaterial.color = Color.white;
+        line.material = lineMaterial;
     }
 
     ///Detects if Agent has entered a Trigger collider
@@ -59,6 +78,11 @@ public abstract class AgentController : MonoBehaviour
         {
             transform.position = spawn_point.position;
         }
+    }
+
+    public float[] getOutput()
+    {
+        return output;
     }
 
     /// Update is called every frame
@@ -76,6 +100,14 @@ public abstract class AgentController : MonoBehaviour
                 current_decision_time -= Time.deltaTime;
             }
             Move(output[0], output[1] + 1f);
+            if (locked_on)
+            {
+                drawLine();
+            }
+            else
+            {
+                line.enabled = false;
+            }
         }
     }
     /// FixedUpdate is called every fixed framerate frame
@@ -93,19 +125,19 @@ public abstract class AgentController : MonoBehaviour
                 cur_maturity += Time.deltaTime;
             }
 
-            if (cur_energy >= energy)
+            if (cur_energy <= 0)
             {
                 Die(-10);
             }
             else
             {
-                cur_energy += Time.deltaTime;
+                cur_energy -= Time.deltaTime;
             }
 
 
-            if (EC.UImgr.camera_pos_ref == this.gameObject)
+            if (locked_on)
             {
-                EC.UImgr.UpdateInfo(gameObject.tag, network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString());
+                EC.UImgr.UpdateInfo(this);
             }
         }
     }
@@ -113,7 +145,7 @@ public abstract class AgentController : MonoBehaviour
     ///Passes Agent data to the UI elements and resets Camera position
     public void GetLockedOn()
     {
-        EC.UImgr.LockCamera(gameObject.tag, network.GetFitness().ToString(), speed.ToString(), maturity.ToString(), sight_radius.ToString(), this.gameObject);
+        EC.UImgr.LockCamera(this);
     }
 
     ///Move function
@@ -134,4 +166,7 @@ public abstract class AgentController : MonoBehaviour
 
     ///Abstract function that stands for sensory input 
     public abstract float[] InputSensors();
+
+    ///Abstract function for drawing line when followed by camera
+    public abstract void drawLine();
 }

@@ -13,13 +13,12 @@ public class UIManager : MonoBehaviour
     [Header("UI settings")]
     public TextMeshProUGUI cur_gen_text, population_text;
     public GameObject info_panel;
-    public TextMeshProUGUI type_text, speed_text, fit_text, maturity_text, sight_text;
+    public TextMeshProUGUI type_text, speed_text, fit_text, maturity_text, energy_text, accel_text, angle_text;
     public Camera main_camera;
     public float camera_zoom;
     private float def_zoom;
     public GameObject camera_pos_ref;
     public int gen_count;
-    public Slider NMC, TMS, TMR;
     /// Start is called before the first frame update
     void Start()
     {
@@ -47,31 +46,30 @@ public class UIManager : MonoBehaviour
     }
 
     ///Updates info about object that the camera is currently locked on
-    public void UpdateInfo(string type, string fitness, string speed, string maturity, string sight)
+    public void UpdateInfo(AgentController agent)
     {
-        type_text.text = type;
-        fit_text.text = fitness;
-        speed_text.text = speed;
-        maturity_text.text = maturity;
-        sight_text.text = sight;
+        type_text.text = agent.gameObject.tag;
+        fit_text.text = agent.network.GetFitness().ToString();
+        speed_text.text = agent.speed.ToString();
+        maturity_text.text = agent.maturity.ToString();
+        energy_text.text = agent.cur_energy.ToString();
+        accel_text.text = agent.getOutput()[0].ToString();
+        angle_text.text = agent.getOutput()[1].ToString();
     }
 
     ///Locks the camera on the object displaying info about it
-    public void LockCamera(string type, string fitness, string speed, string maturity, string sight, GameObject obj)
+    public void LockCamera(AgentController agent)
     {
         main_camera.orthographicSize = def_zoom;
+        camera_pos_ref = agent.gameObject;
         info_panel.SetActive(true);
-        type_text.text = type;
-        fit_text.text = fitness;
-        speed_text.text = speed;
-        maturity_text.text = maturity;
-        sight_text.text = sight;
-        camera_pos_ref = obj;
+        UpdateInfo(agent);
         main_camera.transform.position = new Vector3(camera_pos_ref.transform.position.x, camera_pos_ref.transform.position.y, -10);
         main_camera.orthographicSize *= camera_zoom;
+        agent.locked_on = true;
     }
 
-    ///Cancels locck on 
+    ///Cancels lock on 
     public void ReleaseCamera()
     {
         info_panel.SetActive(false);

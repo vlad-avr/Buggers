@@ -173,8 +173,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca24a0ec64a2bd4a8d5f6c36d5b6db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_hunger: 20
-  cur_hunger: 0
+  energy: 10
+  cur_energy: 0
   maturity: 40
   speed: 4
   angular_drag: 1440
@@ -184,8 +184,10 @@ MonoBehaviour:
   sprite: {fileID: 0}
   spr: {fileID: 5918716766110725480}
   succesor: {fileID: 8648281372460763466, guid: 8528d2f7c04365e4dbce4229449a98db, type: 3}
+  line: {fileID: 0}
+  locked_on: 0
+  delta_decision_time: 0.1
   layers: 040000000600000002000000
-  mutation_rate: 0
   spawn_point: {fileID: 0}
   is_test: 0
 --- !u!1 &4577137059331931341
