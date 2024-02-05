@@ -36,6 +36,7 @@ public class PreyController : AgentController
     public override void Reproduce()
     {
         GameObject obj = Instantiate(succesor, transform.position, transform.rotation);
+        obj.GetComponent<PreyController>().layers = (int[])layers.Clone();
         obj.GetComponent<PreyController>().network = new NNet(this.network);
         obj.GetComponent<PreyController>().network.SetFitness(0);
         if(UnityEngine.Random.Range(0f, 1f) <= mutation_rate)

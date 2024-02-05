@@ -103,26 +103,24 @@ public class EnvironmentController : MonoBehaviour
         return Mathf.CeilToInt(num * ratio);
     }
 
-    private int[] getLayers(int input_layers, List<int> hidden_layers)
+    private int[] getLayers(List<int> hidden_layers)
     {
-        int[] layers = new int[hidden_layers.Count + 2];
-        layers[0] = input_layers;
-        layers[layers.Length - 1] = 2;
-        for(int i  = 0; i < hidden_layers.Count; i++)
-        {
-            layers[i+1] = hidden_layers[i];
-        }
-        return layers;
+        return hidden_layers.ToArray();
+    }
+
+    private Vector2 getRandomSpawnPos()
+    {
+        return new Vector2(Random.Range(-config.room.x / 2.0f, config.room.x / 2.0f), Random.Range(-config.room.y / 2.0f, config.room.y / 2.0f));
     }
 
     private void spawnPreys()
     {
         for (int i = 0; i < config.prey_count; i++)
         {
-            Vector2 spawnPos = new Vector2(Random.Range(-config.room.x / 2.0f, config.room.x / 2.0f), Random.Range(-config.room.y/2.0f, config.room.y/2.0f));
+            Vector2 spawnPos = getRandomSpawnPos();
             GameObject new_obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
             PreyController controller = new_obj.GetComponent<PreyController>();
-            controller.layers = getLayers(4, config.prey_net);
+            controller.layers = getLayers(config.prey_net);
             controller.network = new NNet(controller.layers);
             controller.spawn_point = prey_pos;
             MutateAgent(controller, config.prey_traits, true);
@@ -134,10 +132,10 @@ public class EnvironmentController : MonoBehaviour
     {
         for (int i = 0; i < config.predator_count; i++)
         {
-            Vector2 spawnPos = new Vector2(Random.Range(-config.room.x / 2.0f, config.room.x / 2.0f), Random.Range(-config.room.y / 2.0f, config.room.y / 2.0f));
+            Vector2 spawnPos = getRandomSpawnPos();
             GameObject new_obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
             PredatorController controller = new_obj.GetComponent<PredatorController>();
-            controller.layers = getLayers(2, config.predator_net);
+            controller.layers = getLayers(config.predator_net);
             controller.network = new NNet(controller.layers);
             controller.spawn_point = predator_pos;
             MutateAgent(controller, config.predator_traits, false);
@@ -256,7 +254,7 @@ public class EnvironmentController : MonoBehaviour
         {
             for (int i = 0; i < best_prey_count; i++)
             {
-                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y));
+                Vector2 spawnPos = getRandomSpawnPos();
                 GameObject obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PreyController>().network = new NNet(preys[i]);
                 obj.GetComponent<PreyController>().network.SetFitness(0f);
@@ -274,7 +272,7 @@ public class EnvironmentController : MonoBehaviour
         {
             for (int i = 0; i < best_predator_count; i++)
             {
-                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y));
+                Vector2 spawnPos = getRandomSpawnPos();
                 GameObject obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PredatorController>().network = new NNet(predators[i]);
                 obj.GetComponent<PredatorController>().network.SetFitness(0f);
