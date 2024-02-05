@@ -152,14 +152,14 @@ public class SetupManager : MonoBehaviour
             conf.predator_neuron_mutation_chance = float.Parse(predator_neuron_mutation.text);
 
             conf.prey_net = new List<int>();
-            foreach(InputField inputField in prey_net)
+            for(int i = 1; i < prey_net.Count-1; i++)
             {
-                conf.prey_net.Add(int.Parse(inputField.text));
+                conf.prey_net.Add(int.Parse(prey_net[i].text));
             }
             conf.predator_net = new List<int>();
-            foreach (InputField inputField in predator_net)
+            for (int i = 1; i < predator_net.Count - 1; i++)
             {
-                conf.predator_net.Add(int.Parse(inputField.text));
+                conf.predator_net.Add(int.Parse(predator_net[i].text));
             }
 
             conf.prey_traits = new List<Trait>();
@@ -453,6 +453,7 @@ public class SetupManager : MonoBehaviour
         GameObject controller = Instantiate(environmentController, transform.position, Quaternion.identity);
         controller.transform.SetParent(this.transform);
         controller.GetComponent<EnvironmentController>().config = inputMap.getConfig();
+        controller.GetComponent<UIManager>().setupUI = this.gameObject;
     }
 
     private void setupNetRefs(GameObject setupUI)

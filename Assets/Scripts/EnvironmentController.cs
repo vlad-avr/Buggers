@@ -78,16 +78,11 @@ public class EnvironmentController : MonoBehaviour
     [Header("Sprite Array")]
     public Sprite[] SA;
 
+    [Header("Room Colliders")]
+    //top -> right -> bottom -> left
+    public List<GameObject> borders;
 
-    ///Awake is called when the script instnce is loaded
-    private void Awake()
-    {
 
-        
-        
-        //best_prey_count = (int)(prey_count * best_prey_ratio);
-        //best_predator_count = (int)(predator_count * best_predator_ratio);
-    }
 
     private void Start()
     {
@@ -104,6 +99,14 @@ public class EnvironmentController : MonoBehaviour
         System.Tuple<Vector2, Vector2> spawns = getSpawnPos(config.room);
         prey_pos.position = spawns.Item1;
         predator_pos.position = spawns.Item2;
+        borders[0].transform.position = new Vector2(0 , config.room.y / 2.0f);
+        borders[0].transform.localScale = new Vector2(config.room.x, 0.5f);
+        borders[1].transform.position = new Vector2(config.room.x / 2.0f, 0);
+        borders[1].transform.localScale = new Vector2(0.5f, config.room.y);
+        borders[2].transform.position = new Vector2(0, -config.room.y / 2.0f);
+        borders[2].transform.localScale = new Vector2(config.room.x, 0.5f);
+        borders[3].transform.position = new Vector2(-config.room.x / 2.0f, 0);
+        borders[3].transform.localScale = new Vector2(0.5f, config.room.y);
     }
 
     private void updateConfig()
@@ -130,14 +133,29 @@ public class EnvironmentController : MonoBehaviour
         return Mathf.CeilToInt(num * ratio);
     }
 
+    private int[] getLayers(int input_layers, List<int> hidden_layers)
+    {
+        int[] layers = new int[hidden_layers.Count + 2];
+        layers[0] = input_layers;
+        layers[layers.Length - 1] = 2;
+        for(int i  = 0; i < hidden_layers.Count; i++)
+        {
+            layers[i+1] = hidden_layers[i];
+        }
+        return layers;
+    }
+
     private void spawnPreys()
     {
         for (int i = 0; i < config.prey_count; i++)
         {
-            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x / 2, transform.position.x + FS.spawn_room.x / 2), Random.Range(transform.position.y - FS.spawn_room.y/2, transform.position.y + FS.spawn_room.y/2)); GameObject new_obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
-            new_obj.GetComponent<PreyController>().network = new NNet(new_obj.GetComponent<PreyController>().layers);
-            new_obj.GetComponent<PreyController>().spawn_point = prey_pos;
-            MutateAgent(new_obj.GetComponent<PreyController>(), config.prey_traits, true);
+            Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x / 2, transform.position.x + FS.spawn_room.x / 2), Random.Range(transform.position.y - FS.spawn_room.y/2, transform.position.y + FS.spawn_room.y/2));
+            GameObject new_obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
+            PreyController controller = new_obj.GetComponent<PreyController>();
+            controller.layers = getLayers(4, config.prey_net);
+            controller.network = new NNet(controller.layers);
+            controller.spawn_point = prey_pos;
+            MutateAgent(controller, config.prey_traits, true);
         }
         prey_count = config.prey_count;
     }
@@ -148,9 +166,11 @@ public class EnvironmentController : MonoBehaviour
         {
             Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x/2, transform.position.x + FS.spawn_room.x/2), Random.Range(transform.position.y - FS.spawn_room.y/2, transform.position.y + FS.spawn_room.y/2));
             GameObject new_obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
-            new_obj.GetComponent<PredatorController>().network = new NNet(new_obj.GetComponent<PredatorController>().layers);
-            new_obj.GetComponent<PredatorController>().spawn_point = predator_pos;
-            MutateAgent(new_obj.GetComponent<PredatorController>(), config.predator_traits, false);
+            PredatorController controller = new_obj.GetComponent<PredatorController>();
+            controller.layers = getLayers(2, config.predator_net);
+            controller.network = new NNet(controller.layers);
+            controller.spawn_point = predator_pos;
+            MutateAgent(controller, config.predator_traits, true);
         }
 
         predator_count = config.predator_count;
@@ -452,7 +472,8 @@ public class EnvironmentController : MonoBehaviour
         {
             for (int i = 0; i < best_prey_count; i++)
             {
-                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y)); GameObject obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
+                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y));
+                GameObject obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PreyController>().network = new NNet(preys[i]);
                 obj.GetComponent<PreyController>().network.SetFitness(0f);
                 float rand = Random.Range(0f, 1f);
@@ -469,7 +490,8 @@ public class EnvironmentController : MonoBehaviour
         {
             for (int i = 0; i < best_predator_count; i++)
             {
-                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y)); GameObject obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
+                Vector2 spawnPos = new Vector2(Random.Range(transform.position.x - FS.spawn_room.x, transform.position.x + FS.spawn_room.x), Random.Range(transform.position.y - FS.spawn_room.y, transform.position.y + FS.spawn_room.y));
+                GameObject obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PredatorController>().network = new NNet(predators[i]);
                 obj.GetComponent<PredatorController>().network.SetFitness(0f);
                 float rand = Random.Range(0f, 1f);

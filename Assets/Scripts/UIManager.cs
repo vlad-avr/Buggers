@@ -20,22 +20,18 @@ public class UIManager : MonoBehaviour
     public GameObject camera_pos_ref;
     public int gen_count;
     public Slider NMC, TMS, TMR;
-
-    ///Awake is called when the script instnce is loaded
-    private void Awake()
+    [Header("Setup UI reference")]
+    public GameObject setupUI;
+    /// Start is called before the first frame update
+    void Start()
     {
+        main_camera = Camera.main;
+        setCameraFocus();
+        setupUI.SetActive(false);
         gen_count = 0;
         camera_pos_ref = this.gameObject;
         def_zoom = main_camera.orthographicSize;
         info_panel.SetActive(false);
-        //NMC.value = EC.mutation_rate;
-        //TMR.value = EC.reproduction_mutation_prob;
-        //TMS.value = EC.spawn_mutation_prob;
-    }
-    /// Start is called before the first frame update
-    void Start()
-    {
-        setCameraFocus();
     }
 
     ///Adjust Camera view field according to map size
