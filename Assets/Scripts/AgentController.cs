@@ -29,10 +29,13 @@ public abstract class AgentController : MonoBehaviour
     ///Reference to EnvironmentController script in the scene
     protected EnvironmentController EC;
 
+    [Header("Decision making")]
+    public float delta_decision_time = 5;
+    private float current_decision_time = 0;
+    private float[] output;
     ///NNet script settings
     [Header("Network Options")]
     public int[] layers;
-    public float mutation_rate;
     ///Spawn point in the scene reference
     [Header("Respawn point")]
     public Transform spawn_point;
@@ -43,6 +46,7 @@ public abstract class AgentController : MonoBehaviour
     /// Start is called before the first frame update
     void Start()
     {
+        sight_radius = Mathf.Max(EC.config.room.x, EC.config.room.y);
         transform.localScale = size;
         spr.sprite = sprite;
         spr.color = color;
@@ -62,7 +66,15 @@ public abstract class AgentController : MonoBehaviour
     {
         if (!is_test)
         {
-            float[] output = network.FeedForward(InputSensors());
+            if (current_decision_time <= 0)
+            {
+                output = network.FeedForward(InputSensors());
+                current_decision_time = delta_decision_time;
+            }
+            else
+            {
+                current_decision_time -= Time.deltaTime;
+            }
             Move(output[0], output[1] + 1f);
         }
     }

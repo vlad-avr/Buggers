@@ -22,10 +22,6 @@ public class PredatorController : AgentController
         obj.GetComponent<PredatorController>().layers = (int[])layers.Clone();
         obj.GetComponent<PredatorController>().network = new NNet(this.network);
         obj.GetComponent<PredatorController>().network.SetFitness(0);
-        if (UnityEngine.Random.Range(0f, 1f) <= mutation_rate)
-        {
-            obj.GetComponent<PredatorController>().network.Mutate();
-        }
         EC.MutateAgent(obj.GetComponent<PredatorController>(), EC.config.predator_traits, this);
         EC.predator_count++;
         obj.GetComponent<PredatorController>().spawn_point = EC.predator_pos;
