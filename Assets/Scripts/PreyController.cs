@@ -80,7 +80,7 @@ public class PreyController : AgentController
             predator_pos = min.transform;
         }
         vec = min.transform.position - transform.position;
-        angle = Vector2.Angle(transform.up, vec);
+        angle = Vector2.SignedAngle(transform.up, vec);
         input_arr.Add(angle / 180f);
         input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
         return input_arr.ToArray();

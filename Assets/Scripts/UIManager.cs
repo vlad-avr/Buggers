@@ -54,7 +54,7 @@ public class UIManager : MonoBehaviour
         maturity_text.text = agent.maturity.ToString();
         energy_text.text = agent.cur_energy.ToString();
         accel_text.text = agent.getOutput()[0].ToString();
-        angle_text.text = agent.getOutput()[1].ToString();
+        angle_text.text = (agent.getOutput()[1] + 1).ToString();
     }
 
     ///Locks the camera on the object displaying info about it
