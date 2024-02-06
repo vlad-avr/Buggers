@@ -258,8 +258,9 @@ public class EnvironmentController : MonoBehaviour
                 GameObject obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PreyController>().network = new NNet(preys[i]);
                 obj.GetComponent<PreyController>().network.SetFitness(0f);
+                obj.GetComponent<PreyController>().delta_decision_time = config.prey_net_mods.Item2;
                 float rand = Random.Range(0f, 1f);
-                if (rand <= config.prey_neuron_mutation_chance * i)
+                if (rand <= config.prey_net_mods.Item1 * i)
                 {
                     obj.GetComponent<PreyController>().network.Mutate();
                 }
@@ -276,8 +277,9 @@ public class EnvironmentController : MonoBehaviour
                 GameObject obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
                 obj.GetComponent<PredatorController>().network = new NNet(predators[i]);
                 obj.GetComponent<PredatorController>().network.SetFitness(0f);
+                obj.GetComponent<PredatorController>().delta_decision_time = config.predator_net_mods.Item2;
                 float rand = Random.Range(0f, 1f);
-                if (rand <= config.predator_chosen_ratio * i)
+                if (rand <= config.predator_net_mods.Item1 * i)
                 {
                     obj.GetComponent<PredatorController>().network.Mutate();
                 }

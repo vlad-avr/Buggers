@@ -24,8 +24,7 @@ public class SetupManager : MonoBehaviour
 
         public List<List<InputField>> predator_traits = new List<List<InputField>>();
 
-        public InputField prey_neuron_mutation;
-        public InputField predator_neuron_mutation;
+        public List<Tuple<InputField, InputField>> net_mods = new List<Tuple<InputField, InputField>>();
 
         public List<InputField> prey_net = new List<InputField>();
         public List<InputField> predator_net = new List<InputField>();
@@ -67,8 +66,13 @@ public class SetupManager : MonoBehaviour
                 predator_traits[i].Add(traitUI.Find("PROB").GetComponent<InputField>());
             }
 
-            prey_neuron_mutation = prey_panel.Find("N_CHANGE").Find("NEURON").GetComponent<InputField>();
-            predator_neuron_mutation = predator_panel.Find("N_CHANGE").Find("NEURON").GetComponent<InputField>();
+            first = prey_panel.Find("N_CHANGE").Find("NEURON").GetComponent<InputField>();
+            second = prey_panel.Find("D_RATE").Find("DECISION").GetComponent<InputField>();
+            net_mods.Add(Tuple.Create(first, second));
+            first = predator_panel.Find("N_CHANGE").Find("NEURON").GetComponent<InputField>();
+            second = predator_panel.Find("D_RATE").Find("DECISION").GetComponent<InputField>();
+            net_mods.Add(Tuple.Create(first, second));
+
             //prey_net.Add(prey_panel.Find("NET").Find("FIRST").GetComponent<InputField>());
             //prey_net.Add(prey_panel.Find("NET").Find("LAST").GetComponent<InputField>());
             //predator_net.Add(predator_panel.Find("NET").Find("FIRST").GetComponent<InputField>());
@@ -86,9 +90,10 @@ public class SetupManager : MonoBehaviour
             population_settings[1].Item1.onEndEdit.AddListener(value => clampInt(population_settings[1].Item1, min_agent_count, max_agent_count));
             population_settings[0].Item2.onEndEdit.AddListener(value => clampFloat(population_settings[0].Item2, min_chosen_ratio, max_chosen_ratio));
             population_settings[1].Item2.onEndEdit.AddListener(value => clampFloat(population_settings[1].Item2, min_chosen_ratio, max_chosen_ratio));
-            prey_neuron_mutation.onEndEdit.AddListener(value => clampFloat(prey_neuron_mutation, 0f, 1f));
-            predator_neuron_mutation.onEndEdit.AddListener(value => clampFloat(predator_neuron_mutation, 0f, 1f));
-
+            net_mods[0].Item1.onEndEdit.AddListener(value => clampFloat(net_mods[0].Item1, 0f, 1f));
+            net_mods[1].Item1.onEndEdit.AddListener(value => clampFloat(net_mods[1].Item1, 0f, 1f));
+            net_mods[0].Item2.onEndEdit.AddListener(value => clampFloat(net_mods[0].Item2, 0.1f, 1f));
+            net_mods[1].Item2.onEndEdit.AddListener(value => clampFloat(net_mods[1].Item2, 0.1f, 1f));
 
             prey_traits[0][0].onEndEdit.AddListener(value => clampFloat(prey_traits[0][0], min_speed, max_speed));
             prey_traits[1][0].onEndEdit.AddListener(value => clampFloat(prey_traits[1][0], min_maturity, max_maturity));
@@ -148,8 +153,8 @@ public class SetupManager : MonoBehaviour
             conf.predator_count = int.Parse(population_settings[1].Item1.text);
             conf.predator_chosen_ratio = float.Parse(population_settings[1].Item2.text);
 
-            conf.prey_neuron_mutation_chance = float.Parse(prey_neuron_mutation.text);
-            conf.predator_neuron_mutation_chance = float.Parse(predator_neuron_mutation.text);
+            conf.prey_net_mods = Tuple.Create(float.Parse(net_mods[0].Item1.text), float.Parse(net_mods[0].Item2.text));
+            conf.predator_net_mods = Tuple.Create(float.Parse(net_mods[1].Item1.text), float.Parse(net_mods[1].Item2.text));
 
             conf.prey_net = new List<int>();
             for(int i = 0; i < prey_net.Count; i++)
@@ -204,8 +209,10 @@ public class SetupManager : MonoBehaviour
                 predator_traits[i][1].text = config.predator_traits[i].offset.ToString();
                 predator_traits[i][2].text = config.predator_traits[i].probability.ToString();
             }
-            prey_neuron_mutation.text = config.prey_neuron_mutation_chance.ToString();
-            predator_neuron_mutation.text = config.predator_neuron_mutation_chance.ToString();
+            net_mods[0].Item1.text = config.prey_net_mods.Item1.ToString();
+            net_mods[0].Item2.text = config.prey_net_mods.Item2.ToString();
+            net_mods[1].Item1.text = config.predator_net_mods.Item1.ToString();
+            net_mods[1].Item2.text = config.predator_net_mods.Item2.ToString();
         }
     }
 
@@ -282,8 +289,8 @@ public class SetupManager : MonoBehaviour
 
         public List<int> prey_net;
         public List<int> predator_net;
-        public float prey_neuron_mutation_chance;
-        public float predator_neuron_mutation_chance;
+        public Tuple<float, float> prey_net_mods;
+        public Tuple<float, float> predator_net_mods;
 
         //TRAIT SEQUENCE: speed -> energy -> maturity -> size
         public List<Trait> prey_traits;
@@ -309,17 +316,17 @@ public class SetupManager : MonoBehaviour
             predator_chosen_ratio = float.Parse(subparts[1]);
 
             subparts = parts[5].Split(' ');
-            prey_neuron_mutation_chance = float.Parse(subparts[0]);
+            prey_net_mods = Tuple.Create(float.Parse(subparts[0]), float.Parse(subparts[1]));
             prey_net = new List<int>();
-            for(int i = 1; i < subparts.Length; i++)
+            for(int i = 2; i < subparts.Length; i++)
             {
                 prey_net.Add(int.Parse(subparts[i]));
             }
 
             subparts = parts[6].Split(' ');
-            predator_neuron_mutation_chance = float.Parse(subparts[0]);
+            predator_net_mods = Tuple.Create(float.Parse(subparts[0]), float.Parse(subparts[1]));
             predator_net = new List<int>();
-            for (int i = 1; i < subparts.Length; i++)
+            for (int i = 2; i < subparts.Length; i++)
             {
                 predator_net.Add(int.Parse(subparts[i]));
             }
@@ -346,12 +353,12 @@ public class SetupManager : MonoBehaviour
                 + food_drop_rate + " " + food_drop_num + " " + food_lifespan + "\n"
                 + prey_count + " " + prey_chosen_ratio + "\n"
                 + predator_count + " " + predator_chosen_ratio + "\n";
-            res += prey_neuron_mutation_chance;
+            res += prey_net_mods.Item1 + " " + prey_net_mods.Item2;
             for(int i = 1; i < prey_net.Count-1; i++)
             {
                 res += " " + prey_net[i];
             }
-            res += "\n" + predator_neuron_mutation_chance;
+            res += "\n" + predator_net_mods.Item1 + " " + predator_net_mods.Item2;
             for (int i = 1; i < predator_net.Count - 1; i++)
             {
                 res += " " + predator_net[i];

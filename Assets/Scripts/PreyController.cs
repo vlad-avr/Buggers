@@ -41,6 +41,7 @@ public class PreyController : AgentController
         obj.GetComponent<PreyController>().layers = (int[])layers.Clone();
         obj.GetComponent<PreyController>().network = new NNet(this.network);
         obj.GetComponent<PreyController>().network.SetFitness(0);
+        obj.GetComponent<PreyController>().delta_decision_time = delta_decision_time;
         EC.MutateAgent(obj.GetComponent<PreyController>(), EC.config.prey_traits, this);
         EC.prey_count++;
         obj.GetComponent<PreyController>().spawn_point = EC.prey_pos;
