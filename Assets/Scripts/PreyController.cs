@@ -74,7 +74,10 @@ public class PreyController : AgentController
                 min = hit_predator[i];
             }
         }
-        predator_pos = min.transform;
+        if (min != null)
+        {
+            predator_pos = min.transform;
+        }
         vec = min.transform.position - transform.position;
         angle = Vector2.Angle(transform.up, vec);
         input_arr.Add(angle / 180f);

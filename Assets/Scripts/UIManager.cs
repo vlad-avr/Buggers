@@ -50,7 +50,6 @@ public class UIManager : MonoBehaviour
     {
         type_text.text = agent.gameObject.tag;
         fit_text.text = agent.network.GetFitness().ToString();
-        Debug.Log(agent.network.GetFitness());
         speed_text.text = agent.speed.ToString();
         maturity_text.text = agent.maturity.ToString();
         energy_text.text = agent.cur_energy.ToString();
