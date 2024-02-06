@@ -23,6 +23,7 @@ public class PredatorController : AgentController
         obj.GetComponent<PredatorController>().network = new NNet(this.network);
         obj.GetComponent<PredatorController>().network.SetFitness(0);
         obj.GetComponent<PredatorController>().delta_decision_time = delta_decision_time;
+        obj.GetComponent<PredatorController>().sight_radius = sight_radius;
         EC.MutateAgent(obj.GetComponent<PredatorController>(), EC.config.predator_traits, this);
         EC.predator_count++;
         obj.GetComponent<PredatorController>().spawn_point = EC.predator_pos;
