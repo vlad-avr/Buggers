@@ -73,6 +73,14 @@ public class UIManager : MonoBehaviour
     public void ReleaseCamera()
     {
         info_panel.SetActive(false);
+        if (camera_pos_ref.tag.Equals("Prey"))
+        {
+            camera_pos_ref.GetComponent<PreyController>().locked_on = false;
+        }
+        if (camera_pos_ref.tag.Equals("Predator"))
+        {
+            camera_pos_ref.GetComponent<PredatorController>().locked_on = false;
+        }
         camera_pos_ref = this.gameObject;
         main_camera.orthographicSize = def_zoom;
     }
