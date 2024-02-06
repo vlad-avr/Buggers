@@ -12,9 +12,9 @@ public abstract class AgentController : MonoBehaviour
 
     ///gameObject physical parameters setting
     [Header("gameObject Settings")]
-    public float energy = 10;
+    public float energy;
     public float cur_energy;
-    public float maturity = 20;
+    public float maturity;
     protected float cur_maturity;
     public float speed;
     public float angular_drag;

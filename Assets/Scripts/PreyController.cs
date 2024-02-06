@@ -30,7 +30,7 @@ public class PreyController : AgentController
     ///Ensures that Prey object is destroyed properly in case of collision with Predator
     private void GetEaten(PredatorController predator)
     {
-        predator.cur_energy = 0f;
+        predator.cur_energy = predator.energy;
         predator.network.AddFitness(1f);
         Die(-5);
     }

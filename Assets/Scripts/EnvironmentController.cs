@@ -179,6 +179,7 @@ public class EnvironmentController : MonoBehaviour
     ///Sets UIManager camera reference to GameObject that has PreyController script with highest fitness value of NNet attached to it
     public void FiitestPrey()
     {
+        UImgr.ReleaseCamera();
         PreyController temp = prey_objs[0];
         for(int i = 1; i < prey_objs.Length; i++)
         {
@@ -193,6 +194,7 @@ public class EnvironmentController : MonoBehaviour
     ///Sets UIManager camera reference to GameObject that has PredatorController script with highest fitness value of NNet attached to it
     public void FiitestPredator()
     {
+        UImgr.ReleaseCamera();
         PredatorController temp = pred_objs[0];
         for (int i = 1; i < pred_objs.Length; i++)
         {
