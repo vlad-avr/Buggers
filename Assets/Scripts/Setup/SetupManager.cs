@@ -427,8 +427,28 @@ public class SetupManager : MonoBehaviour
     [Header("EnvironmentController entity prefab")]
     public GameObject environmentController;
 
+    [Header("Panels References")]
+    public List<GameObject> canvases = new List<GameObject>();
+    public List<Button> buttons = new List<Button>();
+    public GameObject main_canvas;
+
     private void Awake()
     {
+        main_canvas = GameObject.Find("MAIN");
+        GameObject obj = GameObject.Find("SETUP_CANVAS");
+        obj.SetActive(false);
+        canvases.Add(obj);
+        //obj = GameObject.Find("DATASET_CANVAS");
+        //obj.SetActive(false);
+        //canvases.Add(obj);
+        buttons.Add(GameObject.Find("MAIN").transform.Find("MAIN_PANEL").Find("TRAINING").GetComponent<Button>());
+        buttons[0].onClick.AddListener(onTrainingCanvasLoad);
+        buttons.Add(GameObject.Find("MAIN").transform.Find("MAIN_PANEL").Find("DATASET").GetComponent<Button>());
+    }
+
+    public void onTrainingCanvasLoad()
+    {
+        setActiveCanvas(0);
         inputMap = new InputMap();
         GameObject setupUI = GameObject.Find("SETUP");
         inputMap.initialize(setupUI);
@@ -436,6 +456,12 @@ public class SetupManager : MonoBehaviour
         setupNetRefs(setupUI);
         setupConfigUI(setupUI);
         loadConfig("default");
+    }
+
+    public void setActiveCanvas(int selected)
+    {
+        main_canvas.SetActive(false);
+        canvases[selected].SetActive(true);
     }
 
     private void setupConfigUI(GameObject setupUI)
