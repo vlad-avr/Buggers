@@ -10,6 +10,15 @@ using static UnityEngine.UI.Dropdown;
 public class SetupManager : MonoBehaviour
 {
 
+    public class AgentMap
+    {
+        public InputField name;
+        public Tuple<InputField, InputField> pop;
+        public List<List<InputField>> traits = new List<List<InputField>>();
+        public List<InputField> net = new List<InputField>();
+        public Tuple<InputField> net_mods;
+    }
+
     public class InputMap 
     {
         public InputField name;
@@ -28,6 +37,7 @@ public class SetupManager : MonoBehaviour
 
         public List<InputField> prey_net = new List<InputField>();
         public List<InputField> predator_net = new List<InputField>();
+        //public Tuple<List<AgentMap>, List<AgentMap>> agent_maps = Tuple.Create(new List<AgentMap>(), new List<AgentMap>());
 
         public void initialize(GameObject setupUI)
         {

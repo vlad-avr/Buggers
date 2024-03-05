@@ -1054,7 +1054,7 @@ GameObject:
   - component: {fileID: 55515590}
   - component: {fileID: 55515589}
   m_Layer: 5
-  m_Name: prey_caption
+  m_Name: NAME
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15992,7 +15992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1348411737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17013,7 +17013,7 @@ GameObject:
   - component: {fileID: 1427169740}
   - component: {fileID: 1427169739}
   m_Layer: 5
-  m_Name: predator_caption
+  m_Name: NAME
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
