@@ -11,6 +11,8 @@ public class EnvironmentController : MonoBehaviour
 {
     // Name of file with some trained networks
     const string file_name = "NNet.dat";
+    const string observation_file = "Assets/Resources/Config/Observe.txt";
+    private bool toAppend = false;
 
     [Header("Entities Controller / Environment Settings")]
     ///Reference to FoodSpawner script
@@ -324,6 +326,16 @@ public class EnvironmentController : MonoBehaviour
         set.pred_fitness_params[1] = sum / predators.Count;
         set.pred_fitness_params[2] = predators[0].GetFitness();
         set.FillOut();
+        if (UImgr.gen_count < 30)
+        {
+            WriteFile(toAppend);
+            if (!toAppend)
+            {
+                toAppend = true;
+            }
+            InitNextGeneration();
+            return;
+        }
         result_set.SetActive(true);
     }
     
@@ -364,81 +376,91 @@ public class EnvironmentController : MonoBehaviour
     }
 
     ///Writes NNet Pool to .dat file and repopulates the Environment
-    public void WriteFile()
+    public void WriteFile(bool toAppend)
     {
-        if (prey_count > 0)
+        using (StreamWriter writer = new StreamWriter(observation_file, toAppend))
         {
-            GameObject[] prey_objs = GameObject.FindGameObjectsWithTag("Prey");
-            for (int i = 0; i < prey_objs.Length; i++)
-            {
-                prey_objs[i].GetComponent<PreyController>().Die(0);
-            }
+            ResultSet set = result_set.GetComponent<ResultSet>();
+            writer.WriteLine(UImgr.gen_count);
+            writer.WriteLine(set.final_prey_count);
+            writer.WriteLine(set.prey_fitness_params[0].ToString() + " " + set.prey_fitness_params[1].ToString() + " " + set.prey_fitness_params[2].ToString());
+            writer.WriteLine(set.final_pred_count);
+            writer.WriteLine(set.pred_fitness_params[0].ToString() + " " + set.pred_fitness_params[1].ToString() + " " + set.pred_fitness_params[2].ToString());
+            writer.WriteLine(set.time_elapsed);
         }
+        //if (prey_count > 0)
+        //{
+        //    GameObject[] prey_objs = GameObject.FindGameObjectsWithTag("Prey");
+        //    for (int i = 0; i < prey_objs.Length; i++)
+        //    {
+        //        prey_objs[i].GetComponent<PreyController>().Die(0);
+        //    }
+        //}
 
-        if (predator_count > 0)
-        {
-            GameObject[] pred_objs = GameObject.FindGameObjectsWithTag("Predator");
-            for (int i = 0; i < pred_objs.Length; i++)
-            {
-                pred_objs[i].GetComponent<PredatorController>().Die(0);
-            }
-        }
-        using (var stream = File.Open(file_name, FileMode.Create))
-        {
-            using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
-            {
-                writer.Write(preys.Count);
-                for(int i = 0; i < preys.Count; i++)
-                {
-                    
-                    int[] t_layers = preys[i].GetLayers();
-                    float[][][] t_weights = preys[i].GetWeights();
-                    writer.Write(t_layers.Length);
-                    for (int j = 0; j < t_layers.Length; j++)
-                    {
-                        writer.Write(t_layers[j]);
-                    }
-                    writer.Write(t_weights.Length);
-                    for(int j = 0; j < t_weights.Length; j++)
-                    {
-                        writer.Write(t_weights[j].Length);
-                        for(int k = 0; k < t_weights[j].Length; k++)
-                        {
-                            writer.Write(t_weights[j][k].Length);
-                            for(int l = 0; l < t_weights[j][k].Length; l++)
-                            {
-                                writer.Write(t_weights[j][k][l]);
-                            }
-                        }
-                    }
-                }
-                writer.Write(predators.Count);
-                for (int i = 0; i < predators.Count; i++)
-                {
+        //if (predator_count > 0)
+        //{
+        //    GameObject[] pred_objs = GameObject.FindGameObjectsWithTag("Predator");
+        //    for (int i = 0; i < pred_objs.Length; i++)
+        //    {
+        //        pred_objs[i].GetComponent<PredatorController>().Die(0);
+        //    }
+        //}
+        //using (var stream = File.Open(file_name, FileMode.Create))
+        //{
+        //    using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
+        //    {
+        //        writer.Write(preys.Count);
+        //        for(int i = 0; i < preys.Count; i++)
+        //        {
 
-                    int[] t_layers = predators[i].GetLayers();
-                    float[][][] t_weights = predators[i].GetWeights();
-                    writer.Write(t_layers.Length);
-                    for (int j = 0; j < t_layers.Length; j++)
-                    {
-                        writer.Write(t_layers[j]);
-                    }
-                    writer.Write(t_weights.Length);
-                    for (int j = 0; j < t_weights.Length; j++)
-                    {
-                        writer.Write(t_weights[j].Length);
-                        for (int k = 0; k < t_weights[j].Length; k++)
-                        {
-                            writer.Write(t_weights[j][k].Length);
-                            for (int l = 0; l < t_weights[j][k].Length; l++)
-                            {
-                                writer.Write(t_weights[j][k][l]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //            int[] t_layers = preys[i].GetLayers();
+        //            float[][][] t_weights = preys[i].GetWeights();
+        //            writer.Write(t_layers.Length);
+        //            for (int j = 0; j < t_layers.Length; j++)
+        //            {
+        //                writer.Write(t_layers[j]);
+        //            }
+        //            writer.Write(t_weights.Length);
+        //            for(int j = 0; j < t_weights.Length; j++)
+        //            {
+        //                writer.Write(t_weights[j].Length);
+        //                for(int k = 0; k < t_weights[j].Length; k++)
+        //                {
+        //                    writer.Write(t_weights[j][k].Length);
+        //                    for(int l = 0; l < t_weights[j][k].Length; l++)
+        //                    {
+        //                        writer.Write(t_weights[j][k][l]);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        writer.Write(predators.Count);
+        //        for (int i = 0; i < predators.Count; i++)
+        //        {
+
+        //            int[] t_layers = predators[i].GetLayers();
+        //            float[][][] t_weights = predators[i].GetWeights();
+        //            writer.Write(t_layers.Length);
+        //            for (int j = 0; j < t_layers.Length; j++)
+        //            {
+        //                writer.Write(t_layers[j]);
+        //            }
+        //            writer.Write(t_weights.Length);
+        //            for (int j = 0; j < t_weights.Length; j++)
+        //            {
+        //                writer.Write(t_weights[j].Length);
+        //                for (int k = 0; k < t_weights[j].Length; k++)
+        //                {
+        //                    writer.Write(t_weights[j][k].Length);
+        //                    for (int l = 0; l < t_weights[j][k].Length; l++)
+        //                    {
+        //                        writer.Write(t_weights[j][k][l]);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     ///Reads NNet Pool from .dat file and repopulates the Environment
