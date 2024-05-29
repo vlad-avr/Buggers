@@ -306,6 +306,7 @@ public class EnvironmentController : MonoBehaviour
         UImgr.gen_count++;
         prey_count = config.prey_count;
         predator_count = config.predator_count;
+        startTime = (int)Time.time;
     }
 
     private void ShowResults()

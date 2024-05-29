@@ -31,7 +31,7 @@ public class PreyController : AgentController
     private void GetEaten(PredatorController predator)
     {
         predator.cur_energy = predator.energy;
-        predator.network.AddFitness(1f);
+        predator.network.AddFitness(2f);
         Die(-5);
     }
     ///Create a clone of this object with identical NNet but slighty different parameters (speed, size , etc.)
