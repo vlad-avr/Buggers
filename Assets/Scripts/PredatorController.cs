@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,6 +55,10 @@ public class PredatorController : AgentController
             {
                 min = hit_predator[i];
             }
+        }
+        if (min == null)
+        {
+            min = this.GetComponent<Collider2D>();
         }
         target = min.transform;
         Vector2 vec = min.transform.position - transform.position;

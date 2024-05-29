@@ -66,6 +66,10 @@ public class PreyController : AgentController
         float angle = Vector2.SignedAngle(transform.up, vec);
         input_arr.Add(angle / 180f);
         input_arr.Add(Vector2.Distance(transform.position, min.transform.position) / sight_radius);
+        if(min == null)
+        {
+            min = this.GetComponent<Collider2D>();
+        }
         target = min.transform;
         min = null;
         for (int i = 0; i < hit_predator.Length; i++)
@@ -78,6 +82,9 @@ public class PreyController : AgentController
         if (min != null)
         {
             predator_pos = min.transform;
+        }else
+        {
+            min = this.GetComponent<Collider2D>();
         }
         vec = min.transform.position - transform.position;
         angle = Vector2.SignedAngle(transform.up, vec);

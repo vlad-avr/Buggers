@@ -38,6 +38,7 @@ public class NNet
         }
         InitNeurons();
         InitWeights();
+        this.fitness = copy_network.fitness;
         CopyWeights(copy_network.weights);
     }
 
@@ -195,11 +196,11 @@ public class NNet
         }
         if(net1.fitness > net2.fitness)
         {
-            return 1;
+            return -1;
         }
         else if(net1.fitness < net2.fitness)
         {
-            return -1;
+            return 1;
         }
         else
         {

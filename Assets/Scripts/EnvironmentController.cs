@@ -20,17 +20,10 @@ public class EnvironmentController : MonoBehaviour
     public List<NNet> predators = new List<NNet>();
     public int prey_count;
     public int predator_count;
-    //public int start_prey_count;
-    //public int start_predator_count;
-    //public double best_prey_ratio;
-    //public double best_predator_ratio;
-    //public float mutation_rate;
     public GameObject prey_obj;
     public GameObject predator_obj;
     public Transform predator_pos;
     public Transform prey_pos;
-    //private int best_prey_count;
-    //private int best_predator_count;
     private PreyController[] prey_objs;
     private PredatorController[] pred_objs;
     [Header("Configuration")]
@@ -52,6 +45,11 @@ public class EnvironmentController : MonoBehaviour
     //top -> right -> bottom -> left
     public List<GameObject> borders;
 
+    [Header("For Displaying Results")]
+    ///For displaying results
+    public GameObject result_set;
+    private int startTime;
+    private int endTime;
 
 
     private void Start()
@@ -61,6 +59,9 @@ public class EnvironmentController : MonoBehaviour
         spawnPreys();
         spawnPredators();
         FS.Spawn_food(FS.spawn_num);
+        startTime = (int)Time.time;
+        result_set.GetComponent<ResultSet>().SetRefs();
+        result_set.SetActive(false);
     }
 
     private void setConfig()
@@ -213,7 +214,6 @@ public class EnvironmentController : MonoBehaviour
         {
             // Ecosystem is dead, recreate
             Repopulate();
-            Debug.Log("ECOSYSTEM IS DEAD");
         }
         prey_objs = FindObjectsOfType<PreyController>();
         prey_count = prey_objs.Length;
@@ -241,7 +241,7 @@ public class EnvironmentController : MonoBehaviour
             }
         }
 
-        if(predator_count > 0)
+        if (predator_count > 0)
         {
             GameObject[] pred_objs = GameObject.FindGameObjectsWithTag("Predator");
             for (int i = 0; i < pred_objs.Length; i++)
@@ -250,6 +250,16 @@ public class EnvironmentController : MonoBehaviour
                 pred_objs[i].GetComponent<PredatorController>().Die(0);
             }
         }
+        endTime = (int)Time.time;
+        ShowResults();
+    }
+
+    public void InitNextGeneration()
+    {
+        UnPause();
+        result_set.SetActive(false);
+        result_set.GetComponent<ResultSet>().final_prey_count = 0;
+        result_set.GetComponent<ResultSet>().final_pred_count = 0;
         int best_prey_count = getBestAgentCount(config.prey_count, config.prey_chosen_ratio);
         int num = config.prey_count / best_prey_count;
         for (int j = 0; j < num; j++)
@@ -286,7 +296,7 @@ public class EnvironmentController : MonoBehaviour
                     obj.GetComponent<PredatorController>().network.Mutate();
                 }
                 MutateAgent(obj.GetComponent<PredatorController>(), config.predator_traits, false);
-              
+
             }
         }
         FS.ResetFoodSpawnRate();
@@ -296,6 +306,31 @@ public class EnvironmentController : MonoBehaviour
         UImgr.gen_count++;
         prey_count = config.prey_count;
         predator_count = config.predator_count;
+    }
+
+    private void ShowResults()
+    {
+        Pause();
+        ResultSet set = result_set.GetComponent<ResultSet>();
+        set.time_elapsed = endTime - startTime;
+        set.prey_fitness_params[0] = preys[preys.Count - 1].GetFitness();
+        float sum = 0;
+        foreach(NNet net in preys)
+        {
+            sum += net.GetFitness();
+        }
+        set.prey_fitness_params[1] = sum / preys.Count;
+        set.prey_fitness_params[2] = preys[0].GetFitness();
+        set.pred_fitness_params[0] = predators[predators.Count - 1].GetFitness();
+        sum = 0;
+        foreach (NNet net in predators)
+        {
+            sum += net.GetFitness();
+        }
+        set.pred_fitness_params[1] = sum / predators.Count;
+        set.pred_fitness_params[2] = predators[0].GetFitness();
+        set.FillOut();
+        result_set.SetActive(true);
     }
     
     ///Pauses simulation
@@ -313,9 +348,10 @@ public class EnvironmentController : MonoBehaviour
     ///Adds new NNet record of PreyController script 
     public void AddPrey(NNet net)
     {
+        result_set.GetComponent<ResultSet>().final_prey_count++;
         preys.Add(new NNet(net));
         preys.Sort((net1, net2) => NNet.CompareNNets(net1, net2));
-        if(preys.Count > getBestAgentCount(config.prey_count, config.prey_chosen_ratio))
+        if (preys.Count > getBestAgentCount(config.prey_count, config.prey_chosen_ratio))
         {
             preys.RemoveAt(preys.Count - 1);
         }
@@ -324,6 +360,7 @@ public class EnvironmentController : MonoBehaviour
     ///Adds new NNet record of PredatorController script
     public void AddPredator(NNet net)
     {
+        result_set.GetComponent<ResultSet>().final_pred_count++;
         predators.Add(new NNet(net));
         predators.Sort((net1, net2) => NNet.CompareNNets(net1, net2));
         if (predators.Count > getBestAgentCount(config.predator_count, config.predator_chosen_ratio))
