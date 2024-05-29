@@ -261,43 +261,36 @@ public class EnvironmentController : MonoBehaviour
         result_set.GetComponent<ResultSet>().final_prey_count = 0;
         result_set.GetComponent<ResultSet>().final_pred_count = 0;
         int best_prey_count = getBestAgentCount(config.prey_count, config.prey_chosen_ratio);
-        int num = config.prey_count / best_prey_count;
-        for (int j = 0; j < num; j++)
+        for (int i = 0; i < config.prey_count; i++)
         {
-            for (int i = 0; i < best_prey_count; i++)
+            Vector2 spawnPos = getRandomSpawnPos();
+            GameObject obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
+            obj.GetComponent<PreyController>().network = new NNet(preys[i % best_prey_count]);
+            obj.GetComponent<PreyController>().network.SetFitness(0f);
+            obj.GetComponent<PreyController>().delta_decision_time = config.prey_net_mods.Item2;
+            obj.GetComponent<PreyController>().spawn_point = prey_pos;
+            float rand = Random.Range(0f, 1f);
+            if (rand <= config.prey_net_mods.Item1 * i)
             {
-                Vector2 spawnPos = getRandomSpawnPos();
-                GameObject obj = Instantiate(prey_obj, spawnPos, Quaternion.identity);
-                obj.GetComponent<PreyController>().network = new NNet(preys[i]);
-                obj.GetComponent<PreyController>().network.SetFitness(0f);
-                obj.GetComponent<PreyController>().delta_decision_time = config.prey_net_mods.Item2;
-                float rand = Random.Range(0f, 1f);
-                if (rand <= config.prey_net_mods.Item1 * i)
-                {
-                    obj.GetComponent<PreyController>().network.Mutate();
-                }
-                MutateAgent(obj.GetComponent<PreyController>(), config.prey_traits, true);
+                obj.GetComponent<PreyController>().network.Mutate();
             }
+            MutateAgent(obj.GetComponent<PreyController>(), config.prey_traits, true);
         }
         int best_predator_count = getBestAgentCount(config.predator_count, config.predator_chosen_ratio);
-        num = config.predator_count / best_predator_count;
-        for (int j = 0; j < num; j++)
+        for (int i = 0; i < config.predator_count; i++)
         {
-            for (int i = 0; i < best_predator_count; i++)
+            Vector2 spawnPos = getRandomSpawnPos();
+            GameObject obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
+            obj.GetComponent<PredatorController>().network = new NNet(predators[i%best_predator_count]);
+            obj.GetComponent<PredatorController>().network.SetFitness(0f);
+            obj.GetComponent<PredatorController>().delta_decision_time = config.predator_net_mods.Item2;
+            obj.GetComponent<PredatorController>().spawn_point = predator_pos;
+            float rand = Random.Range(0f, 1f);
+            if (rand <= config.predator_net_mods.Item1 * i)
             {
-                Vector2 spawnPos = getRandomSpawnPos();
-                GameObject obj = Instantiate(predator_obj, spawnPos, Quaternion.identity);
-                obj.GetComponent<PredatorController>().network = new NNet(predators[i]);
-                obj.GetComponent<PredatorController>().network.SetFitness(0f);
-                obj.GetComponent<PredatorController>().delta_decision_time = config.predator_net_mods.Item2;
-                float rand = Random.Range(0f, 1f);
-                if (rand <= config.predator_net_mods.Item1 * i)
-                {
-                    obj.GetComponent<PredatorController>().network.Mutate();
-                }
-                MutateAgent(obj.GetComponent<PredatorController>(), config.predator_traits, false);
-
+                obj.GetComponent<PredatorController>().network.Mutate();
             }
+            MutateAgent(obj.GetComponent<PredatorController>(), config.predator_traits, false);
         }
         FS.ResetFoodSpawnRate();
         FS.Spawn_food(FS.spawn_num);
