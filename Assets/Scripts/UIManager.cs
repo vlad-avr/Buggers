@@ -33,7 +33,15 @@ public class UIManager : MonoBehaviour
     ///Adjust Camera view field according to map size
     void setCameraFocus()
     {
-        main_camera.orthographicSize = Mathf.Max(EC.config.room.x, EC.config.room.y)/2.0f;
+        if(EC.config.room.x / 1920f <= EC.config.room.y / 1080f)
+        {
+            main_camera.orthographicSize = EC.config.room.y / 2.0f;
+        }
+        else
+        {
+            main_camera.orthographicSize = EC.config.room.x / 4.0f;
+        }
+        //main_camera.orthographicSize = Mathf.Max(EC.config.room.x/1920f, EC.config.room.y/1080f)/2.0f;
     }
 
     /// Update is called once per frame
